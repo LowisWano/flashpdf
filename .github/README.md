@@ -1,4 +1,22 @@
-# GITHUB WORKFLOW
+# GITHUB GUIDE
+1. Clone the repo
+```bash
+git clone https://github.com/LowisWano/flashpdf.git
+```
+
+2. Go to the git repo and npm install
+```bash
+cd flashpdf
+npm install
+```
+
+3. Run the project in development mode
+```bash
+npm run dev
+```
+
+
+# BRANCHING WORKFLOW
 1. Open your terminal (for windows use git bash)
 
 ```bash
