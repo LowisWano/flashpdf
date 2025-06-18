@@ -22,3 +22,5 @@ export default function HelloPage(){
 
 4. Git commit your work
 ![Screens](./assets/gitcommit.png)
+
+5. Click Sync Changes to
