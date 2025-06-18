@@ -8,7 +8,7 @@ import Link from "next/link"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -32,9 +32,11 @@ export default function LandingPage() {
             </Link>
           </nav>
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" className="hidden sm:inline-flex">
-              Sign In
-            </Button>
+            <Link href="/login">
+              <Button variant="ghost" className="hidden sm:inline-flex">
+                Sign In
+              </Button>
+            </Link>
             <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
               Get Started
             </Button>
@@ -59,13 +61,15 @@ export default function LandingPage() {
             ace your exams with FlashPDF.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-lg px-8 py-3"
-            >
-              <Upload className="w-5 h-5 mr-2" />
-              Upload Your First PDF
-            </Button>
+            <Link href="/dashboard">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-lg px-8 py-3"
+              >
+                <Upload className="w-5 h-5 mr-2" />
+                Upload Your First PDF
+              </Button>
+            </Link>
             <Link href="https://youtu.be/xvFZjo5PgG0">
               <Button size="lg" variant="outline" className="text-lg px-8 py-3">
                 Watch Demo

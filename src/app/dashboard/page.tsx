@@ -24,7 +24,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="">
+    <div className="p-20">
       {/* Upload Area */}
       <Card className="border-2 border-dashed border-gray-300 hover:border-orange-400 transition-colors">
         <CardContent className="p-12">
@@ -52,6 +52,8 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
+
+      <h1>Your decks</h1>
     </div>
   )
 }
