@@ -23,4 +23,4 @@ export default function HelloPage(){
 4. Git commit your work
 ![Screens](./assets/gitcommit.png)
 
-5. Click Sync Changes to
+5. If this is a new branch, click "Publish Branch". Go to github, a notification will popup that says your branch has pushed new changes. Click create pull request.
