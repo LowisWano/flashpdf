@@ -1,9 +1,10 @@
-import { BookOpen, Clock, FileText, Filter, Grid3X3, List, Search, TrendingUp } from "lucide-react";
+import { BookOpen, Clock, FileText, Filter, Search, TrendingUp } from "lucide-react";
 import Deck from "./deck"
 import { Deck as DeckType } from "@/services/deck.service"
 import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { CreateFlashcardsDialog } from "./create-flashcards-dialog";
 
 export default function DecksSection({
   decks,
@@ -13,25 +14,14 @@ export default function DecksSection({
   
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3">
+      <div className="flex flex-row sm:items-center sm:justify-between gap-4 mb-3">
         <div>
           <h1 className="text-3xl font-bold">My Decks</h1>
           <p className="text-gray-600">Manage and study your flashcard collections</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant={"grid" === "grid" ? "default" : "outline"}
-            size="lg"
-          >
-            <Grid3X3 className="w-4 h-4" />
-          </Button>
-          <Button
-            variant={"grid" === "list" ? "default" : "outline"}
-            size="lg"
-          >
-            <List className="w-4 h-4" />
-          </Button>
-        </div>
+        
+          <CreateFlashcardsDialog />
+        
       </div>
 
       
@@ -46,8 +36,8 @@ export default function DecksSection({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              <Filter className="w-4 h-4 mr-2" />
               Sort by
+              <Filter className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

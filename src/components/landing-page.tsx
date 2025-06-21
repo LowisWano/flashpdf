@@ -34,11 +34,11 @@ export default function LandingPage() {
           <div className="flex items-center space-x-3">
             <Link href="/login">
               <Button variant="ghost" className="hidden sm:inline-flex">
-                Sign In
+                Login
               </Button>
             </Link>
             <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-              Get Started
+              Create an Account
             </Button>
           </div>
         </div>
