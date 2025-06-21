@@ -42,7 +42,6 @@ export function useProfile() {
   const [settings, setSettings] = useState({
     emailNotifications: true,
     studyReminders: true,
-    achievementAlerts: false,
     publicProfile: true
   })
 
@@ -50,23 +49,23 @@ export function useProfile() {
     {
       id: 1,
       type: "study" as const,
-      title: "Biology Chapter 5",
+      title: "Studied History Deck",
       time: "2 hours ago",
-      score: 92
+      cards: 15
     },
     {
       id: 2,
       type: "create" as const,
-      title: "Spanish Vocabulary",
+      title: "Created Science Deck",
       time: "1 day ago",
-      cards: 45
+      cards: 25
     },
     {
       id: 3,
       type: "study" as const,
-      title: "Chemistry Formulas",
+      title: "Studied Math Deck",
       time: "2 days ago",
-      score: 78
+      cards: 20
     },
     {
       id: 4,
@@ -74,45 +73,6 @@ export function useProfile() {
       title: "History Timeline",
       time: "3 days ago",
       cards: 32
-    }
-  ]
-
-  const achievements = [
-    {
-      id: "first-deck",
-      title: "First Deck",
-      icon: "📚",
-      unlocked: true
-    },
-    {
-      id: "streak-7",
-      title: "7-Day Streak",
-      icon: "⏰",
-      unlocked: true
-    },
-    {
-      id: "perfect-score",
-      title: "Perfect Score",
-      icon: "⭐",
-      unlocked: true
-    },
-    {
-      id: "study-master",
-      title: "Study Master",
-      icon: "🏆",
-      unlocked: false
-    },
-    {
-      id: "creator",
-      title: "Creator",
-      icon: "✏️",
-      unlocked: true
-    },
-    {
-      id: "consistency",
-      title: "Consistency",
-      icon: "🎯",
-      unlocked: false
     }
   ]
 
@@ -257,7 +217,6 @@ export function useProfile() {
     passwordForm,
     settings,
     recentActivity,
-    achievements,
     fileInputRef,
 
     // Actions

@@ -5,7 +5,6 @@ import NavigationBar from "@/components/navigation-bar"
 import ProfileCard from "@/components/profile/profile-card"
 import StatsGrid from "@/components/profile/stats-grid"
 import RecentActivity from "@/components/profile/recent-activity"
-import Achievements from "@/components/profile/achievements"
 import SettingsSection from "@/components/profile/settings-section"
 import { useProfile } from "@/hooks/useProfile"
 import { Edit3, Settings, Save, X } from "lucide-react"
@@ -20,7 +19,6 @@ export default function ProfilePage() {
     passwordForm,
     settings,
     recentActivity,
-    achievements,
     selectedImage,
     imagePreview,
     showPassword,
@@ -155,9 +153,6 @@ export default function ProfilePage() {
 
                 {/* Recent Activity */}
                 <RecentActivity activities={recentActivity} />
-
-                {/* Achievements */}
-                <Achievements achievements={achievements} />
               </div>
             </div>
           )}

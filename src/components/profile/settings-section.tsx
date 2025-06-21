@@ -40,7 +40,6 @@ interface SettingsSectionProps {
   settings: {
     emailNotifications: boolean
     studyReminders: boolean
-    achievementAlerts: boolean
     publicProfile: boolean
   }
   selectedImage: File | null
@@ -310,18 +309,6 @@ export default function SettingsSection({
               className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
             />
           </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium">Achievement Alerts</p>
-              <p className="text-sm text-gray-600">Get notified when you earn achievements</p>
-            </div>
-            <input
-              type="checkbox"
-              checked={settings.achievementAlerts}
-              onChange={(e) => onSettingChange('achievementAlerts', e.target.checked)}
-              className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
-            />
-          </div>
         </CardContent>
       </Card>
 
@@ -369,7 +356,6 @@ export default function SettingsSection({
                 <ul className="text-sm text-red-700 mt-2 space-y-1">
                   <li>• All your flashcard decks</li>
                   <li>• Study progress and statistics</li>
-                  <li>• Achievements and badges</li>
                   <li>• Account settings and preferences</li>
                 </ul>
               </div>
