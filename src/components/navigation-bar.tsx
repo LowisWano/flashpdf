@@ -19,17 +19,6 @@ export default function NavigationBar() {
           <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
             FlashPDF
           </span>
-
-          {/* Search Bar */}
-        <div className="flex-1 max-w-md mx-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input 
-              placeholder="Search Flashcards" 
-              className="pl-10 bg-gray-50 border-gray-200 focus:bg-white"
-            />
-          </div>
-        </div>
         </div>
         
         <div className="flex items-center space-x-3">
