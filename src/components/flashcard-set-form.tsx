@@ -1,0 +1,116 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
+import FlashcardItem, { Flashcard } from "./flashcard-item"
+import React from "react"
+
+interface FlashcardSetFormProps {
+  title: string
+  description: string
+  flashcards: Flashcard[]
+  onTitleChange: (value: string) => void
+  onDescriptionChange: (value: string) => void
+  onAddFlashcard: () => void
+  onRemoveFlashcard: (id: string) => void
+  onUpdateFlashcard: (id: string, field: "term" | "definition", value: string) => void
+  onSave: () => void
+  onCancel?: () => void
+  isSaving?: boolean
+}
+
+const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
+  title,
+  description,
+  flashcards,
+  onTitleChange,
+  onDescriptionChange,
+  onAddFlashcard,
+  onRemoveFlashcard,
+  onUpdateFlashcard,
+  onSave,
+  onCancel,
+  isSaving = false,
+}) => {
+  return (
+    <div className="space-y-8">
+      {/* Main Form */}
+      <Card className="shadow-lg border border-gray-100">
+        <CardHeader>
+          <CardTitle className="text-2xl">Flashcard Set Details</CardTitle>
+          <CardDescription className="text-base">Enter the basic information for your flashcard set</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title" className="text-base">Title</Label>
+            <Input
+              id="title"
+              placeholder="Enter flashcard set title"
+              value={title}
+              onChange={(e) => onTitleChange(e.target.value)}
+              className="bg-white border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-base">Description</Label>
+            <Textarea
+              id="description"
+              placeholder="Enter a description for your flashcard set"
+              value={description}
+              onChange={(e) => onDescriptionChange(e.target.value)}
+              rows={3}
+              className="bg-white border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Flashcards Section Header */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Flashcards</h2>
+        <p className="text-gray-600 mb-6">Create your flashcard terms and definitions</p>
+      </div>
+
+      {/* Individual Flashcards */}
+      <div className="space-y-4">
+        {flashcards.map((card) => (
+          <FlashcardItem
+            key={card.id}
+            card={card}
+            onRemove={onRemoveFlashcard}
+            onUpdate={onUpdateFlashcard}
+            disableRemove={flashcards.length === 1}
+          />
+        ))}
+        {/* Add Card Button as a Card-like Div */}
+        <div
+          className="border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors cursor-pointer rounded-lg bg-white flex flex-col items-center justify-center py-8 text-gray-500 hover:text-gray-700 shadow-sm"
+          onClick={onAddFlashcard}
+        >
+          <Plus className="h-8 w-8 mb-2" />
+          <span className="text-lg font-medium">Add New Card</span>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex justify-end space-x-4 pt-6">
+        {onCancel && (
+          <Button variant="outline" className="border-gray-300" onClick={onCancel} disabled={isSaving}>
+            Cancel
+          </Button>
+        )}
+        <Button
+          onClick={onSave}
+          className="bg-gradient-to-r from-orange-500 to-purple-600 text-white hover:from-orange-600 hover:to-purple-700 shadow-md px-8"
+          disabled={isSaving}
+        >
+          {isSaving ? "Saving..." : "Save Flashcard Set"}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export default FlashcardSetForm; 
