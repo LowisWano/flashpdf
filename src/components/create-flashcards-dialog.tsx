@@ -28,7 +28,7 @@ export function CreateFlashcardsDialog() {
           <div className="grid gap-4">
             <div className="flex flex-col sm:flex-row gap-5 w-full items-stretch">
               {/* Card 1: Generate from an upload */}
-              <Link href={"/flashcards/upload-pdf"} className="flex-1">
+              <Link href="/dashboard/upload" className="flex-1">
                 <button
                   type="button"
                   className="w-full flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"
@@ -40,7 +40,7 @@ export function CreateFlashcardsDialog() {
                 </button>
               </Link>
               {/* Card 2: Create them yourself */}
-              <Link href={"/flashcards/create"} className="flex-1">
+              <Link href="/dashboard/create" className="flex-1">
                 <button
                   type="button"
                   className="w-full flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"

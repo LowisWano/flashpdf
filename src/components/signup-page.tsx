@@ -13,7 +13,7 @@ export default function SignUpPage({
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Create an account</h1>
         <p className="text-muted-foreground text-sm text-balance">
-        Let's get started. Fill in the details below to create your account.
+        Let&apos;s get started. Fill in the details below to create your account.
         </p>
       </div>
       <div className="grid gap-6">
