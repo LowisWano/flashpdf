@@ -39,10 +39,12 @@ export default function Deck({ deck }: {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit
-                </DropdownMenuItem>
+                <Link href={`/dashboard/decks/${deck.id}/edit`} passHref>
+                  <DropdownMenuItem>
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem>
                   <Share2 className="w-4 h-4 mr-2" />
                   Share
