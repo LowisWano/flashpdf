@@ -35,7 +35,7 @@ export default async function Page({
           </CardTitle>
 
           <div className="items-center flex justify-center">
-            <Link href={`/${id}/edit`}>
+            <Link href={`./${id}/edit`}>
               <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">Edit Flashcards</Button>
             </Link>
             <button className="p-1 hover:bg-gray-100 rounded-full">
