@@ -51,7 +51,7 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-purple-50 to-white p-4">
+    <div className="">
       <div className="mx-auto max-w-4xl">
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-gray-900 drop-shadow-sm">Edit Flashcard Set</h1>
