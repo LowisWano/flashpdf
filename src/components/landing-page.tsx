@@ -37,9 +37,11 @@ export default function LandingPage() {
                 Login
               </Button>
             </Link>
-            <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-              Create an Account
-            </Button>
+            <Link href="/signup">
+              <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
