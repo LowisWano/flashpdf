@@ -20,15 +20,9 @@ interface EditDeckFormProps {
 export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
   const router = useRouter()
   
-  // Local state for editing
   const [title, setTitle] = useState(deck.title)
   const [description, setDescription] = useState(deck.description)
-  const [flashcards, setFlashcards] = useState<Flashcard[]>(
-    deck.flashcards.map(card => ({
-      ...card,
-      id: card.id || generateUniqueId([])
-    }))
-  )
+  const [flashcards, setFlashcards] = useState<Flashcard[]>(deck.flashcards)
   const [isSaving, setIsSaving] = useState(false)
 
   const handleAddFlashcard = () => {

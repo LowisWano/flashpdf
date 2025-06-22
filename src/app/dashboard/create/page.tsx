@@ -27,7 +27,6 @@ export default function CreateFlashcardSetPage() {
 
   const handleSave = () => {
     setIsSaving(true)
-    // Simulate save logic
     setTimeout(() => {
       console.log("Saving flashcard set:", { title, description, flashcards })
       setIsSaving(false)
@@ -35,7 +34,6 @@ export default function CreateFlashcardSetPage() {
   }
 
   const handleCancel = () => {
-    // Reset form or navigate away
     setTitle("")
     setDescription("")
     setFlashcards([
