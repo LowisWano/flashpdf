@@ -1,16 +1,28 @@
 "use client"
 
-import { useState } from "react"
 import FlashcardSetForm from "@/components/flashcard-set-form"
-import { Flashcard, addFlashcard, removeFlashcard, updateFlashcard } from "@/services/deck.service"
+import { 
+  Deck,
+  Flashcard, 
+  addFlashcard, 
+  removeFlashcard, 
+  updateFlashcard, 
+  generateUniqueId 
+} from "@/services/deck.service"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
-export default function CreateFlashcardSetPage() {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [flashcards, setFlashcards] = useState<Flashcard[]>([
-    { id: "1", term: "", definition: "" },
-    { id: "2", term: "", definition: "" },
-  ])
+interface EditDeckFormProps {
+  deckId: string
+  deck: Deck
+}
+
+export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
+  const router = useRouter()
+  
+  const [title, setTitle] = useState(deck.title)
+  const [description, setDescription] = useState(deck.description)
+  const [flashcards, setFlashcards] = useState<Flashcard[]>(deck.flashcards)
   const [isSaving, setIsSaving] = useState(false)
 
   const handleAddFlashcard = () => {
@@ -28,26 +40,22 @@ export default function CreateFlashcardSetPage() {
   const handleSave = () => {
     setIsSaving(true)
     setTimeout(() => {
-      console.log("Saving flashcard set:", { title, description, flashcards })
+      console.log("Updating flashcard set:", { id: deckId, title, description, flashcards })
       setIsSaving(false)
+      router.push(`/dashboard/decks/${deckId}`)
     }, 1000)
   }
 
   const handleCancel = () => {
-    setTitle("")
-    setDescription("")
-    setFlashcards([
-      { id: "1", term: "", definition: "" },
-      { id: "2", term: "", definition: "" },
-    ])
+    router.push(`/dashboard/decks/${deckId}`)
   }
 
   return (
-    <div>
+    <div className="">
       <div className="mx-auto max-w-4xl">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-gray-900 drop-shadow-sm">Create Flashcard Set</h1>
-          <p className="mt-2 text-gray-600 text-lg">Build your custom flashcard collection</p>
+          <h1 className="text-4xl font-bold text-gray-900 drop-shadow-sm">Edit Flashcard Set</h1>
+          <p className="mt-2 text-gray-600 text-lg">Modify your flashcard collection</p>
         </div>
         <FlashcardSetForm
           title={title}
