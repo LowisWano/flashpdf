@@ -13,7 +13,7 @@ export default function SignUpPage({
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Create an account</h1>
         <p className="text-muted-foreground text-sm text-balance">
-        Let's get started. Fill in the details below to create your account.
+        Let&apos;s get started. Fill in the details below to create your account.
         </p>
       </div>
       <div className="grid gap-6">
@@ -50,15 +50,6 @@ export default function SignUpPage({
             />
           </svg>
           Sign in with Google
-        </Button>
-        <Button variant="outline" className="w-full">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" className="w-5 h-5 mr-2">
-            <path
-              d="M17.05 20.28c-.98.95-2.05.88-3.08.41-1.09-.47-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.41C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.19 2.31-.89 3.51-.84 1.54.07 2.7.61 3.44 1.57-3.14 1.88-2.29 5.13.22 6.41-.65 1.29-1.52 2.58-2.25 4.03zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
-              fill="currentColor"
-            />
-          </svg>
-          Sign in with Apple
         </Button>
       <div className="text-center text-sm">
        Already have an account?{" "}

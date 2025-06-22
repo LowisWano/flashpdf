@@ -6,8 +6,14 @@ export interface Flashcard {
 export interface Deck {
   id: number;
   title: string;
+  description: string;
   flashcards: Flashcard[];
-  lastOpened: string;
+  topics: string[];
+  studyProgress: number;
+  cardCount: number;
+  accuracy: number;
+  lastStudied: string;
+  isStarred: boolean;
 }
 
 export function getDecks(): Deck[] {
@@ -15,6 +21,7 @@ export function getDecks(): Deck[] {
     {
       id: 1,
       title: "AppDev",
+      description: "Flashcards for my Application Development class",
       flashcards: [
         {
           term: "Spring Boot",
@@ -25,29 +32,209 @@ export function getDecks(): Deck[] {
           definition: "A TypeScript-based free and open-source single-page web application framework."
         }
       ],
-      lastOpened: "2025-05-25"
+      topics: [
+        "Web development",
+        "NextJS",
+        "UI/UX",
+        "Tech Stack"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
     },
     {
       id: 2,
-      title: "AppDev",
+      title: "Thesis",
+      description: "Flashcards for my Thesis class",
       flashcards: [
         {
-          term: "spring boot",
-          definition: "a java web framework"
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
         }
       ],
-      lastOpened: "2025-05-25"
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
     },
     {
       id: 3,
-      title: "AppDev",
+      title: "Social Issues",
+      description: "Flashcards for my Social Issues class",
       flashcards: [
         {
-          term: "spring boot",
-          definition: "a java web framework"
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
         }
       ],
-      lastOpened: "2025-05-25"
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
+    },
+    {
+      id: 4,
+      title: "Social Issues",
+      description: "Flashcards for my Social Issues class",
+      flashcards: [
+        {
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
+        }
+      ],
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
+    },
+    {
+      id: 5,
+      title: "Social Issues",
+      description: "Flashcards for my Social Issues class",
+      flashcards: [
+        {
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
+        }
+      ],
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
+    },
+    {
+      id: 6,
+      title: "Social Issues",
+      description: "Flashcards for my Social Issues class",
+      flashcards: [
+        {
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
+        }
+      ],
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
+    },
+    {
+      id: 7,
+      title: "Social Issues",
+      description: "Flashcards for my Social Issues class",
+      flashcards: [
+        {
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
+        }
+      ],
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
+    },
+    {
+      id: 8,
+      title: "Social Issues",
+      description: "Flashcards for my Social Issues class",
+      flashcards: [
+        {
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
+        }
+      ],
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
+    },
+    {
+      id: 9,
+      title: "Social Issues",
+      description: "Flashcards for my Social Issues class",
+      flashcards: [
+        {
+          term: "Spring Boot",
+          definition: "An open-source Java framework used for programming standalone, production-grade Spring-based applications with a bundle of libraries that make project startup and management easier."
+        },
+        {
+          term: "Angular",
+          definition: "A TypeScript-based free and open-source single-page web application framework."
+        }
+      ],
+      topics: [
+        "Web development",
+        "NextJS"
+      ],
+      studyProgress: 33,
+      cardCount: 2,
+      accuracy: 50,
+      lastStudied: "2025-05-25",
+      isStarred: true
     }
   ]
 
