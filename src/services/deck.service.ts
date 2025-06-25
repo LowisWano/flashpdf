@@ -15,7 +15,7 @@ export interface Deck {
   accuracy: number;
   lastStudied: string;
   isStarred: boolean;
-}
+} 
 
 
 export function getDecks(): Deck[] {

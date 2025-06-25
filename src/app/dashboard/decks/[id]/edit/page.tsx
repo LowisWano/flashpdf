@@ -7,7 +7,7 @@ export default async function Page({
   params: { id: string }
 }) {
   // This is a server component that safely uses params
-  const id = params.id
+  const { id } = await params
   const decks = getDecks()
   const currentDeck = decks.find((d) => d.id === Number(id))
   
