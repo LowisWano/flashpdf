@@ -16,10 +16,8 @@ datasource db {
 }
 
 model User {
-  id            String     @default(cuid()) @id
-  name          String
-  email         String     @unique
-  passwordHash  String
+  id            String     @id
+  name          String?
   decks         Deck[]
 }
 

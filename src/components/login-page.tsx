@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { login } from "@/app/actions/auth"
+import { login } from "@/app/login/actions"
 
 export default function LoginPage() {
   return (
@@ -50,7 +50,7 @@ export default function LoginPage() {
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="#" className="underline underline-offset-4 text-orange-500">
+        <a href="/signup" className="underline underline-offset-4 text-orange-500">
           Sign up
         </a>
       </div>
