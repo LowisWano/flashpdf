@@ -18,7 +18,7 @@ export default async function Page({
 }: {
   params: { id: string }
 }) {
-  const id = params.id
+  const { id } = await params
   const decks = getDecks()
   const currentDeck = decks.find(d => d.id === Number(id))
 

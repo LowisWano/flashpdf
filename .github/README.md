@@ -1,16 +1,26 @@
-# GITHUB GUIDE
-1. Clone the repo
+# HOW TO RUN THE PROJECT
+1. Clone the repository:
 ```bash
 git clone https://github.com/LowisWano/flashpdf.git
 ```
 
-2. Go to the git repo and npm install
+2. Navigate into the project directory and install dependencies:
 ```bash
 cd flashpdf
 npm install
 ```
 
-3. Run the project in development mode
+3. Set up environment variables:
+- Create a .env file in the root directory if it doesn't exist.
+- Add the necessary environment variables (such as DATABASE_URL).
+
+4. Set up the database with Prisma:
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+
+4. Run the project in development mode
 ```bash
 npm run dev
 ```
