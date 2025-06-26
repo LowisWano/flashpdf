@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-
 import { createClient } from '@/utils/supabase/server'
+import prisma from '@/lib/prisma'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -18,11 +18,12 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
+    console.log(error)
     redirect('/error')
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  revalidatePath('/dashboard', 'layout')
+  redirect('/dashboard')
 }
 
 export async function signup(formData: FormData) {
@@ -35,12 +36,27 @@ export async function signup(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signUp(data)
+  const name = formData.get('name') as string
+
+  const { error, data: signupData } = await supabase.auth.signUp(data)
 
   if (error) {
     redirect('/error')
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  const user = signupData?.user
+    ? signupData.user
+    : (await supabase.auth.getUser()).data.user
+
+  if (user) {
+    // Save to your User table
+    await prisma.user.create({
+      data: {
+        id: user.id, // Supabase Auth UUID
+        name: name,
+      },
+    })
+  }
+
+  redirect('/check-email?justSignedUp=true')
 }

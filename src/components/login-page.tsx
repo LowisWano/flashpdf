@@ -16,7 +16,7 @@ export default function LoginPage() {
       <div className="grid gap-6">
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" name="email" placeholder="m@example.com" required />
+          <Input id="email" type="email" name="email" placeholder="johndoe@gmail.com" required />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
