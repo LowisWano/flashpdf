@@ -1,10 +1,19 @@
 
 import DecksSection from "@/components/decks-section"
-import { getDecks, Deck } from "@/services/deck.service"
+import { getDecks } from "@/services/deck.service"
+import { Deck } from "@/generated/prisma"
+import { createClient } from '@/utils/supabase/server'
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase.auth.getUser()
+  if (error) {
+    return <div>an error occured</div>
+  }
+  console.log(data.user.id)
 
-  const decks: Deck[] = getDecks()
+  const decks: Deck[] = await getDecks(data.user.id)
   
   return (
     <div >
