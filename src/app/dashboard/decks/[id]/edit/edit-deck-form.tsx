@@ -7,7 +7,6 @@ import {
   addFlashcard, 
   removeFlashcard, 
   updateFlashcard, 
-  generateUniqueId 
 } from "@/services/deck.service"
 import { editDeck } from "./actions"
 import { useState } from "react"
@@ -27,7 +26,7 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
   const [isSaving, setIsSaving] = useState(false)
 
   const handleAddFlashcard = () => {
-    setFlashcards(addFlashcard(flashcards))
+    setFlashcards(addFlashcard(flashcards, deckId))
   }
 
   const handleRemoveFlashcard = (id: string) => {
