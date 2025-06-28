@@ -44,7 +44,6 @@ export async function editDeck(deckId: string, data: { title: string; descriptio
     if (!existingIds.includes(card.id)) {
       await prisma.flashcard.create({
         data: {
-          id: card.id,
           term: card.term,
           definition: card.definition,
           deckId,
