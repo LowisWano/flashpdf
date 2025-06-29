@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { Download, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
 import { Deck as DeckType } from "@/services/deck.service"
+import { useState, useTransition } from 'react'
+import { deleteDeckAction } from '@/app/dashboard/decks/delete-deck-action'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog'
 
 import {
   Card,
@@ -17,6 +20,18 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 export default function Deck({ deck }: { 
   deck: DeckType
 }) {
+  const [showDelete, setShowDelete] = useState(false)
+  const [isPending, startTransition] = useTransition()
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      await deleteDeckAction(deck.id)
+      setShowDelete(false)
+      // Optionally: trigger a refresh or callback
+      window.location.reload()
+    })
+  }
+
   return (
       <Card key={deck.id} className="hover:shadow-lg transition-shadow group justify-between">
         <CardHeader className="">
@@ -54,7 +69,7 @@ export default function Deck({ deck }: {
                   Export
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem className="text-red-600" onClick={() => setShowDelete(true)}>
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete
                 </DropdownMenuItem>
@@ -102,6 +117,20 @@ export default function Deck({ deck }: {
             </Button>
           </Link>
         </CardContent>
+        <Dialog open={showDelete} onOpenChange={setShowDelete}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete Deck</DialogTitle>
+            </DialogHeader>
+            <p>Are you sure you want to delete this deck? This action cannot be undone.</p>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowDelete(false)} disabled={isPending}>Cancel</Button>
+              <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
+                {isPending ? 'Deleting...' : 'Delete'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </Card>
   )
 }

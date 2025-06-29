@@ -16,6 +16,27 @@ export async function getDecks(userId: string): Deck[] {
   return decks
 }
 
+export async function deleteDeck(deckId: string, userId: string): Promise<void> {
+  // Verify the deck belongs to the user before deleting
+  const deck = await prisma.deck.findFirst({
+    where: {
+      id: deckId,
+      userId: userId,
+    },
+  })
+
+  if (!deck) {
+    throw new Error("Deck not found or you don't have permission to delete it")
+  }
+
+  // Delete the deck (flashcards will be deleted automatically due to CASCADE)
+  await prisma.deck.delete({
+    where: {
+      id: deckId,
+    },
+  })
+}
+
 // implement database query for add flashcard here.
 export function addFlashcard(flashcards: Flashcard[], deckId: string): Flashcard[] {
   // Find max id (as number) among flashcards, fallback to 0 if none
