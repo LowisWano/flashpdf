@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-import { getDecks } from "@/services/deck.service"
+import { getDecks, DeckWithFlashcards } from "@/services/deck.service"
+import { createClient } from '@/utils/supabase/server'
 
 import Link from "next/link"
 
@@ -18,9 +19,20 @@ export default async function Page({
 }: {
   params: { id: string }
 }) {
-  const { id } = await params
-  const decks = getDecks()
-  const currentDeck = decks.find(d => d.id === Number(id))
+  const { id } = params
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return <div className="text-center mt-10">Unauthenticated</div>
+  }
+
+  const decks: DeckWithFlashcards[] = await getDecks(user.id)
+
+  const currentDeck = decks.find((d) => d.id === id)
 
   if (!currentDeck) {
     return <div>Deck not found</div>

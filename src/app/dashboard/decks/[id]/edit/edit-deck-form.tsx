@@ -1,13 +1,12 @@
 "use client"
 
 import FlashcardSetForm from "@/components/flashcard-set-form"
-import { 
-  Deck,
-  Flashcard, 
-  addFlashcard, 
-  removeFlashcard, 
-  updateFlashcard, 
-  generateUniqueId 
+import {
+  DeckWithFlashcards as Deck,
+  DraftFlashcard as Flashcard,
+  addFlashcard,
+  removeFlashcard,
+  updateFlashcard,
 } from "@/services/deck.service"
 import { useState } from "react"
 import { useRouter } from "next/navigation"

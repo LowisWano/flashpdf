@@ -1,6 +1,6 @@
 import { BookOpen, Clock, FileText, Filter, Search, TrendingUp } from "lucide-react";
 import Deck from "./deck"
-import { Deck as DeckType } from "@/services/deck.service"
+import { DeckWithFlashcards as DeckType } from "@/services/deck.service"
 import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";

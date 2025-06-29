@@ -1,6 +1,9 @@
+"use client"
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Download, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
-import { Deck as DeckType } from "@/services/deck.service"
+import { DeckWithFlashcards as DeckType } from "@/services/deck.service"
+import { useState } from 'react'
 
 import {
   Card,
@@ -17,6 +20,28 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 export default function Deck({ deck }: { 
   deck: DeckType
 }) {
+  const router = useRouter()
+  const [deleting, setDeleting] = useState(false)
+
+  const handleDelete = async () => {
+    if (deleting) return
+    const confirmed = confirm(`Delete deck "${deck.title}"? This cannot be undone.`)
+    if (!confirmed) return
+
+    setDeleting(true)
+    try {
+      const res = await fetch(`/api/decks/${deck.id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const { error } = await res.json()
+        alert(error || 'Failed to delete deck')
+      } else {
+        router.refresh()
+      }
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   return (
       <Card key={deck.id} className="hover:shadow-lg transition-shadow group justify-between">
         <CardHeader className="">
@@ -54,7 +79,7 @@ export default function Deck({ deck }: {
                   Export
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem className="text-red-600" onClick={handleDelete} disabled={deleting}>
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete
                 </DropdownMenuItem>

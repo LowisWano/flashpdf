@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import FlashcardSetForm from "@/components/flashcard-set-form"
-import { Flashcard, addFlashcard, removeFlashcard, updateFlashcard } from "@/services/deck.service"
+import { addFlashcard, removeFlashcard, updateFlashcard } from "@/services/deck.service"
+import type { DraftFlashcard as Flashcard } from "@/services/deck.service"
 
 export default function CreateFlashcardSetPage() {
   const [title, setTitle] = useState("")
@@ -12,6 +14,7 @@ export default function CreateFlashcardSetPage() {
     { id: "2", term: "", definition: "" },
   ])
   const [isSaving, setIsSaving] = useState(false)
+  const router = useRouter()
 
   const handleAddFlashcard = () => {
     setFlashcards(addFlashcard(flashcards))
@@ -25,12 +28,35 @@ export default function CreateFlashcardSetPage() {
     setFlashcards(updateFlashcard(flashcards, id, field, value))
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (flashcards.length < 2) {
+      alert("You need at least 2 flashcards to create a deck.")
+      return
+    }
     setIsSaving(true)
-    setTimeout(() => {
-      console.log("Saving flashcard set:", { title, description, flashcards })
+    try {
+      const res = await fetch("/api/decks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          topics: [],
+          flashcards: flashcards.map(({ term, definition }) => ({ term, definition })),
+        }),
+      })
+      if (!res.ok) {
+        const { error } = await res.json()
+        throw new Error(error || "Failed to save")
+      }
+      router.push("/dashboard")
+    } catch (err: any) {
+      alert(err.message)
+    } finally {
       setIsSaving(false)
-    }, 1000)
+    }
   }
 
   const handleCancel = () => {

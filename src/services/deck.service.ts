@@ -1,10 +1,8 @@
-import { Deck, Flashcard } from "@/generated/prisma"
 import prisma from "@/lib/prisma"
 import { Prisma } from "@/generated/prisma"
 
-
-export async function getDecks(userId: string): Deck[] {
-  const decks: Deck[] = await prisma.deck.findMany({
+export async function getDecks(userId: string): Promise<DeckWithFlashcards[]> {
+  const decks = await prisma.deck.findMany({
     where: {
       userId: userId,
     },
@@ -16,32 +14,100 @@ export async function getDecks(userId: string): Deck[] {
   return decks
 }
 
-// implement database query for add flashcard here.
-export function addFlashcard(flashcards: Flashcard[]): Flashcard[] {
-  const newCard: Flashcard = {
-    id: "1",
-    term: "add",
-    definition: "definition",
-    deckId: "1"
+// Prisma helper type that includes nested flashcards
+export type DeckWithFlashcards = Prisma.DeckGetPayload<{
+  include: {
+    flashcards: true
+  }
+}>
+
+// Create a new deck together with its flashcards for a user
+export async function createDeck(
+  userId: string,
+  data: {
+    title: string
+    description: string
+    topics?: string[]
+    flashcards: { term: string; definition: string }[]
+  }
+): Promise<DeckWithFlashcards> {
+  const {
+    title,
+    description,
+    topics = [],
+    flashcards: flashcardsInput,
+  } = data
+
+  const deck = await prisma.deck.create({
+    data: {
+      title,
+      description,
+      topics,
+      studyProgress: 0,
+      cardCount: flashcardsInput.length,
+      accuracy: 0,
+      lastStudied: new Date(),
+      isStarred: false,
+      userId,
+      flashcards: {
+        createMany: {
+          data: flashcardsInput.map((fc) => ({
+            term: fc.term,
+            definition: fc.definition,
+          })),
+        },
+      },
+    },
+    include: {
+      flashcards: true,
+    },
+  })
+
+  return deck
+}
+
+// Delete a deck if it belongs to the given user – returns true if deleted
+export async function deleteDeck(userId: string, deckId: string): Promise<boolean> {
+  // Verify ownership
+  const deck = await prisma.deck.findUnique({
+    where: { id: deckId },
+    select: { userId: true },
+  })
+
+  if (!deck || deck.userId !== userId) return false
+
+  await prisma.deck.delete({ where: { id: deckId } })
+  return true
+}
+
+export interface DraftFlashcard {
+  id: string
+  term: string
+  definition: string
+}
+
+export function addFlashcard(flashcards: DraftFlashcard[]): DraftFlashcard[] {
+  const newCard: DraftFlashcard = {
+    id: crypto.randomUUID(),
+    term: "",
+    definition: "",
   }
   return [...flashcards, newCard]
 }
 
-// implement database query for remove flashcard here.
-export function removeFlashcard(flashcards: Flashcard[], id: string): Flashcard[] {
+export function removeFlashcard(flashcards: DraftFlashcard[], id: string): DraftFlashcard[] {
   if (flashcards.length > 1) {
     return flashcards.filter((card) => card.id !== id)
   }
   return flashcards
 }
 
-// implement database query for update flashcard here.
 export function updateFlashcard(
-  flashcards: Flashcard[], 
+  flashcards: DraftFlashcard[], 
   id: string, 
   field: "term" | "definition", 
   value: string
-): Flashcard[] {
+): DraftFlashcard[] {
   return flashcards.map((card) => 
     card.id === id ? { ...card, [field]: value } : card
   )
