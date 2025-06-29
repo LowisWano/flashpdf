@@ -103,8 +103,27 @@ export default function UploadArea() {
 
       const text = await pollWhisperResult(data.whisper_hash);
       setExtractedText(text);
-    } catch (err: any) {
-      setError(err.message || "An error occurred.");
+
+      const cohereRes = await fetch("/api/cohere", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!cohereRes.ok) {
+        const errorData = await cohereRes.json();
+        setError(`Failed to generate flashcards: ${errorData.error}`);
+        return;
+      }
+
+      const cohereData = await cohereRes.json();
+      console.log(cohereData.flashcards.content[0].text)
+
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "An error occurred.";
+      setError(errorMessage);
     } finally {
       setProcessing(false);
     }
