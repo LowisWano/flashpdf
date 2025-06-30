@@ -1,4 +1,4 @@
-import { Deck, Flashcard } from "@/generated/prisma"
+import { Deck, Flashcard } from "@/generated/prisma";
 import prisma from "@/lib/prisma"
 import { Prisma } from "@/generated/prisma"
 

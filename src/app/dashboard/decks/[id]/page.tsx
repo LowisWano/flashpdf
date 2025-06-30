@@ -1,21 +1,14 @@
-import FlashcardsSection from "@/components/flashcards-section"
-
+import Link from "next/link"
 import { MoreVertical } from 'lucide-react'
-
+import { getDecks } from "@/services/deck.service"
+import { createClient } from "@/utils/supabase/server"
+import FlashcardsSection from "@/components/flashcards-section"
 import {
   Card,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-
-import { getDecks } from "@/services/deck.service"
-import { createClient } from "@/utils/supabase/server"
-import Link from "next/link"
-
-import DecksSection from "@/components/decks-section"
-import { Deck } from "@/generated/prisma"
-import { createClient } from '@/utils/supabase/server'
 
 export default async function Page({
   params,
