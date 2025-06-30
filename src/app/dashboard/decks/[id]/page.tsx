@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 
 import { getDecks } from "@/services/deck.service"
-
+import { createClient } from "@/utils/supabase/server"
 import Link from "next/link"
 
 export default async function Page({
@@ -19,8 +19,15 @@ export default async function Page({
   params: { id: string }
 }) {
   const { id } = await params
-  const decks = getDecks()
-  const currentDeck = decks.find(d => d.id === Number(id))
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+
+  if (!data?.user?.id) {
+    return <div>User not authenticated</div>
+  }
+
+  const decks = await getDecks(data.user.id)
+  const currentDeck = decks.find(d => d.id === id)
 
   if (!currentDeck) {
     return <div>Deck not found</div>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CohereClientV2, CohereError, CohereTimeoutError } from 'cohere-ai';
+import { createDeck } from '@/services/deck.service';
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.COHERE_APIKEY;
@@ -9,10 +10,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { text } = await req.json();
+    const { text, userId } = await req.json();
     
-    if (!text) {
-      return NextResponse.json({ error: "Text is required" }, { status: 400 });
+    if (!text || !userId) {
+      return NextResponse.json({ error: "Missing text or user ID" }, { status: 400 });
     }
 
     const cohere = new CohereClientV2({ 
@@ -26,21 +27,25 @@ export async function POST(req: NextRequest) {
         {
           role: "system",
           content: `
-            Generate an array of JSON objects in the following format:
+            Generate a JSON data in this format:
 
             {
-              term: string;
-              definition: string;    
+              title: string;
+              flashcards: {
+                term: string;
+                definition: string;  
+              }[];
             }
 
             Instructions:
 
-            1. Create an array of flashcards JSON object by extracting key terms and their definitions from the given text.
-            2. Each flashcard should be a JSON object with exactly two fields: "term" and "definition".
-            3. Use the original text as much as possible, but you may lightly rephrase or clarify ambiguous or complex content to make clear and concise term-definition pairs.
-            4. Ensure the output is valid JSON (an array of objects), with proper syntax and punctuation.
-            5. If the text contains multiple key concepts, generate one flashcard per concept.
-            6. Avoid including explanations, commentary, or anything outside the JSON array.
+            1. Set the "title" field to a concise summary or main topic of the given text.
+            2. Create the "flashcards" array by extracting key terms and their definitions from the given text.
+            3. Each flashcard should be a JSON object with exactly two fields: "term" and "definition".
+            4. Use the original text as much as possible, but you may lightly rephrase or clarify ambiguous or complex content to produce clear and concise term-definition pairs.
+            5. Ensure the output is valid JSON, properly formatted with correct syntax and punctuation.
+            6. If the text contains multiple key concepts, generate one flashcard per concept.
+            7. Avoid adding explanations, commentary, or content outside the described JSON structure.
           `,
         },{
           role: "user",
@@ -48,8 +53,23 @@ export async function POST(req: NextRequest) {
         }
       ],
     });
-    
-    return NextResponse.json({ flashcards: chat.message });
+    const responseText = chat.message?.content?.[0]?.text;
+    if (!responseText) {
+      return NextResponse.json({ error: "Invalid response from Cohere" }, { status: 500 });
+    }
+
+    const responseData = JSON.parse(responseText);
+
+    const deck = await createDeck({
+      userId: userId,
+      deck: {
+        title: responseData.title,
+        flashcards: responseData.flashcards,
+        cardCount: responseData.flashcards.length
+      }
+    });
+
+    return NextResponse.json({ success: "Successfully created flashcards", deck })
   } catch(err){
     if (err instanceof CohereTimeoutError) {
       console.log("Request timed out", err);
