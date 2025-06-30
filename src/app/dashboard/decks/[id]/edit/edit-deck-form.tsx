@@ -47,7 +47,7 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
   const [isSaving, setIsSaving] = useState(false)
 
   const handleAddFlashcard = () => {
-    setFlashcards(addFlashcard(flashcards))
+    setFlashcards(addFlashcard(flashcards, deckId))
   }
 
   const handleRemoveFlashcard = (id: string) => {
@@ -58,13 +58,19 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
     setFlashcards(updateFlashcard(flashcards, id, field, value))
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true)
-    setTimeout(() => {
-      console.log("Updating flashcard set:", { id: deckId, title, description, flashcards })
-      setIsSaving(false)
+    try {
+      await editDeck(deckId, {
+        title,
+        description,
+        flashcards: flashcards.map(({ id, term, definition }) => ({ id, term, definition })),
+      })
       router.push(`/dashboard/decks/${deckId}`)
-    }, 1000)
+    } catch (e) {
+      // Optionally handle error
+      setIsSaving(false)
+    }
   }
 
   const handleCancel = () => {

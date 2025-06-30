@@ -13,6 +13,10 @@ import { getDecks } from "@/services/deck.service"
 import { createClient } from "@/utils/supabase/server"
 import Link from "next/link"
 
+import DecksSection from "@/components/decks-section"
+import { Deck } from "@/generated/prisma"
+import { createClient } from '@/utils/supabase/server'
+
 export default async function Page({
   params,
 }: {
