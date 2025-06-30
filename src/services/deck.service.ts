@@ -17,12 +17,14 @@ export async function getDecks(userId: string): Deck[] {
 }
 
 // implement database query for add flashcard here.
-export function addFlashcard(flashcards: Flashcard[]): Flashcard[] {
+export function addFlashcard(flashcards: Flashcard[], deckId: string): Flashcard[] {
+  // Find max id (as number) among flashcards, fallback to 0 if none
+  const maxId = flashcards.length > 0 ? Math.max(...flashcards.map(card => Number(card.id) || 0)) : 0
   const newCard: Flashcard = {
-    id: "1",
-    term: "add",
-    definition: "definition",
-    deckId: "1"
+    id: (maxId + 1).toString(),
+    term: "",
+    definition: "",
+    deckId: deckId
   }
   return [...flashcards, newCard]
 }

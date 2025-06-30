@@ -13,14 +13,23 @@ import { getDecks } from "@/services/deck.service"
 
 import Link from "next/link"
 
+import DecksSection from "@/components/decks-section"
+import { Deck } from "@/generated/prisma"
+import { createClient } from '@/utils/supabase/server'
+
 export default async function Page({
   params,
 }: {
   params: { id: string }
 }) {
   const { id } = await params
-  const decks = getDecks()
-  const currentDeck = decks.find(d => d.id === Number(id))
+  const supabase = await createClient()
+  const {data, error} = await supabase.auth.getUser()
+  if (error) {
+    return <div>an error occured</div>
+  }
+  const decks = await getDecks(data.user.id)
+  const currentDeck = decks.find(d => d.id === id)
 
   if (!currentDeck) {
     return <div>Deck not found</div>
