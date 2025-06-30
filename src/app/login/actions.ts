@@ -60,3 +60,16 @@ export async function signup(formData: FormData) {
 
   redirect('/check-email?justSignedUp=true')
 }
+
+export async function logout() {
+  const supabase = await createClient()
+  
+  const { error } = await supabase.auth.signOut()
+  
+  if (error) {
+    console.log(error)
+    redirect('/error')
+  }
+  
+  redirect('/')
+}
