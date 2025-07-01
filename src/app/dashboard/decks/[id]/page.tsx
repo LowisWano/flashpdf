@@ -1,7 +1,8 @@
-import FlashcardsSection from "@/components/flashcards-section"
-
+import Link from "next/link"
 import { MoreVertical } from 'lucide-react'
-
+import { getDecks } from "@/services/deck.service"
+import { createClient } from "@/utils/supabase/server"
+import FlashcardsSection from "@/components/flashcards-section"
 import {
   Card,
   CardHeader,
@@ -9,13 +10,9 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-import { getDecks } from "@/services/deck.service"
-
-import Link from "next/link"
-
 import DecksSection from "@/components/decks-section"
 import { Deck } from "@/generated/prisma"
-import { createClient } from '@/utils/supabase/server'
+
 
 export default async function Page({
   params,
@@ -24,10 +21,12 @@ export default async function Page({
 }) {
   const { id } = await params
   const supabase = await createClient()
-  const {data, error} = await supabase.auth.getUser()
-  if (error) {
-    return <div>an error occured</div>
+  const { data } = await supabase.auth.getUser()
+
+  if (!data?.user?.id) {
+    return <div>User not authenticated</div>
   }
+
   const decks = await getDecks(data.user.id)
   const currentDeck = decks.find(d => d.id === id)
 
