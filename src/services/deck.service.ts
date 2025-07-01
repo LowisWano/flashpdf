@@ -1,9 +1,29 @@
-import { Deck, Flashcard } from "@/generated/prisma"
+import { Deck, Flashcard } from "@/generated/prisma";
 import prisma from "@/lib/prisma"
 import { Prisma } from "@/generated/prisma"
 
+interface FlashcardEntry {
+  term: string;
+  definition: string;
+}
 
-export async function getDecks(userId: string): Deck[] {
+interface DeckEntry {
+  title: string;
+  flashcards: FlashcardEntry[];
+  cardCount: number;
+}
+interface FlashcardEntry {
+  term: string;
+  definition: string;
+}
+
+interface DeckEntry {
+  title: string;
+  flashcards: FlashcardEntry[];
+  cardCount: number;
+}
+
+export async function getDecks(userId: string): Promise<Deck[]> {
   const decks: Deck[] = await prisma.deck.findMany({
     where: {
       userId: userId,
@@ -61,22 +81,5 @@ export function addFlashcard(flashcards: Flashcard[], deckId: string): Flashcard
   return [...flashcards, newCard]
 }
 
-// implement database query for remove flashcard here.
-export function removeFlashcard(flashcards: Flashcard[], id: string): Flashcard[] {
-  if (flashcards.length > 1) {
-    return flashcards.filter((card) => card.id !== id)
-  }
-  return flashcards
-}
-
-// implement database query for update flashcard here.
-export function updateFlashcard(
-  flashcards: Flashcard[], 
-  id: string, 
-  field: "term" | "definition", 
-  value: string
-): Flashcard[] {
-  return flashcards.map((card) => 
-    card.id === id ? { ...card, [field]: value } : card
-  )
+  return createdDeck;
 }

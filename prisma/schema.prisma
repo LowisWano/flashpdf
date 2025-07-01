@@ -24,14 +24,14 @@ model User {
 model Deck {
   id            String     @default(cuid()) @id
   title         String
-  description   String
-  topics        String[]
-  studyProgress Int
-  cardCount     Int
-  accuracy      Int
-  lastStudied   DateTime
-  isStarred     Boolean
-  user          User      @relation(fields: [userId], references: [id])
+  description   String     @default("")
+  topics        String[]   @default([])
+  studyProgress Int        @default(0)
+  cardCount     Int       
+  accuracy      Int        @default(0)
+  lastStudied   DateTime   @default(now())
+  isStarred     Boolean    @default(false)
+  user          User       @relation(fields: [userId], references: [id])
   userId        String
   flashcards    Flashcard[]
 }

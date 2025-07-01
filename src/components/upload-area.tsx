@@ -14,6 +14,8 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/utils/supabase/client"
 
 async function pollWhisperResult(whisperHash: string, { interval = 3000, maxAttempts = 20 } = {}) {
   let attempts = 0;
@@ -56,6 +58,7 @@ async function pollWhisperResult(whisperHash: string, { interval = 3000, maxAtte
 }
 
 export default function UploadArea() {
+  const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [processing, setProcessing] = useState(false);
   const [extractedText, setExtractedText] = useState<string | null>(null);
@@ -103,13 +106,18 @@ export default function UploadArea() {
 
       const text = await pollWhisperResult(data.whisper_hash);
       setExtractedText(text);
+      const supabase = await createClient()
+      const userData = await supabase.auth.getUser()
 
       const cohereRes = await fetch("/api/cohere", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({
+          text,
+          userId: userData?.data?.user?.id
+        }),
       });
 
       if (!cohereRes.ok) {
@@ -117,9 +125,9 @@ export default function UploadArea() {
         setError(`Failed to generate flashcards: ${errorData.error}`);
         return;
       }
-
-      const cohereData = await cohereRes.json();
-      console.log(cohereData.flashcards.content[0].text)
+      const response = await cohereRes.json();
+      console.log(response.deck)
+      router.push(`/dashboard/decks/${response.deck.id}/edit`)
 
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "An error occurred.";
