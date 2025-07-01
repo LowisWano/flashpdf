@@ -10,10 +10,6 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-import DecksSection from "@/components/decks-section"
-import { Deck } from "@/generated/prisma"
-
-
 export default async function Page({
   params,
 }: {
@@ -38,7 +34,7 @@ export default async function Page({
     <div className="flex justify-center flex-col mx-45">
       <Card className="mb-6">
         <CardHeader className="flex flex-row justify-between">
-          <CardTitle className="text-2xl font-bold">
+          <CardTitle className="text-2xl">
             {currentDeck.title}
           </CardTitle>
 
