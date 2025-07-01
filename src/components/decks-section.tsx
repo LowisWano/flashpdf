@@ -1,6 +1,6 @@
 import { BookOpen, Clock, FileText, Filter, Search, TrendingUp } from "lucide-react";
 import Deck from "./deck"
-import { Deck as DeckType } from "@/services/deck.service"
+import { Deck as DeckType } from "@/generated/prisma"
 import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
@@ -60,14 +60,13 @@ export default function DecksSection({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-3">
-        {
-          decks.map((deck) => (
-            <Deck key={deck.id} deck={deck} />
-          ))
-        }
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-3">
+          {
+            decks.map((deck) => (
+              <Deck key={deck.id} deck={deck} />
+            ))
+          }
+        </div>
     </div>
   )
 }
