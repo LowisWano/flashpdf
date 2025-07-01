@@ -2,43 +2,59 @@
 
 import { useState } from "react"
 import FlashcardSetForm from "@/components/flashcard-set-form"
-import { Flashcard, addFlashcard, removeFlashcard, updateFlashcard } from "@/services/deck.service"
+import { v4 as uuidv4 } from "uuid";
+import { Flashcard } from "@/components/flashcard-item";
+import { createDeckAction } from "./createAction";
 
 export default function CreateFlashcardSetPage() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [flashcards, setFlashcards] = useState<Flashcard[]>([
-    { id: "1", term: "", definition: "" },
-    { id: "2", term: "", definition: "" },
-  ])
+  const [flashcards, setFlashcards] = useState<Flashcard[]>(() => [
+    { id: uuidv4(), term: "", definition: "" },
+    { id: uuidv4(), term: "", definition: "" },
+  ]);
   const [isSaving, setIsSaving] = useState(false)
 
   const handleAddFlashcard = () => {
-    setFlashcards(addFlashcard(flashcards))
+    setFlashcards([
+      ...flashcards,
+      { id: uuidv4(), term: "", definition: "" }
+    ]);
   }
 
   const handleRemoveFlashcard = (id: string) => {
-    setFlashcards(removeFlashcard(flashcards, id))
+    setFlashcards(flashcards.filter(card => card.id !== id));
   }
 
   const handleUpdateFlashcard = (id: string, field: "term" | "definition", value: string) => {
-    setFlashcards(updateFlashcard(flashcards, id, field, value))
-  }
+    setFlashcards(flashcards.map(card =>
+      card.id === id ? { ...card, [field]: value } : card
+    ));
+  };
 
-  const handleSave = () => {
-    setIsSaving(true)
-    setTimeout(() => {
-      console.log("Saving flashcard set:", { title, description, flashcards })
-      setIsSaving(false)
-    }, 1000)
-  }
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      createDeckAction({
+        title,
+        description,
+        flashcards
+      })
+      
+    } catch (err: unknown) {
+      // handle error (show toast, etc)
+      console.log(err)
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleCancel = () => {
     setTitle("")
     setDescription("")
     setFlashcards([
-      { id: "1", term: "", definition: "" },
-      { id: "2", term: "", definition: "" },
+      { id: uuidv4(), term: "", definition: "" },
+      { id: uuidv4(), term: "", definition: "" },
     ])
   }
 
