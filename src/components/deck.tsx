@@ -1,3 +1,5 @@
+"use client"
+import { useState } from "react"
 import Link from 'next/link'
 import { Download, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
 import { Deck as DeckType } from "@/services/deck.service"
@@ -13,10 +15,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from "@/components/ui/badge"
 import { Progress } from './ui/progress'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
+import DeleteDeckDialog from './delete-deck-dialog'
+import { DialogTrigger } from './ui/dialog'
 
 export default function Deck({ deck }: { 
   deck: DeckType
 }) {
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   return (
       <Card key={deck.id} className="hover:shadow-lg transition-shadow group justify-between">
         <CardHeader className="">
@@ -54,9 +59,11 @@ export default function Deck({ deck }: {
                   Export
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete
+                <DropdownMenuItem className="text-red-600" onClick={() => setIsDeleteOpen(true)}>
+                  <DialogTrigger className="flex">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete Deck
+                  </DialogTrigger>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -102,6 +109,12 @@ export default function Deck({ deck }: {
             </Button>
           </Link>
         </CardContent>
+        <DeleteDeckDialog
+        deckId={deck.id}
+        deckTitle={deck.title}
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+      />
       </Card>
   )
 }

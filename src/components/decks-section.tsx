@@ -5,6 +5,16 @@ import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { CreateFlashcardsDialog } from "./create-flashcards-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog"
+import DeleteDeckDialog from "./delete-deck-dialog";
 
 export default function DecksSection({
   decks,
@@ -60,7 +70,7 @@ export default function DecksSection({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      
+      <Dialog>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-3">
         {
           decks.map((deck) => (
@@ -68,6 +78,9 @@ export default function DecksSection({
           ))
         }
       </div>
+      
+        
+      </Dialog>
     </div>
   )
 }
