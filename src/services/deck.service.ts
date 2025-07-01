@@ -1,24 +1,14 @@
-import { Deck, Flashcard } from "@/generated/prisma";
+import { Deck } from "@/generated/prisma";
 import prisma from "@/lib/prisma"
-import { Prisma } from "@/generated/prisma"
 
-interface FlashcardEntry {
+export interface FlashcardEntry {
   term: string;
   definition: string;
 }
 
-interface DeckEntry {
+export interface DeckEntry {
   title: string;
-  flashcards: FlashcardEntry[];
-  cardCount: number;
-}
-interface FlashcardEntry {
-  term: string;
-  definition: string;
-}
-
-interface DeckEntry {
-  title: string;
+  description?: string;
   flashcards: FlashcardEntry[];
   cardCount: number;
 }
@@ -38,12 +28,13 @@ export async function getDecks(userId: string): Promise<Deck[]> {
 
 export async function createDeck({ userId, deck }: {
   userId: string,
-  deck: DeckEntry
+  deck: DeckEntry,
 }): Promise<Deck> {
   const createdDeck = await prisma.deck.create({
     data: {
       title: deck.title,
       userId: userId,
+      description: deck.description || "",
       cardCount: deck.flashcards.length,
       flashcards: {
         create: deck.flashcards.map(f => ({

@@ -15,14 +15,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from "@/components/ui/badge"
 import { Progress } from './ui/progress'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { Dialog, DialogTrigger } from './ui/dialog'
+import { Dialog } from './ui/dialog'
 import DeleteDeckDialog from './delete-deck-dialog'
 
 export default function Deck({ deck }: { 
   deck: DeckType
 }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  console.log(isDeleteDialogOpen)
   return (
       <Card key={deck.id} className="hover:shadow-lg transition-shadow group justify-between">
         <CardHeader className="">
