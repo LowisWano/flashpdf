@@ -1,5 +1,4 @@
 import { Deck, Flashcard } from "@/generated/prisma";
-import { Deck, Flashcard } from "@/generated/prisma";
 import prisma from "@/lib/prisma"
 import { Prisma } from "@/generated/prisma"
 
@@ -25,7 +24,6 @@ interface DeckEntry {
 }
 
 export async function getDecks(userId: string): Promise<Deck[]> {
-export async function getDecks(userId: string): Promise<Deck[]> {
   const decks: Deck[] = await prisma.deck.findMany({
     where: {
       userId: userId,
@@ -38,52 +36,6 @@ export async function getDecks(userId: string): Promise<Deck[]> {
   return decks
 }
 
-export async function createDeck({ userId, deck }: {
-  userId: string,
-  deck: DeckEntry
-}): Promise<Deck> {
-  const createdDeck = await prisma.deck.create({
-    data: {
-      title: deck.title,
-      userId: userId,
-      cardCount: deck.flashcards.length,
-      flashcards: {
-        create: deck.flashcards.map(f => ({
-          term: f.term,
-          definition: f.definition,
-        })),
-      },
-    },
-    include: {
-      flashcards: true,
-    },
-  });
-
-  return createdDeck;
-}
-export async function createDeck({ userId, deck }: {
-  userId: string,
-  deck: DeckEntry
-}): Promise<Deck> {
-  const createdDeck = await prisma.deck.create({
-    data: {
-      title: deck.title,
-      userId: userId,
-      cardCount: deck.flashcards.length,
-      flashcards: {
-        create: deck.flashcards.map(f => ({
-          term: f.term,
-          definition: f.definition,
-        })),
-      },
-    },
-    include: {
-      flashcards: true,
-    },
-  });
-
-  return createdDeck;
-}
 export async function createDeck({ userId, deck }: {
   userId: string,
   deck: DeckEntry
