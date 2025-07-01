@@ -1,20 +1,42 @@
 "use client"
 
 import FlashcardSetForm from "@/components/flashcard-set-form"
-import { 
-  Deck,
-  Flashcard, 
-  addFlashcard, 
-  removeFlashcard, 
-  updateFlashcard, 
-} from "@/services/deck.service"
-import { editDeck } from "./actions"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Deck, Flashcard } from "@/generated/prisma"
+import { editDeck } from "./actions"
 
 interface EditDeckFormProps {
   deckId: string
   deck: Deck
+}
+
+function addFlashcard(flashcards: Flashcard[]): Flashcard[] {
+  const newCard: Flashcard = {
+    id: "1",
+    term: "add",
+    definition: "definition",
+    deckId: "1"
+  }
+  return [...flashcards, newCard]
+}
+
+function updateFlashcard(
+  flashcards: Flashcard[], 
+  id: string, 
+  field: "term" | "definition", 
+  value: string
+): Flashcard[] {
+  return flashcards.map((card) => 
+    card.id === id ? { ...card, [field]: value } : card
+  )
+}
+
+function removeFlashcard(flashcards: Flashcard[], id: string): Flashcard[] {
+  if (flashcards.length > 1) {
+    return flashcards.filter((card) => card.id !== id)
+  }
+  return flashcards
 }
 
 export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
