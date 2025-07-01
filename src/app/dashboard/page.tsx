@@ -11,7 +11,6 @@ export default async function Dashboard() {
   if (error) {
     return <div>an error occured</div>
   }
-  console.log(data.user.id)
 
   const decks: Deck[] = await getDecks(data.user.id)
   

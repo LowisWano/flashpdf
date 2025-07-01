@@ -59,3 +59,19 @@ export async function createDeck({ userId, deck }: {
 
   return createdDeck;
 }
+
+export async function deleteDeck({
+  deckId
+}: {
+  deckId: string
+}){
+  try {
+    const deck = await prisma.deck.delete({
+      where: { id: deckId }
+    })
+
+    return deck
+  } catch (error) {
+    console.error('Error deleting deck:', error)
+  }
+}

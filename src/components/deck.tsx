@@ -1,7 +1,9 @@
+"use client"
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { Download, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
-import { Deck as DeckType } from "@/services/deck.service"
-
+import { Deck as DeckType } from '@/generated/prisma'
 import {
   Card,
   CardContent,
@@ -13,54 +15,66 @@ import { Button } from '@/components/ui/button'
 import { Badge } from "@/components/ui/badge"
 import { Progress } from './ui/progress'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
+import { Dialog, DialogTrigger } from './ui/dialog'
+import DeleteDeckDialog from './delete-deck-dialog'
 
 export default function Deck({ deck }: { 
   deck: DeckType
 }) {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  console.log(isDeleteDialogOpen)
   return (
       <Card key={deck.id} className="hover:shadow-lg transition-shadow group justify-between">
         <CardHeader className="">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-2">
-                <CardTitle className="text-lg line-clamp-1">{deck.title}</CardTitle>
-                {deck.isStarred && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
+          <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-2">
+                  <CardTitle className="text-lg line-clamp-1">{deck.title}</CardTitle>
+                  {deck.isStarred && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
+                </div>
+                <CardDescription className="line-clamp-2">{deck.description}</CardDescription>
               </div>
-              <CardDescription className="line-clamp-2">{deck.description}</CardDescription>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <MoreVertical className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <Link href={`/dashboard/decks/${deck.id}/edit`} passHref>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <Link href={`/dashboard/decks/${deck.id}/edit`} passHref>
+                    <DropdownMenuItem>
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit
+                    </DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem>
-                    <Edit className="w-4 h-4 mr-2" />
-                    Edit
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share
                   </DropdownMenuItem>
-                </Link>
-                <DropdownMenuItem>
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                  <DropdownMenuItem>
+                    <Download className="w-4 h-4 mr-2" />
+                    Export
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-600"
+                    onClick={() => setIsDeleteDialogOpen(true)}
+                  >
+                    <div className="flex">
+                      <Trash2 className="w-4 h-4 mr-4" />
+                      Delete
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <DeleteDeckDialog deckId={deck.id} deckTitle={deck.title} setIsDeleteDialogOpen={setIsDeleteDialogOpen}/>
+          </Dialog>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-1">
