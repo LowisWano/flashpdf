@@ -108,7 +108,7 @@ export default function Deck({ deck }: {
             </div>
           </div>
           
-          <Link href={`/dashboard/decks/${deck.id}`}>
+          <Link href={`/dashboard/decks/${deck.id}/study`}>
             <Button className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
               <Play className="w-4 h-4 mr-2" />
               Study Now

@@ -26,6 +26,19 @@ export async function getDecks(userId: string): Promise<Deck[]> {
   return decks
 }
 
+export async function getDeckById(deckId: string): Promise<Deck | null> {
+  const deck = await prisma.deck.findUnique({
+    where: {
+      id: deckId,
+    },
+    include: {
+      flashcards: true
+    }
+  });
+  
+  return deck;
+}
+
 export async function createDeck({ userId, deck }: {
   userId: string,
   deck: DeckEntry,
@@ -49,6 +62,27 @@ export async function createDeck({ userId, deck }: {
   });
 
   return createdDeck;
+}
+
+export async function updateDeckProgress({
+  deckId,
+  accuracy,
+}: {
+  deckId: string;
+  accuracy: number;
+}): Promise<Deck> {
+  const updatedDeck = await prisma.deck.update({
+    where: {
+      id: deckId
+    },
+    data: {
+      accuracy,
+      lastStudied: new Date(),
+      studyProgress: 100 // Mark as completed when study session is done
+    }
+  });
+  
+  return updatedDeck;
 }
 
 export async function deleteDeck({
