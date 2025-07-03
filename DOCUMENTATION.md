@@ -38,10 +38,10 @@ Major work-streams:
 ### 2.3 Front-end pages / components
 | File | Key modifications |
 | --- | --- |
-| `src/app/dashboard/create/page.tsx` | • Uses draft-card helpers.  
-• Client-side form validation.  
+| `src/app/dashboard/create/page.tsx` | • Uses draft-card helpers.
+• Client-side form validation.
 • `fetch('/api/decks', {POST…})` then `router.push('/dashboard')`. |
-| `src/components/deck.tsx` | • Added `"use client"`.  
+| `src/components/deck.tsx` | • Added `"use client"`.
 • Delete menu-item – calls DELETE route, refreshes dashboard. |
 | `src/components/decks-section.tsx` | Type import switched to `DeckWithFlashcards`. |
 | `src/app/dashboard/page.tsx` | Fetches decks for current Supabase user via `getDecks`. |
@@ -106,4 +106,4 @@ NEXT_ESLINT_IGNORE=true npm run build
 
 ---
 
-*Document generated on {{date}} during development pin.* 
+*Document generated on {{date}} during development pin.*
