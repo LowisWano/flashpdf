@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import FlashcardSetForm from "@/components/flashcard-set-form"
 import { v4 as uuidv4 } from "uuid";
 import { Flashcard } from "@/components/flashcard-item";
@@ -9,11 +9,16 @@ import { createDeckAction } from "./createAction";
 export default function CreateFlashcardSetPage() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [flashcards, setFlashcards] = useState<Flashcard[]>(() => [
-    { id: uuidv4(), term: "", definition: "" },
-    { id: uuidv4(), term: "", definition: "" },
-  ]);
+  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [isSaving, setIsSaving] = useState(false)
+
+  // Initialize flashcards after component mounts to avoid hydration mismatch
+  useEffect(() => {
+    setFlashcards([
+      { id: uuidv4(), term: "", definition: "" },
+      { id: uuidv4(), term: "", definition: "" },
+    ]);
+  }, []);
 
   const handleAddFlashcard = () => {
     setFlashcards([
@@ -56,6 +61,11 @@ export default function CreateFlashcardSetPage() {
       { id: uuidv4(), term: "", definition: "" },
       { id: uuidv4(), term: "", definition: "" },
     ])
+  }
+
+  // Don't render until flashcards are initialized to prevent hydration issues
+  if (flashcards.length === 0) {
+    return null;
   }
 
   return (

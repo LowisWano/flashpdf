@@ -36,6 +36,10 @@ export async function createDeck({ userId, deck }: {
       userId: userId,
       description: deck.description || "",
       cardCount: deck.flashcards.length,
+      studyProgress: 0,
+      accuracy: 0,
+      lastStudied: new Date(),
+      isStarred: false,
       flashcards: {
         create: deck.flashcards.map(f => ({
           term: f.term,
