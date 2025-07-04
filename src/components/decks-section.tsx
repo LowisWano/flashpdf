@@ -9,26 +9,51 @@ import { Button } from "./ui/button";
 import { CreateFlashcardsDialog } from "./create-flashcards-dialog";
 import { useState, useMemo } from "react";
 
+// Define sort types
+type SortOption = "recent" | "name" | null;
+
 export default function DecksSection({
   decks,
 }: {
   decks: DeckType[];
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>(null);
 
-  // Filter decks based on search query
+  // Filter and sort decks based on search query and sort option
   const filteredDecks = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return decks;
+    // First filter by search query
+    let result = decks;
+    
+    if (searchQuery.trim()) {
+      result = result.filter((deck) =>
+        deck.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
+      );
     }
     
-    return decks.filter((deck) =>
-      deck.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
-    );
-  }, [decks, searchQuery]);
+    // Then apply sorting
+    if (sortBy) {
+      return [...result].sort((a, b) => {
+        if (sortBy === "name") {
+          return a.title.localeCompare(b.title);
+        }
+        if (sortBy === "recent") {
+          // Sort by lastStudied date, most recent first
+          return new Date(b.lastStudied).getTime() - new Date(a.lastStudied).getTime();
+        }
+        return 0;
+      });
+    }
+    
+    return result;
+  }, [decks, searchQuery, sortBy]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+  };
+  
+  const handleSort = (option: SortOption) => {
+    setSortBy(option);
   };
   
   return (
@@ -57,38 +82,34 @@ export default function DecksSection({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Sort by
-              <Filter className="w-4 h-4" />
+              Sort by {sortBy === 'name' ? ': Name' : sortBy === 'recent' ? ': Recently studied' : ''}
+              <Filter className="w-4 h-4 ml-2" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSort('recent')}>
               <Clock className="w-4 h-4 mr-2" />
               Recently studied
+              {sortBy === 'recent' && <span className="ml-2 text-primary">✓</span>}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSort('name')}>
               <FileText className="w-4 h-4 mr-2" />
               Name
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Progress
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <BookOpen className="w-4 h-4 mr-2" />
-              Card count
+              {sortBy === 'name' && <span className="ml-2 text-primary">✓</span>}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      {/* Search results info */}
-      {searchQuery.trim() && (
+      {/* Search and sort info */}
+      {(searchQuery.trim() || sortBy) && (
         <div className="mb-4">
           <p className="text-sm text-gray-600">
             {filteredDecks.length === 0 
-              ? `No decks found for "${searchQuery}"`
-              : `Found ${filteredDecks.length} deck${filteredDecks.length === 1 ? '' : 's'} for "${searchQuery}"`
+              ? `No decks found${searchQuery ? ` for "${searchQuery}"` : ''}`
+              : `Found ${filteredDecks.length} deck${filteredDecks.length === 1 ? '' : 's'}${searchQuery ? ` for "${searchQuery}"` : ''}${
+                  sortBy ? ` sorted by ${sortBy === 'name' ? 'name' : 'recently studied'}` : ''
+                }`
             }
           </p>
         </div>
