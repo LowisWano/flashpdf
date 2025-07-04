@@ -53,8 +53,9 @@ export default function ProfileCard({
           <div className="relative inline-block mb-4">
             <Avatar className="w-24 h-24">
               <AvatarImage 
-                src={imagePreview || user.avatar} 
-                alt={user.name} 
+                src={imagePreview || user.avatar || "https://github.com/shadcn.png"} 
+                alt={user.name}
+                referrerPolicy="no-referrer"
               />
               <AvatarFallback className="text-2xl">
                 {user.name.split(' ').map(n => n[0]).join('')}

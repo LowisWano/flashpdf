@@ -5,7 +5,7 @@ import NavigationBar from "@/components/navigation-bar"
 import ProfileCard from "@/components/profile/profile-card"
 import StatsGrid from "@/components/profile/stats-grid"
 import RecentActivity from "@/components/profile/recent-activity"
-import SettingsSection from "@/components/profile/settings-section"
+import SimpleSettingsSection from "@/components/profile/simple-settings-section"
 import { useProfile } from "@/hooks/useProfile"
 import { Edit3, Settings, Save, X } from "lucide-react"
 
@@ -94,30 +94,13 @@ export default function ProfilePage() {
           </div>
 
           {showSettings ? (
-            /* Settings Section */
-            <SettingsSection
+            /* Simple Settings Section */
+            <SimpleSettingsSection
               user={user}
-              editForm={editForm}
-              passwordForm={passwordForm}
-              settings={settings}
               selectedImage={selectedImage}
               imagePreview={imagePreview}
-              showPassword={showPassword}
-              showNewPassword={showNewPassword}
-              showConfirmPassword={showConfirmPassword}
-              showDeleteConfirmation={showDeleteConfirmation}
-              deleteConfirmation={deleteConfirmation}
-              onEditFormChange={handleEditFormChange}
-              onPasswordFormChange={handlePasswordFormChange}
-              onSettingChange={handleSettingChange}
               onImageUpload={handleImageUpload}
               onSaveImage={handleSaveImage}
-              onRemoveImage={handleRemoveImage}
-              onPasswordChange={handlePasswordChange}
-              onDeleteAccount={handleDeleteAccount}
-              onTogglePasswordVisibility={handleTogglePasswordVisibility}
-              onToggleDeleteConfirmation={handleToggleDeleteConfirmation}
-              onDeleteConfirmationChange={handleDeleteConfirmationChange}
               triggerFileInput={triggerFileInput}
             />
           ) : (

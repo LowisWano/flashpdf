@@ -1,4 +1,5 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
+import { createClient } from "@/utils/supabase/client"
 
 export function useProfile() {
   const [isEditing, setIsEditing] = useState(false)
@@ -12,20 +13,52 @@ export function useProfile() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Mock user data - in a real app this would come from your auth system
+  // Default user data that will be updated from Supabase
   const [user, setUser] = useState({
-    name: "Alex Johnson",
-    email: "alex.johnson@example.com",
-    avatar: "/api/placeholder/150/150",
-    joinDate: "March 2023",
-    bio: "Passionate about learning and creating study materials. Love exploring new topics and helping others learn.",
-    level: "Advanced",
-    streak: 45,
-    totalStudyTime: "127 hours",
-    decksCreated: 23,
-    decksStudied: 156,
-    averageScore: 87
+    name: "User",
+    email: "user@example.com",
+    avatar: "https://github.com/shadcn.png",
+    joinDate: "2025",
+    bio: "No bio yet",
+    level: "Beginner",
+    streak: 0,
+    totalStudyTime: "0 hours",
+    decksCreated: 0,
+    decksStudied: 0,
+    averageScore: 0
   })
+
+  // Fetch user data from Supabase
+  useEffect(() => {
+    async function fetchUserData() {
+      const supabase = createClient()
+      const { data, error } = await supabase.auth.getUser()
+      
+      if (error) {
+        console.error("Error fetching user:", error)
+        return
+      }
+      
+      if (data?.user) {
+        // Use default avatar from shadcn
+        const avatarUrl = "https://github.com/shadcn.png"
+        const fullName = data.user.user_metadata?.full_name || data.user.user_metadata?.name || "User"
+        
+        setUser(prev => ({
+          ...prev,
+          name: fullName,
+          email: data.user.email || prev.email,
+          avatar: avatarUrl, // Always use the shadcn avatar
+          joinDate: new Date(data.user.created_at).toLocaleDateString('en-US', { 
+            month: 'long', 
+            year: 'numeric' 
+          })
+        }))
+      }
+    }
+    
+    fetchUserData()
+  }, [])
 
   const [editForm, setEditForm] = useState({
     name: user.name,
