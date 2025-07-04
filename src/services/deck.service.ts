@@ -9,12 +9,13 @@ export interface FlashcardEntry {
 export interface DeckEntry {
   title: string;
   description?: string;
+  topics?: string[];
   flashcards: FlashcardEntry[];
   cardCount: number;
 }
 
 export async function getDecks(userId: string): Promise<Deck[]> {
-  const decks: Deck[] = await prisma.deck.findMany({
+  const decks = await prisma.deck.findMany({
     where: {
       userId: userId,
     },
@@ -22,6 +23,18 @@ export async function getDecks(userId: string): Promise<Deck[]> {
       flashcards: true
     }
   })
+
+  // Update the cardCount on each deck to match the actual number of flashcards
+  for (const deck of decks) {
+    const flashcardsCount = deck.flashcards?.length || 0
+    if (deck.cardCount !== flashcardsCount) {
+      await prisma.deck.update({
+        where: { id: deck.id },
+        data: { cardCount: flashcardsCount }
+      })
+      deck.cardCount = flashcardsCount
+    }
+  }
 
   return decks
 }
@@ -36,6 +49,18 @@ export async function getDeckById(deckId: string): Promise<Deck | null> {
     }
   });
   
+  // Update the cardCount if it's not matching the actual number of flashcards
+  if (deck && deck.flashcards) {
+    const flashcardsCount = deck.flashcards.length
+    if (deck.cardCount !== flashcardsCount) {
+      await prisma.deck.update({
+        where: { id: deckId },
+        data: { cardCount: flashcardsCount }
+      })
+      deck.cardCount = flashcardsCount
+    }
+  }
+  
   return deck;
 }
 
@@ -48,6 +73,7 @@ export async function createDeck({ userId, deck }: {
       title: deck.title,
       userId: userId,
       description: deck.description || "",
+      topics: deck.topics || [],
       cardCount: deck.flashcards.length,
       flashcards: {
         create: deck.flashcards.map(f => ({

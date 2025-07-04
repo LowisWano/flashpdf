@@ -3,16 +3,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { Plus, X } from "lucide-react"
 import FlashcardItem, { Flashcard } from "./flashcard-item"
-import React from "react"
+import React, { KeyboardEvent } from "react"
+import { Badge } from "@/components/ui/badge"
 
 interface FlashcardSetFormProps {
   title: string
   description: string
+  tags: string[]
   flashcards: Flashcard[]
   onTitleChange: (value: string) => void
   onDescriptionChange: (value: string) => void
+  onAddTag: (tag: string) => void
+  onRemoveTag: (tag: string) => void
   onAddFlashcard: () => void
   onRemoveFlashcard: (id: string) => void
   onUpdateFlashcard: (id: string, field: "term" | "definition", value: string) => void
@@ -24,9 +28,12 @@ interface FlashcardSetFormProps {
 const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
   title,
   description,
+  tags,
   flashcards,
   onTitleChange,
   onDescriptionChange,
+  onAddTag,
+  onRemoveTag,
   onAddFlashcard,
   onRemoveFlashcard,
   onUpdateFlashcard,
@@ -34,6 +41,16 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
   onCancel,
   isSaving = false,
 }) => {
+  const [tagInput, setTagInput] = React.useState<string>("");
+
+  const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && tagInput.trim()) {
+      e.preventDefault();
+      onAddTag(tagInput.trim());
+      setTagInput("");
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Main Form */}
@@ -63,6 +80,32 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
               rows={3}
               className="bg-white border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100"
             />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="tags" className="text-base">Tags</Label>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {tags.map((tag) => (
+                <Badge key={tag} className="bg-gradient-to-r from-orange-400 to-purple-500 text-white flex items-center gap-1 px-3 py-1">
+                  {tag}
+                  <button 
+                    type="button" 
+                    onClick={() => onRemoveTag(tag)} 
+                    className="ml-1 hover:text-gray-100"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+            </div>
+            <Input
+              id="tags"
+              placeholder="Add tags (press Enter to add)"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={handleTagKeyDown}
+              className="bg-white border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+            />
+            <p className="text-xs text-gray-500 mt-1">Press Enter to add a tag</p>
           </div>
         </CardContent>
       </Card>
@@ -113,4 +156,4 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
   )
 }
 
-export default FlashcardSetForm; 
+export default FlashcardSetForm;
