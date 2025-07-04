@@ -28,32 +28,67 @@ export function useProfile() {
     averageScore: 0
   })
 
-  // Fetch user data from Supabase
+  // Fetch user data from Supabase auth and database
   useEffect(() => {
     async function fetchUserData() {
       const supabase = createClient()
       const { data, error } = await supabase.auth.getUser()
       
       if (error) {
-        console.error("Error fetching user:", error)
+        console.error("Error fetching user from auth:", error)
         return
       }
       
       if (data?.user) {
-        // Use default avatar from shadcn
-        const avatarUrl = "https://github.com/shadcn.png"
-        const fullName = data.user.user_metadata?.full_name || data.user.user_metadata?.name || "User"
-        
-        setUser(prev => ({
-          ...prev,
-          name: fullName,
-          email: data.user.email || prev.email,
-          avatar: avatarUrl, // Always use the shadcn avatar
-          joinDate: new Date(data.user.created_at).toLocaleDateString('en-US', { 
-            month: 'long', 
-            year: 'numeric' 
-          })
-        }))
+        try {
+          // Fetch user name from the User table in the database
+          const response = await fetch(`/api/users/${data.user.id}`)
+          
+          if (!response.ok) {
+            throw new Error(`Failed to fetch user data: ${response.status}`)
+          }
+          
+          const userData = await response.json()
+          
+          // Use default avatar from shadcn
+          const avatarUrl = "https://github.com/shadcn.png"
+          
+          setUser(prev => ({
+            ...prev,
+            name: userData.name || "User", // Use name from database
+            email: data.user.email || prev.email,
+            avatar: avatarUrl, // Always use the shadcn avatar
+            joinDate: new Date(data.user.created_at).toLocaleDateString('en-US', { 
+              month: 'long', 
+              year: 'numeric' 
+            })
+          }))
+          
+          // Also update the edit form with the fetched name
+          setEditForm(prev => ({
+            ...prev,
+            name: userData.name || "User"
+          }))
+          
+        } catch (dbError) {
+          console.error("Error fetching user from database:", dbError)
+          
+          // Fallback to auth data if database fetch fails
+          const fallbackName = data.user.user_metadata?.full_name || 
+                              data.user.user_metadata?.name || 
+                              "User"
+          
+          setUser(prev => ({
+            ...prev,
+            name: fallbackName,
+            email: data.user.email || prev.email,
+            avatar: "https://github.com/shadcn.png",
+            joinDate: new Date(data.user.created_at).toLocaleDateString('en-US', { 
+              month: 'long', 
+              year: 'numeric' 
+            })
+          }))
+        }
       }
     }
     
@@ -109,11 +144,38 @@ export function useProfile() {
     }
   ]
 
-  const handleSaveProfile = () => {
-    setUser(prev => ({ ...prev, ...editForm }))
-    setIsEditing(false)
-    setSelectedImage(null)
-    setImagePreview(null)
+  const handleSaveProfile = async () => {
+    try {
+      // Get the user's ID from Supabase auth
+      const supabase = createClient()
+      const { data } = await supabase.auth.getUser()
+      
+      if (data?.user) {
+        // Update the user's name in the database
+        const response = await fetch(`/api/users/${data.user.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: editForm.name,
+          }),
+        })
+        
+        if (!response.ok) {
+          throw new Error(`Failed to update user: ${response.status}`)
+        }
+        
+        // Update local state
+        setUser(prev => ({ ...prev, ...editForm }))
+        setIsEditing(false)
+        setSelectedImage(null)
+        setImagePreview(null)
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error)
+      alert("Failed to update profile. Please try again.")
+    }
   }
 
   const handleCancelEdit = () => {
