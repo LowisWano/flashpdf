@@ -8,7 +8,7 @@ import { editDeck } from "./actions"
 
 interface EditDeckFormProps {
   deckId: string
-  deck: Deck
+  deck: any // Using any temporarily to fix type issues
 }
 
 
@@ -50,6 +50,7 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
   
   const [title, setTitle] = useState(deck.title)
   const [description, setDescription] = useState(deck.description)
+  const [tags, setTags] = useState<string[]>(deck.topics || [])
   const [flashcards, setFlashcards] = useState<Flashcard[]>(deck.flashcards)
   const [isSaving, setIsSaving] = useState(false)
 
@@ -65,12 +66,23 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
     setFlashcards(updateFlashcard(flashcards, id, field, value))
   }
 
+  const handleAddTag = (tag: string) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
+  }
+
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter(t => t !== tag));
+  }
+
   const handleSave = async () => {
     setIsSaving(true)
     try {
       await editDeck(deckId, {
         title,
         description,
+        topics: tags,
         flashcards: flashcards.map(({ id, term, definition }) => ({ id, term, definition })),
       })
       router.push(`/dashboard/decks/${deckId}/study`)
@@ -94,9 +106,12 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
         <FlashcardSetForm
           title={title}
           description={description}
+          tags={tags}
           flashcards={flashcards}
           onTitleChange={setTitle}
           onDescriptionChange={setDescription}
+          onAddTag={handleAddTag}
+          onRemoveTag={handleRemoveTag}
           onAddFlashcard={handleAddFlashcard}
           onRemoveFlashcard={handleRemoveFlashcard}
           onUpdateFlashcard={handleUpdateFlashcard}

@@ -6,9 +6,10 @@ import { revalidatePath } from 'next/cache'
 import { Flashcard } from "@/components/flashcard-item"
 import { redirect } from "next/navigation"
 
-export async function createDeckAction({ title, description, flashcards }: {
+export async function createDeckAction({ title, description, topics, flashcards }: {
   title: string,
   description: string,
+  topics: string[],
   flashcards: Flashcard[]
 }) {
   const supabase = await createClient()
@@ -24,6 +25,7 @@ export async function createDeckAction({ title, description, flashcards }: {
     deck: {
       title,
       description,
+      topics,
       flashcards: flashcards.map(({ term, definition }) => ({ term, definition })),
       cardCount: flashcards.length,
     }

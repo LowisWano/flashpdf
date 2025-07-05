@@ -9,6 +9,7 @@ import { createDeckAction } from "./createAction";
 export default function CreateFlashcardSetPage() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [tags, setTags] = useState<string[]>([])
   const [flashcards, setFlashcards] = useState<Flashcard[]>(() => [
     { id: uuidv4(), term: "", definition: "" },
     { id: uuidv4(), term: "", definition: "" },
@@ -32,12 +33,23 @@ export default function CreateFlashcardSetPage() {
     ));
   };
 
+  const handleAddTag = (tag: string) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
+  }
+
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter(t => t !== tag));
+  }
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
       createDeckAction({
         title,
         description,
+        topics: tags,
         flashcards
       })
       
@@ -52,6 +64,7 @@ export default function CreateFlashcardSetPage() {
   const handleCancel = () => {
     setTitle("")
     setDescription("")
+    setTags([])
     setFlashcards([
       { id: uuidv4(), term: "", definition: "" },
       { id: uuidv4(), term: "", definition: "" },
@@ -68,9 +81,12 @@ export default function CreateFlashcardSetPage() {
         <FlashcardSetForm
           title={title}
           description={description}
+          tags={tags}
           flashcards={flashcards}
           onTitleChange={setTitle}
           onDescriptionChange={setDescription}
+          onAddTag={handleAddTag}
+          onRemoveTag={handleRemoveTag}
           onAddFlashcard={handleAddFlashcard}
           onRemoveFlashcard={handleRemoveFlashcard}
           onUpdateFlashcard={handleUpdateFlashcard}

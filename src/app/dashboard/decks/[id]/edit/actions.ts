@@ -5,13 +5,15 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 
-export async function editDeck(deckId: string, data: { title: string; description: string; flashcards: { id: string; term: string; definition: string; }[] }) {
-  // Update ni sa deck title og description
+export async function editDeck(deckId: string, data: { title: string; description: string; topics?: string[]; flashcards: { id: string; term: string; definition: string; }[] }) {
+  // Update the deck title, description, topics, and cardCount
   await prisma.deck.update({
     where: { id: deckId },
     data: {
       title: data.title,
       description: data.description,
+      topics: data.topics || [],
+      cardCount: data.flashcards.length, // Update the card count to reflect the actual number of flashcards
     },
   })
 
