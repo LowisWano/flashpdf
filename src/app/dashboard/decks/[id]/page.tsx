@@ -31,7 +31,7 @@ export default async function Page({
   }
 
   return (
-    <div className="flex justify-center flex-col mx-45">
+    <div className="flex justify-center flex-col sm:mx-45">
       <Card className="mb-6">
         <CardHeader className="flex flex-row justify-between">
           <CardTitle className="text-2xl">
