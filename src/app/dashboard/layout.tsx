@@ -8,7 +8,7 @@ export default function DashboardLayout({
   return (
     <div>
       <NavigationBar/>
-      <main className="sm:p-15 p-5">{children}</main>
+      <main className="sm:p-15 p-5 md:max-w-[1900px] md:mx-auto">{children}</main>
     </div>
   )
 }
