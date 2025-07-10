@@ -9,6 +9,16 @@ import { Progress } from './ui/progress'
 import { ArrowLeft, ArrowRight, Check, X } from 'lucide-react'
 import { updateDeckProgress } from '@/services/deck.service'
 
+// Shuffle function using Fisher-Yates algorithm
+const shuffleArray = (array: any[]) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 export default function StudySession({ deck, userId }: { 
   deck: any, // Using any temporarily as we need to fix the Deck type
   userId: string 
@@ -19,9 +29,17 @@ export default function StudySession({ deck, userId }: {
   const [answeredCards, setAnsweredCards] = useState<{ [key: string]: boolean }>({});
   const [isStudyCompleted, setIsStudyCompleted] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [shuffledFlashcards, setShuffledFlashcards] = useState<any[]>([]);
 
   const flashcards = deck.flashcards || [];
   const totalCards = flashcards.length;
+  
+  // Shuffle flashcards when component mounts or when deck changes
+  useEffect(() => {
+    if (flashcards.length > 0) {
+      setShuffledFlashcards(shuffleArray(flashcards));
+    }
+  }, [deck.id]);
   
   // Calculate progress percentage
   const progressPercentage = totalCards > 0 ? (Object.keys(answeredCards).length / totalCards) * 100 : 0;
@@ -32,11 +50,13 @@ export default function StudySession({ deck, userId }: {
     setCorrectAnswers(0);
     setAnsweredCards({});
     setIsStudyCompleted(false);
+    // Re-shuffle cards when starting a new session
+    setShuffledFlashcards(shuffleArray(flashcards));
   };
 
   // Handle answering a card
   const handleAnswer = (isCorrect: boolean) => {
-    const cardId = flashcards[currentCardIndex].id;
+    const cardId = shuffledFlashcards[currentCardIndex].id;
     
     // Update answered cards
     setAnsweredCards(prev => ({
@@ -116,11 +136,21 @@ export default function StudySession({ deck, userId }: {
     router.push(`/dashboard/decks/${deck.id}`);
   };
 
+  // If there are no cards in the deck
   if (totalCards === 0) {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold mb-4">No flashcards found in this deck</h2>
         <Button onClick={() => router.push(`/dashboard/decks/${deck.id}/edit`)}>Edit Deck</Button>
+      </div>
+    );
+  }
+  
+  // If flashcards haven't been shuffled yet
+  if (shuffledFlashcards.length === 0 && totalCards > 0) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="animate-pulse">Loading flashcards...</div>
       </div>
     );
   }
@@ -197,7 +227,12 @@ export default function StudySession({ deck, userId }: {
       <div className="mb-8">
         <div className="flex flex-col gap-2 mb-4">
           <div className="flex justify-between items-center">
-            <span className="font-medium">Study Progress</span>
+            <div className="flex items-center">
+              <span className="font-medium">Study Progress</span>
+              <span className="ml-2 text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">
+                Shuffled
+              </span>
+            </div>
             <span className="text-sm font-medium">{Math.round(progressPercentage)}%</span>
           </div>
           <Progress value={progressPercentage} className="h-3 rounded-md" />
@@ -206,10 +241,10 @@ export default function StudySession({ deck, userId }: {
 
       {/* Current Flashcard - Updated with more spacing */}
       <div className="flex flex-col gap-6 mb-12">
-        {flashcards.length > 0 && (
+        {shuffledFlashcards.length > 0 && (
           <FlashCard 
-            key={flashcards[currentCardIndex].id || currentCardIndex} 
-            flashcard={flashcards[currentCardIndex]} 
+            key={shuffledFlashcards[currentCardIndex].id || currentCardIndex} 
+            flashcard={shuffledFlashcards[currentCardIndex]} 
           />
         )}
       </div>
@@ -259,6 +294,21 @@ export default function StudySession({ deck, userId }: {
         >
           Next
           <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      {/* Shuffle Button */}
+      <div className="flex justify-center mt-6">
+        <Button 
+          variant="outline"
+          onClick={() => {
+            setShuffledFlashcards(shuffleArray(flashcards));
+            setCurrentCardIndex(0);
+            setAnsweredCards({});
+          }}
+          className="text-purple-600 border-purple-600 hover:bg-purple-50"
+        >
+          Shuffle Cards
         </Button>
       </div>
     </div>
