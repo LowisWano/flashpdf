@@ -51,14 +51,6 @@ export default function Deck({ deck }: {
                       Edit
                     </DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem>
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Share
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Download className="w-4 h-4 mr-2" />
-                    Export
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-600"
@@ -107,13 +99,20 @@ export default function Deck({ deck }: {
               <div className="font-semibold">{deck.accuracy}%</div>
             </div>
           </div>
+          <div className='flex flex-col gap-2'>
+            <Link href={`/dashboard/decks/${deck.id}/study`}>
+              <Button className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
+                <Play className="w-4 h-4 mr-2" />
+                Study Now
+              </Button>
+            </Link>
+            <Link href={`/dashboard/decks/${deck.id}`}>
+              <Button className="w-full" variant="outline">
+                View Deck
+              </Button>
+            </Link>
+          </div>
           
-          <Link href={`/dashboard/decks/${deck.id}/study`}>
-            <Button className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-              <Play className="w-4 h-4 mr-2" />
-              Study Now
-            </Button>
-          </Link>
         </CardContent>
       </Card>
   )

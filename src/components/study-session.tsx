@@ -8,6 +8,8 @@ import { Button } from './ui/button'
 import { Progress } from './ui/progress'
 import { ArrowLeft, ArrowRight, Check, X } from 'lucide-react'
 import { updateDeckProgress } from '@/services/deck.service'
+import { Input } from './ui/input'
+import { Label } from './ui/label'
 
 export default function StudySession({ deck, userId }: { 
   deck: any, // Using any temporarily as we need to fix the Deck type
@@ -19,11 +21,13 @@ export default function StudySession({ deck, userId }: {
   const [answeredCards, setAnsweredCards] = useState<{ [key: string]: boolean }>({});
   const [isStudyCompleted, setIsStudyCompleted] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [userAnswer, setUserAnswer] = useState('');
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
 
   const flashcards = deck.flashcards || [];
   const totalCards = flashcards.length;
   
-  // Calculate progress percentage
   const progressPercentage = totalCards > 0 ? (Object.keys(answeredCards).length / totalCards) * 100 : 0;
   
   // Initialize study session
@@ -32,65 +36,76 @@ export default function StudySession({ deck, userId }: {
     setCorrectAnswers(0);
     setAnsweredCards({});
     setIsStudyCompleted(false);
+    setUserAnswer('');
+    setIsAnswerSubmitted(false);
+    setIsAnswerCorrect(false);
   };
 
-  // Handle answering a card
-  const handleAnswer = (isCorrect: boolean) => {
+  const handleAnswerSubmit = () => {
+    if (!userAnswer.trim()) return;
+    
+    const currentCard = flashcards[currentCardIndex];
+    const isCorrect = userAnswer.trim().toLowerCase() === currentCard.term.toLowerCase();
+    
+    setIsAnswerCorrect(isCorrect);
+    setIsAnswerSubmitted(true);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleAnswerSubmit();
+    }
+  };
+
+  const handleNextCard = () => {
     const cardId = flashcards[currentCardIndex].id;
     
-    // Update answered cards
     setAnsweredCards(prev => ({
       ...prev,
-      [cardId]: isCorrect
+      [cardId]: isAnswerCorrect
     }));
     
-    // Update correct answers count
-    if (isCorrect) {
+    if (isAnswerCorrect) {
       setCorrectAnswers(prev => prev + 1);
     }
     
-    // Move to next card or complete session
     if (currentCardIndex < totalCards - 1) {
       setCurrentCardIndex(prev => prev + 1);
+      setUserAnswer('');
+      setIsAnswerSubmitted(false);
+      setIsAnswerCorrect(false);
     } else {
-      // For the last card, we need to wait for state updates to complete
-      // before calculating the final score
       setTimeout(() => {
-        completeStudySession(isCorrect);
+        completeStudySession();
       }, 0);
     }
   };
 
-  // Navigate to previous card if possible
   const goToPreviousCard = () => {
     if (currentCardIndex > 0) {
       setCurrentCardIndex(prev => prev - 1);
+      setUserAnswer('');
+      setIsAnswerSubmitted(false);
+      setIsAnswerCorrect(false);
     }
   };
 
-  // Navigate to next card if possible
   const goToNextCard = () => {
     if (currentCardIndex < totalCards - 1) {
       setCurrentCardIndex(prev => prev + 1);
+      setUserAnswer('');
+      setIsAnswerSubmitted(false);
+      setIsAnswerCorrect(false);
     } else if (!isStudyCompleted) {
-      // When manually navigating to the end, just complete without affecting score
       completeStudySession();
     }
   };
 
-  // Complete the study session and calculate score
-  const completeStudySession = async (lastAnswerCorrect?: boolean) => {
-    // Calculate the final score based on the most current state
-    // If we have a lastAnswerCorrect parameter, include it in the calculation
-    const finalCorrectAnswers = lastAnswerCorrect !== undefined 
-      ? correctAnswers + (lastAnswerCorrect ? 1 : 0)
-      : correctAnswers;
-      
-    const score = Math.round((finalCorrectAnswers / totalCards) * 100);
+  const completeStudySession = async () => {
+    const score = Math.round((correctAnswers / totalCards) * 100);
     setFinalScore(score);
     setIsStudyCompleted(true);
     
-    // Update deck progress in database via API
     try {
       const response = await fetch(`/api/decks/${deck.id}`, {
         method: 'PUT',
@@ -104,14 +119,12 @@ export default function StudySession({ deck, userId }: {
         console.error('Failed to update deck progress');
       }
       
-      // Refresh the dashboard page data
       router.refresh();
     } catch (error) {
       console.error('Error updating deck progress:', error);
     }
   };
 
-  // Return to deck view
   const returnToDeck = () => {
     router.push(`/dashboard/decks/${deck.id}`);
   };
@@ -127,7 +140,7 @@ export default function StudySession({ deck, userId }: {
 
   if (isStudyCompleted) {
     return (
-      <div className="max-w-xl mx-auto text-center py-16 px-4">
+      <div className="max-w-xl mx-auto text-center py-4 px-4">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10">
           <div className="mb-8">
             <h2 className="text-4xl font-bold mb-4">You're doing great!</h2>
@@ -192,6 +205,8 @@ export default function StudySession({ deck, userId }: {
     );
   }
 
+  const currentCard = flashcards[currentCardIndex];
+
   return (
     <div>
       <div className="mb-8">
@@ -204,63 +219,90 @@ export default function StudySession({ deck, userId }: {
         </div>
       </div>
 
-      {/* Current Flashcard - Updated with more spacing */}
-      <div className="flex flex-col gap-6 mb-12">
+      {/* Current Flashcard - Show term (question) */}
+      <div className="flex flex-col gap-6 mb-12 bg-white">
         {flashcards.length > 0 && (
-          <FlashCard 
-            key={flashcards[currentCardIndex].id || currentCardIndex} 
-            flashcard={flashcards[currentCardIndex]} 
-          />
+          <div className={`border-4 rounded-lg p-6 transition-colors duration-300 ${
+            isAnswerSubmitted 
+              ? isAnswerCorrect 
+                ? 'border-green-500 bg-green-50' 
+                : 'border-red-500 bg-red-50'
+              : 'border-gray-200'
+          }`}>
+            <div className="text-center">
+              <h3 className="text-xl font-semibold mb-4">Question:</h3>
+              <p className="text-2xl mb-6">{currentCard.definition}</p>
+              
+              {isAnswerSubmitted && (
+                <div className="mt-6 p-4 bg-white rounded-lg border">
+                  <h4 className="font-semibold mb-2">Your Answer:</h4>
+                  <p className="text-lg mb-4">{userAnswer}</p>
+                  <h4 className="font-semibold mb-2">Correct Answer:</h4>
+                  <p className="text-lg">{currentCard.term}</p>
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </div>
 
-      {/* Answer Buttons */}
-      <div className="flex justify-center gap-8 mb-12">
-        <Button 
-          variant="outline" 
-          size="lg" 
-          className="flex items-center border-red-500 text-red-500 hover:bg-red-500 hover:text-white px-6 py-6"
-          onClick={() => handleAnswer(false)}
-        >
-          <X className="mr-2 h-5 w-5" />
-          Incorrect
-        </Button>
-        <Button 
-          variant="outline" 
-          size="lg" 
-          className="flex items-center border-green-500 text-green-500 hover:bg-green-500 hover:text-white px-6 py-6"
-          onClick={() => handleAnswer(true)}
-        >
-          <Check className="mr-2 h-5 w-5" />
-          Correct
-        </Button>
-      </div>
+      {/* Answer Input */}
+      {!isAnswerSubmitted && (
+        <div className="mb-12">
+          <Input 
+            id="answer"
+            value={userAnswer}
+            onChange={(e) => setUserAnswer(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Type your answer..."
+            className="bg-white text-lg py-3"
+            autoFocus
+          />
+          <div className="mt-2 text-sm text-gray-500">
+            Press Enter to submit your answer
+          </div>
+        </div>
+      )}
 
-      {/* Navigation Buttons - Similar to flashcards-section */}
-      <div className="flex items-center justify-center gap-4 mt-8">
-        <Button 
-          variant="outline" 
-          onClick={goToPreviousCard}
-          disabled={currentCardIndex === 0}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Previous
-        </Button>
-        
-        <span className="text-sm text-muted-foreground">
-          Card {currentCardIndex + 1} of {totalCards}
-        </span>
-        
-        <Button 
-          variant="outline" 
-          onClick={goToNextCard}
-          className="flex items-center gap-2"
-        >
-          Next
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </div>
+      {isAnswerSubmitted && (
+        <div className="flex justify-center mb-12">
+          <Button 
+            size="lg" 
+            className="px-8 py-6 text-lg bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+            onClick={handleNextCard}
+          >
+            {currentCardIndex < totalCards - 1 ? 'Continue' : 'Finish'}
+          </Button>
+        </div>
+      )}
+
+      {/* Navigation Buttons - Only show when answer is not submitted */}
+      {/* {!isAnswerSubmitted && (
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <Button 
+            variant="outline" 
+            onClick={goToPreviousCard}
+            disabled={currentCardIndex === 0}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          
+          <span className="text-sm text-muted-foreground">
+            Card {currentCardIndex + 1} of {totalCards}
+          </span>
+          
+          <Button 
+            variant="outline" 
+            onClick={goToNextCard}
+            className="flex items-center gap-2"
+          >
+            Next
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )} */}
     </div>
   )
 }

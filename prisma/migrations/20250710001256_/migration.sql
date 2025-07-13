@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Deck" ADD COLUMN     "attempts" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "averageScore" INTEGER NOT NULL DEFAULT 0;

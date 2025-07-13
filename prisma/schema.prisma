@@ -29,6 +29,8 @@ model Deck {
   studyProgress Int        @default(0)
   cardCount     Int       
   accuracy      Int        @default(0)
+  attempts      Int        @default(0)
+  averageScore  Int        @default(0)
   lastStudied   DateTime   @default(now())
   isStarred     Boolean    @default(false)
   user          User       @relation(fields: [userId], references: [id])
