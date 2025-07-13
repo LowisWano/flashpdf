@@ -7,6 +7,7 @@ import {
   Card,
   CardHeader,
   CardTitle,
+  CardContent
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -18,7 +19,6 @@ export default async function StudyPage({ params }: { params: { id: string } }) 
     return <div>User not authenticated</div>
   }
   
-  // Get deck with all flashcards
   const { id } = await params
   if (!id) {
     return <div>Deck ID is required</div>
@@ -29,7 +29,6 @@ export default async function StudyPage({ params }: { params: { id: string } }) 
     return <div>Deck not found</div>
   }
   
-  // Check if user owns this deck
   if (deck.userId !== data.user.id) {
     return <div>Unauthorized</div>
   }
@@ -37,10 +36,13 @@ export default async function StudyPage({ params }: { params: { id: string } }) 
   return (
     <div className="flex justify-center flex-col sm:mx-45">
       <Card className="mb-6">
-        <CardHeader className="flex flex-row justify-between">
-          <CardTitle className="text-2xl">
+        <CardContent className="flex flex-row justify-between">
+          <div className="flex items-center justify-center">
+          <CardTitle className="text-xl">
             {deck.title}
           </CardTitle>
+          </div>
+          
 
           <div className="items-center flex justify-center">
             <Link href={`/dashboard/decks/${id}/edit`}>
@@ -50,7 +52,7 @@ export default async function StudyPage({ params }: { params: { id: string } }) 
               <MoreVertical className="h-5 w-5" />
             </button>
           </div>
-        </CardHeader>
+        </CardContent>
       </Card>
       
       <StudySession deck={deck} userId={data.user.id} />

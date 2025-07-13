@@ -7,6 +7,7 @@ import {
   Card,
   CardHeader,
   CardTitle,
+  CardContent
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -33,10 +34,12 @@ export default async function Page({
   return (
     <div className="flex justify-center flex-col sm:mx-45">
       <Card className="mb-6">
-        <CardHeader className="flex flex-row justify-between">
-          <CardTitle className="text-2xl">
+        <CardContent className="flex flex-row justify-between">
+        <div className="flex items-center justify-center">
+          <CardTitle className="text-xl">
             {currentDeck.title}
           </CardTitle>
+          </div>
 
           <div className="items-center flex justify-center">
             <Link href={`./${id}/edit`}>
@@ -46,7 +49,7 @@ export default async function Page({
               <MoreVertical className="h-5 w-5" />
             </button>
           </div>
-        </CardHeader>
+        </CardContent>
       </Card>
       
       <FlashcardsSection flashcards={currentDeck.flashcards}/>
