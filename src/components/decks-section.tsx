@@ -58,18 +58,17 @@ export default function DecksSection({
   
   return (
     <div>
-      <div className="flex flex-row sm:items-center sm:justify-between gap-4 mb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold">My Decks</h1>
-          <p className="text-gray-600">Manage and study your flashcard collections</p>
+          <h1 className="text-2xl md:text-3xl font-bold">My Decks</h1>
+          <p className="text-gray-600 text-sm md:text-base">Manage and study your flashcard collections</p>
         </div>
         
-          <CreateFlashcardsDialog />
-        
+        <CreateFlashcardsDialog />
       </div>
 
       
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-8">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
@@ -81,9 +80,11 @@ export default function DecksSection({
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Sort by {sortBy === 'name' ? ': Name' : sortBy === 'recent' ? ': Recently studied' : ''}
-              <Filter className="w-4 h-4 ml-2" />
+            <Button variant="outline" className="w-full sm:w-auto">
+              <span className="truncate">
+                Sort by {sortBy === 'name' ? ': Name' : sortBy === 'recent' ? ': Recently studied' : ''}
+              </span>
+              <Filter className="w-4 h-4 ml-2 flex-shrink-0" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -116,17 +117,17 @@ export default function DecksSection({
       )}
 
       {filteredDecks.length === 0 && searchQuery.trim() ? (
-        <div className="text-center py-12">
+        <div className="text-center py-8 md:py-12">
           <div className="text-gray-400 mb-4">
-            <Search className="w-12 h-12 mx-auto" />
+            <Search className="w-8 h-8 md:w-12 md:h-12 mx-auto" />
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">No decks found</h3>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm md:text-base">
             Try adjusting your search terms or create a new deck.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 mt-3">
           {
             filteredDecks.map((deck) => (
               <Deck key={deck.id} deck={deck} />

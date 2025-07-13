@@ -131,8 +131,8 @@ export default function StudySession({ deck, userId }: {
 
   if (totalCards === 0) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-bold mb-4">No flashcards found in this deck</h2>
+      <div className="text-center py-8 px-4">
+        <h2 className="text-xl md:text-2xl font-bold mb-4">No flashcards found in this deck</h2>
         <Button onClick={() => router.push(`/dashboard/decks/${deck.id}/edit`)}>Edit Deck</Button>
       </div>
     );
@@ -141,18 +141,18 @@ export default function StudySession({ deck, userId }: {
   if (isStudyCompleted) {
     return (
       <div className="max-w-xl mx-auto text-center py-4 px-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10">
-          <div className="mb-8">
-            <h2 className="text-4xl font-bold mb-4">You're doing great!</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-10">
+          <div className="mb-6 md:mb-8">
+            <h2 className="text-2xl md:text-4xl font-bold mb-4">You're doing great!</h2>
             <p className="text-gray-600 dark:text-gray-300">
               Keep it up to build confidence.
             </p>
           </div>
           
-          <div className="my-10">
-            <div className="relative h-48 w-48 mx-auto">
+          <div className="my-8 md:my-10">
+            <div className="relative h-32 w-32 md:h-48 md:w-48 mx-auto">
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-5xl font-bold">{finalScore}%</span>
+                <span className="text-3xl md:text-5xl font-bold">{finalScore}%</span>
               </div>
               <svg className="w-full h-full" viewBox="0 0 100 100">
                 <circle 
@@ -174,27 +174,27 @@ export default function StudySession({ deck, userId }: {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-10 mb-10 text-center">
-            <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-              <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">Correct</p>
-              <p className="text-3xl font-bold">{correctAnswers}</p>
+          <div className="grid grid-cols-2 gap-4 md:gap-10 mb-8 md:mb-10 text-center">
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 md:p-6 rounded-lg">
+              <p className="text-gray-500 dark:text-gray-400 text-xs md:text-sm mb-2">Correct</p>
+              <p className="text-2xl md:text-3xl font-bold">{correctAnswers}</p>
             </div>
-            <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-              <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">Total Cards</p>
-              <p className="text-3xl font-bold">{totalCards}</p>
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 md:p-6 rounded-lg">
+              <p className="text-gray-500 dark:text-gray-400 text-xs md:text-sm mb-2">Total Cards</p>
+              <p className="text-2xl md:text-3xl font-bold">{totalCards}</p>
             </div>
           </div>
           
           <div className="space-y-4">
             <Button 
-              className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 py-6 text-lg"
+              className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 py-4 md:py-6 text-base md:text-lg"
               onClick={initiateStudySession}
             >
               Study Again
             </Button>
             <Button 
               variant="outline" 
-              className="w-full py-6 text-lg"
+              className="w-full py-4 md:py-6 text-base md:text-lg"
               onClick={() => router.push(`/dashboard`)}
             >
               Dashboard
@@ -208,21 +208,21 @@ export default function StudySession({ deck, userId }: {
   const currentCard = flashcards[currentCardIndex];
 
   return (
-    <div>
-      <div className="mb-8">
+    <div className="px-4 md:px-0">
+      <div className="mb-6 md:mb-8">
         <div className="flex flex-col gap-2 mb-4">
           <div className="flex justify-between items-center">
-            <span className="font-medium">Study Progress</span>
+            <span className="font-medium text-sm md:text-base">Study Progress</span>
             <span className="text-sm font-medium">{Math.round(progressPercentage)}%</span>
           </div>
-          <Progress value={progressPercentage} className="h-3 rounded-md" />
+          <Progress value={progressPercentage} className="h-2 md:h-3 rounded-md" />
         </div>
       </div>
 
       {/* Current Flashcard - Show term (question) */}
-      <div className="flex flex-col gap-6 mb-12 bg-white">
+      <div className="flex flex-col gap-6 mb-8 md:mb-12 bg-white">
         {flashcards.length > 0 && (
-          <div className={`border-4 rounded-lg p-6 transition-colors duration-300 ${
+          <div className={`border-4 rounded-lg p-4 md:p-6 transition-colors duration-300 ${
             isAnswerSubmitted 
               ? isAnswerCorrect 
                 ? 'border-green-500 bg-green-50' 
@@ -230,15 +230,15 @@ export default function StudySession({ deck, userId }: {
               : 'border-gray-200'
           }`}>
             <div className="text-center">
-              <h3 className="text-xl font-semibold mb-4">Question:</h3>
-              <p className="text-2xl mb-6">{currentCard.definition}</p>
+              <h3 className="text-lg md:text-xl font-semibold mb-4">Question:</h3>
+              <p className="text-lg md:text-2xl mb-6 leading-relaxed">{currentCard.definition}</p>
               
               {isAnswerSubmitted && (
                 <div className="mt-6 p-4 bg-white rounded-lg border">
-                  <h4 className="font-semibold mb-2">Your Answer:</h4>
-                  <p className="text-lg mb-4">{userAnswer}</p>
-                  <h4 className="font-semibold mb-2">Correct Answer:</h4>
-                  <p className="text-lg">{currentCard.term}</p>
+                  <h4 className="font-semibold mb-2 text-sm md:text-base">Your Answer:</h4>
+                  <p className="text-base md:text-lg mb-4 break-words">{userAnswer}</p>
+                  <h4 className="font-semibold mb-2 text-sm md:text-base">Correct Answer:</h4>
+                  <p className="text-base md:text-lg break-words">{currentCard.term}</p>
                 </div>
               )}
             </div>
@@ -248,27 +248,27 @@ export default function StudySession({ deck, userId }: {
 
       {/* Answer Input */}
       {!isAnswerSubmitted && (
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <Input 
             id="answer"
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your answer..."
-            className="bg-white text-lg py-3"
+            className="bg-white text-base md:text-lg py-3 md:py-4"
             autoFocus
           />
-          <div className="mt-2 text-sm text-gray-500">
+          <div className="mt-2 text-xs md:text-sm text-gray-500">
             Press Enter to submit your answer
           </div>
         </div>
       )}
 
       {isAnswerSubmitted && (
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-8 md:mb-12">
           <Button 
             size="lg" 
-            className="px-8 py-6 text-lg bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+            className="px-6 md:px-8 py-4 md:py-6 text-base md:text-lg bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 w-full md:w-auto"
             onClick={handleNextCard}
           >
             {currentCardIndex < totalCards - 1 ? 'Continue' : 'Finish'}
