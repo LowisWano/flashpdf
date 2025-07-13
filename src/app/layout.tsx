@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "FlashPDF",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body
         className="min-h-screen bg-gray-50"
       >
+        <Toaster position="top-center" richColors closeButton />
         {children}
       </body>
     </html>

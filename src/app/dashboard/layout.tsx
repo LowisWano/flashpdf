@@ -1,4 +1,9 @@
+import { Fragment } from "react"
+import { Folder, Library } from "lucide-react"
 import NavigationBar from "@/components/navigation-bar"
+import { Separator } from "@/components/ui/separator"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 export default function DashboardLayout({
   children,
@@ -6,9 +11,11 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div>
-      <NavigationBar/>
-      <main className="sm:p-15 p-5 md:max-w-[1900px] md:mx-auto">{children}</main>
-    </div>
+    <Fragment>
+      <NavigationBar />
+      <div className="container mx-auto px-4 py-6">
+        {children}
+      </div>
+    </Fragment>
   )
 }

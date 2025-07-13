@@ -1,8 +1,8 @@
 "use client"
 
-import { Sparkles, LogOut, User, Settings } from "lucide-react"
+import { Sparkles, LogOut, Library, Folder, Settings } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import {
   Avatar,
   AvatarFallback,
@@ -20,6 +20,7 @@ import { logout } from "@/app/login/actions"
 
 export default function NavigationBar() {
   const router = useRouter()
+  const pathname = usePathname()
 
   const handleLogout = async () => {
     try {
@@ -27,6 +28,10 @@ export default function NavigationBar() {
     } catch (error) {
       console.error('Logout failed:', error)
     }
+  }
+  
+  const isActive = (path: string) => {
+    return pathname?.startsWith(path)
   }
 
   return (
@@ -42,6 +47,25 @@ export default function NavigationBar() {
             </span>
           </div>
         </Link>
+        
+        <div className="hidden md:flex items-center space-x-8">
+          <Link 
+            href="/dashboard" 
+            className={`flex items-center space-x-1.5 pb-3 border-b-2 ${isActive('/dashboard') && !isActive('/dashboard/folders') ? 'border-orange-500 text-orange-600' : 'border-transparent hover:text-orange-500'} transition-colors`}
+          >
+            <Library className="w-4 h-4" />
+            <span className="font-medium">My Flashcards</span>
+          </Link>
+          
+          <Link 
+            href="/dashboard/folders" 
+            className={`flex items-center space-x-1.5 pb-3 border-b-2 ${isActive('/dashboard/folders') ? 'border-orange-500 text-orange-600' : 'border-transparent hover:text-orange-500'} transition-colors`}
+          >
+            <Folder className="w-4 h-4" />
+            <span className="font-medium">Folders</span>
+          </Link>
+        </div>
+        
         <div className="flex items-center space-x-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
