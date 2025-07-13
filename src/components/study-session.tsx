@@ -280,7 +280,7 @@ export default function StudySession({ deck, userId }: {
       </div>
 
       {/* Shuffle Button - Between flashcard and text input */}
-      <div className="flex justify-end mb-4 -mt-6">
+      <div className="flex justify-center mb-4 -mt-8">
         <Button
           variant="outline"
           size="sm"
