@@ -6,7 +6,7 @@ import { Deck } from '@/generated/prisma'
 import FlashCard from './flashcard'
 import { Button } from './ui/button'
 import { Progress } from './ui/progress'
-import { ArrowLeft, ArrowRight, Check, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, X, Shuffle } from 'lucide-react'
 import { updateDeckProgress } from '@/services/deck.service'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
@@ -24,12 +24,43 @@ export default function StudySession({ deck, userId }: {
   const [userAnswer, setUserAnswer] = useState('');
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+  const [isShuffled, setIsShuffled] = useState(false);
+  const [shuffledFlashcards, setShuffledFlashcards] = useState<any[]>([]);
 
-  const flashcards = deck.flashcards || [];
+  const originalFlashcards = deck.flashcards || [];
+  const flashcards = isShuffled ? shuffledFlashcards : originalFlashcards;
   const totalCards = flashcards.length;
   
   const progressPercentage = totalCards > 0 ? (Object.keys(answeredCards).length / totalCards) * 100 : 0;
   
+  // Shuffle unanswered flashcards function
+  const shuffleUnansweredFlashcards = () => {
+    // Get unanswered flashcards (cards that haven't been answered yet)
+    const unansweredCards = originalFlashcards.filter((_: any, index: number) => {
+      const cardId = originalFlashcards[index].id;
+      return !answeredCards[cardId];
+    });
+    
+    // Shuffle only the unanswered cards
+    const shuffledUnanswered = [...unansweredCards].sort(() => Math.random() - 0.5);
+    
+    // Create new array with answered cards in their original positions and shuffled unanswered cards
+    let newFlashcards = [...originalFlashcards];
+    let shuffledIndex = 0;
+    
+    for (let i = 0; i < newFlashcards.length; i++) {
+      const cardId = newFlashcards[i].id;
+      if (!answeredCards[cardId]) {
+        // Replace with shuffled unanswered card
+        newFlashcards[i] = shuffledUnanswered[shuffledIndex];
+        shuffledIndex++;
+      }
+    }
+    
+    setShuffledFlashcards(newFlashcards);
+    setIsShuffled(true);
+  };
+
   // Initialize study session
   const initiateStudySession = () => {
     setCurrentCardIndex(0);
@@ -39,6 +70,7 @@ export default function StudySession({ deck, userId }: {
     setUserAnswer('');
     setIsAnswerSubmitted(false);
     setIsAnswerCorrect(false);
+    setIsShuffled(false);
   };
 
   const handleAnswerSubmit = () => {
@@ -242,8 +274,22 @@ export default function StudySession({ deck, userId }: {
                 </div>
               )}
             </div>
+            
           </div>
         )}
+      </div>
+
+      {/* Shuffle Button - Between flashcard and text input */}
+      <div className="flex justify-center mb-4 -mt-8">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={shuffleUnansweredFlashcards}
+          className="rounded-full p-2"
+          title="Shuffle unanswered questions"
+        >
+          <Shuffle className="h-4 w-4" />
+        </Button>
       </div>
 
       {/* Answer Input */}
