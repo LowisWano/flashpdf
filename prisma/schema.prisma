@@ -19,6 +19,19 @@ model User {
   id            String     @id
   name          String?
   decks         Deck[]
+  folders       Folder[]
+}
+
+model Folder {
+  id            String     @default(cuid()) @id
+  name          String
+  description   String     @default("")
+  color         String     @default("#4F46E5")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  user          User       @relation(fields: [userId], references: [id])
+  userId        String
+  decks         Deck[]
 }
 
 model Deck {
@@ -35,6 +48,8 @@ model Deck {
   isStarred     Boolean    @default(false)
   user          User       @relation(fields: [userId], references: [id])
   userId        String
+  folder        Folder?    @relation(fields: [folderId], references: [id])
+  folderId      String?
   flashcards    Flashcard[]
 }
 

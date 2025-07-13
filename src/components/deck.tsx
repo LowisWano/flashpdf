@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Download, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
+import { Download, Edit, FolderPlus, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
 import { Deck as DeckType } from '@/generated/prisma'
 import {
   Card,
@@ -17,11 +17,13 @@ import { Progress } from './ui/progress'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Dialog } from './ui/dialog'
 import DeleteDeckDialog from './delete-deck-dialog'
+import MoveToFolderDialog from './move-to-folder-dialog'
 
 export default function Deck({ deck }: { 
   deck: DeckType
 }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isFolderDialogOpen, setIsFolderDialogOpen] = useState(false)
   return (
       <Card key={deck.id} className="hover:shadow-lg transition-shadow group justify-between">
         <CardHeader className="">
@@ -51,6 +53,10 @@ export default function Deck({ deck }: {
                       Edit
                     </DropdownMenuItem>
                   </Link>
+                  <DropdownMenuItem onClick={() => setIsFolderDialogOpen(true)}>
+                    <FolderPlus className="w-4 h-4 mr-2" />
+                    Move to Folder
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-600"
@@ -66,6 +72,14 @@ export default function Deck({ deck }: {
             </div>
             <DeleteDeckDialog deckId={deck.id} deckTitle={deck.title} setIsDeleteDialogOpen={setIsDeleteDialogOpen}/>
           </Dialog>
+          
+          <Dialog open={isFolderDialogOpen} onOpenChange={setIsFolderDialogOpen}>
+            <MoveToFolderDialog 
+              deckId={deck.id} 
+              currentFolderId={deck.folderId || null} 
+              setIsFolderDialogOpen={setIsFolderDialogOpen} 
+            />
+          </Dialog>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-1">
@@ -77,6 +91,11 @@ export default function Deck({ deck }: {
             {deck.topics.length > 2 && (
               <Badge variant="secondary" className="text-xs">
                 +{deck.topics.length - 2}
+              </Badge>
+            )}
+            {deck.folderId && (
+              <Badge className="text-xs bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                In folder
               </Badge>
             )}
           </div>
