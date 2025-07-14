@@ -61,20 +61,21 @@ async function pollWhisperResult(whisperHash: string, { interval = 3000, maxAtte
 export default function UploadArea() {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
   const [processing, setProcessing] = useState(false);
   const [extractedText, setExtractedText] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pasteText, setPasteText] = useState("");
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const processFile = async (file: File) => {
     setError(null);
     setExtractedText(null);
-    const file = e.target.files?.[0];
-    if (!file) return;
+    
     if (file.type !== "application/pdf") {
       setError("Please upload a PDF file.");
       return;
@@ -139,6 +140,45 @@ export default function UploadArea() {
     }
   };
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
+  };
+
+  // Drag and Drop Event Handlers
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Only set drag over to false if we're leaving the drop zone entirely
+    if (!dropZoneRef.current?.contains(e.relatedTarget as Node)) {
+      setIsDragOver(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      const file = files[0];
+      await processFile(file);
+    }
+  };
+
   const handleTextSubmit = () => {
     // Implement text submission logic
   };
@@ -151,42 +191,70 @@ export default function UploadArea() {
           <TabsTrigger value="paste-text" className="text-sm">Paste text</TabsTrigger>
         </TabsList>
         <TabsContent value="upload-pdf">
-          <Card className="border-2 border-dashed border-gray-300 hover:border-orange-400 transition-colors">
-            <CardContent className="p-6 md:p-12">
-              <div className="text-center transition-transform">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-                  <Upload className="w-6 h-6 md:w-8 md:h-8 text-white" />
-                </div>
-                <h3 className="text-lg md:text-xl font-semibold mb-2">Drop your PDF here</h3>
-                <p className="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">or click to browse your files</p>
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-sm md:text-base"
-                  onClick={handleButtonClick}
-                  disabled={processing}
-                >
-                  <Upload className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                  {processing ? "Processing..." : "Choose File"}
-                </Button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="application/pdf"
-                  className="hidden"
-                  onChange={handleFileChange}
-                  disabled={processing}
-                />
-                <p className="text-xs md:text-sm text-gray-500 mt-4">Supports PDF files up to 50MB</p>
-                {error && <div className="text-red-500 mt-4 text-sm">{error}</div>}
-                {extractedText && (
-                  <div className="mt-6 text-left bg-gray-100 p-4 rounded max-h-96 overflow-auto">
-                    <h4 className="font-bold mb-2">Extracted Text:</h4>
-                    <pre className="whitespace-pre-wrap">{extractedText}</pre>
+          <div
+            ref={dropZoneRef}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className={`relative transition-all duration-200 ${
+              isDragOver ? 'scale-105' : 'scale-100'
+            }`}
+          >
+            <Card className={`border-2 border-dashed transition-all duration-200 ${
+              isDragOver 
+                ? 'border-orange-500 bg-orange-50 shadow-lg' 
+                : 'border-gray-300 hover:border-orange-400'
+            }`}>
+              <CardContent className="p-6 md:p-12">
+                <div className="text-center transition-transform">
+                  <div className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 transition-all duration-200 ${
+                    isDragOver 
+                      ? 'bg-gradient-to-br from-orange-600 to-purple-700 scale-110' 
+                      : 'bg-gradient-to-br from-orange-500 to-purple-600'
+                  }`}>
+                    <Upload className={`w-6 h-6 md:w-8 md:h-8 text-white transition-all duration-200 ${
+                      isDragOver ? 'scale-110' : 'scale-100'
+                    }`} />
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                  <h3 className="text-lg md:text-xl font-semibold mb-2">
+                    {isDragOver ? 'Drop your PDF here!' : 'Drop your PDF here'}
+                  </h3>
+                  <p className="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">
+                    {isDragOver ? 'Release to upload' : 'or click to browse your files'}
+                  </p>
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-sm md:text-base"
+                    onClick={handleButtonClick}
+                    disabled={processing}
+                  >
+                    <Upload className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                    {processing ? "Processing..." : "Choose File"}
+                  </Button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="application/pdf"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    disabled={processing}
+                  />
+                  <p className="text-xs md:text-sm text-gray-500 mt-4">Supports PDF files up to 50MB</p>
+                  {error && <div className="text-red-500 mt-4 text-sm">{error}</div>}
+                  {extractedText && (
+                    <div className="mt-6 text-left bg-gray-100 p-4 rounded max-h-96 overflow-auto">
+                      <h4 className="font-bold mb-2">Extracted Text:</h4>
+                      <pre className="whitespace-pre-wrap">{extractedText}</pre>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+            {isDragOver && (
+              <div className="absolute inset-0 bg-orange-500/10 rounded-lg border-2 border-dashed border-orange-500 pointer-events-none" />
+            )}
+          </div>
         </TabsContent>
         <TabsContent value="paste-text">
           <Card>
