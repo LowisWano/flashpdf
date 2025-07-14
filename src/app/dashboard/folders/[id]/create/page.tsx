@@ -1,16 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import FlashcardSetForm from "@/components/flashcard-set-form"
 import { v4 as uuidv4 } from "uuid";
 import { Flashcard } from "@/components/flashcard-item";
-import { createDeckAction } from "./createAction";
-import { useRouter, useSearchParams } from "next/navigation";
+import { createDeckInFolderAction } from "./createAction";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export default function CreateFlashcardSetPage() {
-  const searchParams = useSearchParams();
-  const folderId = searchParams.get('folderId');
+export default function CreateFlashcardSetInFolderPage() {
+  const params = useParams();
+  const folderId = params.id as string;
   const router = useRouter();
   
   const [title, setTitle] = useState("")
@@ -54,21 +54,31 @@ export default function CreateFlashcardSetPage() {
       toast.error("Title is required");
       return;
     }
-    
+
     setIsSaving(true);
     try {
-      const result = await createDeckAction({
+      const result = await createDeckInFolderAction({
         title,
         description,
         topics: tags,
         flashcards,
-        folderId: folderId || undefined
+        folderId
       });
       
-      toast.success("Deck created successfully", { 
-        description: `"${title}" has been created`
-      });
-      
+      if (result && result.success === false) {
+        toast.error("Failed to create deck", { 
+          description: result.error || "Please try again"
+        });
+      } else {
+        toast.success("Deck created successfully", { 
+          description: `"${title}" has been created in the folder`
+        });
+        
+        // Wait a moment to show the toast before redirecting
+        setTimeout(() => {
+          router.push(`/dashboard/folders/${folderId}`);
+        }, 1000);
+      }
     } catch (err: unknown) {
       console.error(err);
       toast.error("Failed to create deck", { 
@@ -80,11 +90,7 @@ export default function CreateFlashcardSetPage() {
   };
 
   const handleCancel = () => {
-    if (folderId) {
-      router.push(`/dashboard/folders/${folderId}`);
-    } else {
-      router.push("/dashboard");
-    }
+    router.push(`/dashboard/folders/${folderId}`);
   }
 
   return (
@@ -92,9 +98,7 @@ export default function CreateFlashcardSetPage() {
       <div className="mx-auto max-w-4xl">
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-gray-900 drop-shadow-sm">Create Flashcard Set</h1>
-          <p className="mt-2 text-gray-600 text-lg">
-            {folderId ? "Add a new flashcard set to this folder" : "Build your custom flashcard collection"}
-          </p>
+          <p className="mt-2 text-gray-600 text-lg">Build your custom flashcard collection</p>
         </div>
         <FlashcardSetForm
           title={title}

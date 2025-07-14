@@ -64,9 +64,10 @@ export async function getDeckById(deckId: string): Promise<Deck | null> {
   return deck;
 }
 
-export async function createDeck({ userId, deck }: {
+export async function createDeck({ userId, deck, folderId }: {
   userId: string,
   deck: DeckEntry,
+  folderId?: string,
 }): Promise<Deck> {
   const createdDeck = await prisma.deck.create({
     data: {
@@ -75,6 +76,7 @@ export async function createDeck({ userId, deck }: {
       description: deck.description || "",
       topics: deck.topics || [],
       cardCount: deck.flashcards.length,
+      folderId: folderId || null, // Assign to folder if provided
       flashcards: {
         create: deck.flashcards.map(f => ({
           term: f.term,
