@@ -1,4 +1,4 @@
-import { Folder } from "@/generated/prisma";
+import { Folder, Deck } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 
 export interface FolderEntry {
@@ -20,7 +20,7 @@ export async function getFolders(userId: string): Promise<Folder[]> {
   return folders;
 }
 
-export async function getFolderById(folderId: string): Promise<Folder | null> {
+export async function getFolderById(folderId: string): Promise<(Folder & { decks: Deck[] }) | null> {
   const folder = await prisma.folder.findUnique({
     where: {
       id: folderId,

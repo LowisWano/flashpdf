@@ -9,7 +9,7 @@ import {
 import { Plus } from "lucide-react"
 import Link from "next/link"
 
-export function CreateFlashcardsDialog() {
+export function CreateFlashcardsDialog({ folderId }: { folderId?: string }) {
   return (
     <Dialog>
       <form>
@@ -28,7 +28,7 @@ export function CreateFlashcardsDialog() {
           <div className="grid gap-4">
             <div className="flex flex-col sm:flex-row gap-5 w-full items-stretch">
               {/* Card 1: Generate from an upload */}
-              <Link href="/dashboard/upload" className="flex-1">
+              <Link href={folderId ? `/dashboard/upload?folderId=${folderId}` : "/dashboard/upload"} className="flex-1">
                 <button
                   type="button"
                   className="w-full flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"
@@ -40,7 +40,7 @@ export function CreateFlashcardsDialog() {
                 </button>
               </Link>
               {/* Card 2: Create them yourself */}
-              <Link href="/dashboard/create" className="flex-1">
+              <Link href={folderId ? `/dashboard/create?folderId=${folderId}` : "/dashboard/create"} className="flex-1">
                 <button
                   type="button"
                   className="w-full flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"

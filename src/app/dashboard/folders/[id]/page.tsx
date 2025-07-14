@@ -1,8 +1,10 @@
 import Link from "next/link"
-import { Edit, Folder as FolderIcon, MoreVertical } from 'lucide-react'
+import { Edit, Folder as FolderIcon, Plus, MoreVertical } from 'lucide-react'
 import { getFolderById } from "@/services/folder.service"
 import { createClient } from "@/utils/supabase/server"
 import DecksSection from "@/components/decks-section"
+import { CreateFlashcardsDialog } from "@/components/create-flashcards-dialog"
+import { Deck } from "@/generated/prisma"
 import {
   Card,
   CardHeader,
@@ -17,7 +19,7 @@ export default async function FolderPage({
 }: {
   params: { id: string }
 }) {
-  const id = params.id
+  const {id} = await params
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser()
 
@@ -34,6 +36,9 @@ export default async function FolderPage({
   if (folder.userId !== data.user.id) {
     return <div>Unauthorized</div>
   }
+  
+  // Get the decks from the folder
+  const decks = folder.decks
 
   return (
     <div>
@@ -50,6 +55,7 @@ export default async function FolderPage({
               )}
             </div>
             <div className="flex space-x-2">
+              <CreateFlashcardsDialog folderId={id} />
               <Link href={`/dashboard/folders/${id}/edit`}>
                 <Button variant="outline" size="sm">
                   <Edit className="h-4 w-4 mr-2" />
@@ -61,15 +67,15 @@ export default async function FolderPage({
         </CardHeader>
         <CardContent>
           <div className="text-sm text-gray-500">
-            {folder.decks.length === 0 
+            {decks.length === 0 
               ? "No decks in this folder yet" 
-              : `${folder.decks.length} deck${folder.decks.length === 1 ? '' : 's'} in this folder`
+              : `${decks.length} deck${decks.length === 1 ? '' : 's'} in this folder`
             }
           </div>
         </CardContent>
       </Card>
 
-      <DecksSection decks={folder.decks} />
+      <DecksSection decks={decks} />
     </div>
   )
 }
