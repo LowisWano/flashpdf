@@ -14,8 +14,12 @@ type SortOption = "recent" | "name" | null;
 
 export default function DecksSection({
   decks,
+  insideFolder = false,
+  folderId
 }: {
   decks: DeckType[];
+  insideFolder?: boolean;
+  folderId?: string;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>(null);
@@ -64,7 +68,9 @@ export default function DecksSection({
           <p className="text-gray-600">Manage and study your flashcard collections</p>
         </div>
         
+        {!insideFolder && (
           <CreateFlashcardsDialog />
+        )}
         
       </div>
 

@@ -75,7 +75,7 @@ export default async function FolderPage({
         </CardContent>
       </Card>
 
-      <DecksSection decks={decks} />
+      <DecksSection decks={decks} insideFolder={true} folderId={id} />
     </div>
   )
 }
