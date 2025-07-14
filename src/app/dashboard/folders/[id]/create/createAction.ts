@@ -3,6 +3,7 @@
 import { createDeck } from "@/services/deck.service"
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { redirect } from "next/navigation"
 import { Flashcard } from "@/components/flashcard-item"
 import { getFolderById } from "@/services/folder.service"
 
@@ -46,7 +47,8 @@ export async function createDeckInFolderAction({ title, description, topics, fla
     revalidatePath("/dashboard")
     revalidatePath(`/dashboard/folders/${folderId}`)
     
-    return { success: true, deck }
+    // Redirect to the folder view after successful creation
+    redirect(`/dashboard/folders/${folderId}`)
   } catch (error) {
     console.error("Error creating deck in folder:", error)
     return { success: false, error: "An error occurred while creating the deck" }

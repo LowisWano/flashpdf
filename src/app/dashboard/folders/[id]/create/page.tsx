@@ -57,7 +57,10 @@ export default function CreateFlashcardSetInFolderPage() {
 
     setIsSaving(true);
     try {
-      const result = await createDeckInFolderAction({
+      // Show success message before the action, as the action will redirect
+      toast.success("Creating deck...");
+      
+      await createDeckInFolderAction({
         title,
         description,
         topics: tags,
@@ -65,26 +68,14 @@ export default function CreateFlashcardSetInFolderPage() {
         folderId
       });
       
-      if (result && result.success === false) {
-        toast.error("Failed to create deck", { 
-          description: result.error || "Please try again"
-        });
-      } else {
-        toast.success("Deck created successfully", { 
-          description: `"${title}" has been created in the folder`
-        });
-        
-        // Wait a moment to show the toast before redirecting
-        setTimeout(() => {
-          router.push(`/dashboard/folders/${folderId}`);
-        }, 1000);
-      }
+      // The server action will handle the redirect, so we don't need to do it here
+      // If the code reaches here, it means there was no redirect, which is unexpected
+      
     } catch (err: unknown) {
       console.error(err);
       toast.error("Failed to create deck", { 
         description: "An unexpected error occurred"
       });
-    } finally {
       setIsSaving(false);
     }
   };
