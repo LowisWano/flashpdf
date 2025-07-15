@@ -1,11 +1,21 @@
 import UploadArea from "@/components/upload-area"
 import UploadPageFooter from "@/components/upload-page-footer"
+import { Suspense } from "react"
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  const params = await searchParams
+  const folderId = typeof params.folderId === 'string' ? params.folderId : undefined
+  
   return (
     <div>
-      <UploadArea/>
-      <UploadPageFooter/>
+      <Suspense fallback={<div>Loading...</div>}>
+        <UploadArea folderId={folderId} />
+      </Suspense>
+      <UploadPageFooter folderId={folderId} />
     </div>
   )
 }

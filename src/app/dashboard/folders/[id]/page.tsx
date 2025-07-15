@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import FolderOptions from "./folder-options"
 import BackButton from "./back-button"
 import AddDeckToFolderButton from "./add-deck-to-folder-button"
+import EmptyFolderActions from "./empty-folder-actions"
 
 export default async function FolderPage({
   params,
@@ -61,9 +62,11 @@ export default async function FolderPage({
         </CardContent>
       </Card>
       
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap gap-4 mb-6 justify-between items-center">
+        <div className="flex items-center gap-2">
+          <BackButton />
+        </div>
         <AddDeckToFolderButton folderId={folder.id} />
-        <BackButton />
       </div>
       
       {folder.decks && folder.decks.length > 0 ? (
@@ -77,11 +80,7 @@ export default async function FolderPage({
           <p className="text-gray-500 max-w-sm mx-auto mb-6">
             Add some decks to this folder to get started.
           </p>
-          <Link href="/dashboard/create">
-            <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-              Create New Deck
-            </Button>
-          </Link>
+          <EmptyFolderActions folderId={folder.id} />
         </div>
       )}
     </div>

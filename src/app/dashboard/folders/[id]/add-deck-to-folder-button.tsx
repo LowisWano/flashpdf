@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus } from 'lucide-react'
+import { Plus, Upload, FileText, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,7 +11,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger
 } from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface AddDeckToFolderButtonProps {
   folderId: string
@@ -19,77 +26,81 @@ interface AddDeckToFolderButtonProps {
 
 export default function AddDeckToFolderButton({ folderId }: AddDeckToFolderButtonProps) {
   const router = useRouter()
-  const [open, setOpen] = useState(false)
   
   const handleAddExistingDeck = () => {
-    // Close dialog and navigate to the deck selection page
-    setOpen(false)
     router.push(`/dashboard/decks?selectFor=folder&folderId=${folderId}`)
   }
   
   const handleCreateNewDeck = () => {
-    // Close dialog and navigate to create page with folder preselected
-    setOpen(false)
     router.push(`/dashboard/create?folderId=${folderId}`)
   }
   
+  const handleAIGenerate = () => {
+    router.push(`/dashboard/upload?folderId=${folderId}`)
+  }
+  
   return (
-    <>
-      <Button
-        onClick={() => setOpen(true)}
-        className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        Add Decks to Folder
-      </Button>
-      
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add Decks to Folder</DialogTitle>
-            <DialogDescription>
-              Choose whether to add existing decks or create a new deck in this folder.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="flex flex-col gap-4 py-4">
-            <Button
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          size="lg"
+          className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          Add Decks
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-4xl p-8">
+        <DialogHeader>
+          <DialogTitle className="text-center">Add Decks to Folder</DialogTitle>
+          <DialogDescription className="text-center">
+            Choose how you want to add decks to this folder
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="grid gap-4 mt-4">
+          <div className="flex flex-col sm:flex-row gap-5 w-full items-stretch">
+            {/* Add Existing Decks */}
+            <button
+              type="button"
               onClick={handleAddExistingDeck}
-              variant="outline"
-              className="justify-start text-left h-auto py-3"
+              className="flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"
             >
-              <div>
-                <h3 className="font-medium">Add Existing Decks</h3>
-                <p className="text-sm text-gray-500 font-normal">
-                  Select from your existing decks to add to this folder
-                </p>
-              </div>
-            </Button>
+              <FileText className="h-8 w-8 text-gray-500 mb-2" />
+              <span className="font-semibold text-lg">Add Existing Decks</span>
+              <span className="text-sm text-gray-500 text-center">
+                Select from your existing decks to add to this folder.
+              </span>
+            </button>
             
-            <Button
+            {/* Create New Deck */}
+            <button
+              type="button"
               onClick={handleCreateNewDeck}
-              variant="outline"
-              className="justify-start text-left h-auto py-3"
+              className="flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"
             >
-              <div>
-                <h3 className="font-medium">Create New Deck</h3>
-                <p className="text-sm text-gray-500 font-normal">
-                  Create a new flashcard deck in this folder
-                </p>
-              </div>
-            </Button>
+              <Plus className="h-8 w-8 text-gray-500 mb-2" />
+              <span className="font-semibold text-lg">Create New Deck</span>
+              <span className="text-sm text-gray-500 text-center">
+                Manually add your own questions and answers.
+              </span>
+            </button>
+            
+            {/* Generate with AI */}
+            <button
+              type="button"
+              onClick={handleAIGenerate}
+              className="flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"
+            >
+              <Sparkles className="h-8 w-8 text-gray-500 mb-2" />
+              <span className="font-semibold text-lg">Generate with AI</span>
+              <span className="text-sm text-gray-500 text-center">
+                Upload a PDF or document and we'll generate flashcards for you.
+              </span>
+            </button>
           </div>
-          
-          <DialogFooter>
-            <Button
-              variant="ghost"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }

@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { removeDeckFromFolder } from '@/services/deck.service';
+import { getDecksNotInFolder } from '@/services/deck.service';
 import { createClient } from '@/utils/supabase/server';
 
-export async function POST(
+export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
 ) {
   try {
+    const { searchParams } = new URL(request.url);
+    const excludeFolderId = searchParams.get('excludeFolderId') || '';
+    
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -16,19 +18,15 @@ export async function POST(
         { status: 401 }
       );
     }
-
-    const {id} = await params;
     
-    await removeDeckFromFolder({ deckId: id });
+    // Get decks not in the specified folder
+    const decks = await getDecksNotInFolder(user.id, excludeFolderId);
 
-    return NextResponse.json(
-      { message: 'Deck removed from folder successfully' },
-      { status: 200 }
-    );
+    return NextResponse.json(decks);
   } catch (error) {
-    console.error('Error removing deck from folder:', error);
+    console.error('Error fetching decks:', error);
     return NextResponse.json(
-      { message: 'Failed to remove deck from folder' },
+      { message: 'Failed to fetch decks' },
       { status: 500 }
     );
   }
