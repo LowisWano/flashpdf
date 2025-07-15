@@ -2,6 +2,7 @@ import { Deck } from "@/generated/prisma";
 import prisma from "@/lib/prisma"
 
 export interface FlashcardEntry {
+  id: string;
   term: string;
   definition: string;
 }

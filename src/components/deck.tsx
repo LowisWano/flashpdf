@@ -39,7 +39,6 @@ export default function Deck({ deck }: {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <MoreVertical className="w-4 h-4" />
                   </Button>

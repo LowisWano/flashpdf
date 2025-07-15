@@ -1,18 +1,17 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Deck } from '@/generated/prisma'
-import FlashCard from './flashcard'
+import { DeckEntry } from '@/services/deck.service'
 import { Button } from './ui/button'
 import { Progress } from './ui/progress'
-import { ArrowLeft, ArrowRight, Check, X, Shuffle } from 'lucide-react'
+import { Shuffle } from 'lucide-react'
 import { updateDeckProgress } from '@/services/deck.service'
 import { Input } from './ui/input'
-import { Label } from './ui/label'
+import { FlashcardEntry } from '@/services/deck.service'
 
 export default function StudySession({ deck, userId }: { 
-  deck: any, // Using any temporarily as we need to fix the Deck type
+  deck: DeckEntry,
   userId: string 
 }) {
   const router = useRouter();
@@ -25,7 +24,7 @@ export default function StudySession({ deck, userId }: {
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const [isShuffled, setIsShuffled] = useState(false);
-  const [shuffledFlashcards, setShuffledFlashcards] = useState<any[]>([]);
+  const [shuffledFlashcards, setShuffledFlashcards] = useState<FlashcardEntry[]>([]);
 
   const originalFlashcards = deck.flashcards || [];
   const flashcards = isShuffled ? shuffledFlashcards : originalFlashcards;
@@ -45,7 +44,7 @@ export default function StudySession({ deck, userId }: {
     const shuffledUnanswered = [...unansweredCards].sort(() => Math.random() - 0.5);
     
     // Create new array with answered cards in their original positions and shuffled unanswered cards
-    let newFlashcards = [...originalFlashcards];
+    const newFlashcards = [...originalFlashcards];
     let shuffledIndex = 0;
     
     for (let i = 0; i < newFlashcards.length; i++) {
@@ -107,34 +106,15 @@ export default function StudySession({ deck, userId }: {
       setIsAnswerSubmitted(false);
       setIsAnswerCorrect(false);
     } else {
-      setTimeout(() => {
-        completeStudySession();
-      }, 0);
+      // Calculate score immediately with the updated value
+      const updatedCorrectAnswers = isAnswerCorrect ? correctAnswers + 1 : correctAnswers;
+      const score = Math.round((updatedCorrectAnswers / totalCards) * 100);
+      completeStudySession(score);
     }
   };
 
-  const goToPreviousCard = () => {
-    if (currentCardIndex > 0) {
-      setCurrentCardIndex(prev => prev - 1);
-      setUserAnswer('');
-      setIsAnswerSubmitted(false);
-      setIsAnswerCorrect(false);
-    }
-  };
-
-  const goToNextCard = () => {
-    if (currentCardIndex < totalCards - 1) {
-      setCurrentCardIndex(prev => prev + 1);
-      setUserAnswer('');
-      setIsAnswerSubmitted(false);
-      setIsAnswerCorrect(false);
-    } else if (!isStudyCompleted) {
-      completeStudySession();
-    }
-  };
-
-  const completeStudySession = async () => {
-    const score = Math.round((correctAnswers / totalCards) * 100);
+  const completeStudySession = async (score: number) => {
+    console.log(`correct answers: ${correctAnswers}/ total cards: ${totalCards} = ${score}`)
     setFinalScore(score);
     setIsStudyCompleted(true);
     
@@ -155,10 +135,6 @@ export default function StudySession({ deck, userId }: {
     } catch (error) {
       console.error('Error updating deck progress:', error);
     }
-  };
-
-  const returnToDeck = () => {
-    router.push(`/dashboard/decks/${deck.id}`);
   };
 
   if (totalCards === 0) {
