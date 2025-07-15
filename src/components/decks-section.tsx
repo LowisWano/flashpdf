@@ -113,7 +113,7 @@ export default function DecksSection({
             <CheckSquare className="w-4 h-4 mr-2" />
             {isSelectionMode ? "Exit Selection" : "Select Decks"}
           </Button>
-          <CreateFlashcardsDialog />
+          {!currentFolderId && <CreateFlashcardsDialog />}
         </div>
       </div>
 

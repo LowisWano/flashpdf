@@ -58,7 +58,7 @@ async function pollWhisperResult(whisperHash: string, { interval = 3000, maxAtte
   throw new Error("Timed out waiting for LLMWhisper result.");
 }
 
-export default function UploadArea() {
+export default function UploadArea({ folderId }: { folderId?: string }) {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);

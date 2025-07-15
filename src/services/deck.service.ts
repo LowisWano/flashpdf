@@ -12,6 +12,7 @@ export interface DeckEntry {
   topics?: string[];
   flashcards: FlashcardEntry[];
   cardCount: number;
+  folderId?: string;
 }
 
 export async function getDecks(userId: string): Promise<Deck[]> {
@@ -75,6 +76,7 @@ export async function createDeck({ userId, deck }: {
       description: deck.description || "",
       topics: deck.topics || [],
       cardCount: deck.flashcards.length,
+      folderId: deck.folderId,
       flashcards: {
         create: deck.flashcards.map(f => ({
           term: f.term,
@@ -173,6 +175,41 @@ export async function removeDeckFromFolder({
     return updatedDeck;
   } catch (error) {
     console.error('Error removing deck from folder:', error);
+    throw error;
+  }
+}
+
+export async function getDecksNotInFolder(userId: string, excludeFolderId: string): Promise<Deck[]> {
+  try {
+    // Get decks that either don't have a folderId or have a different folderId
+    const decks = await prisma.deck.findMany({
+      where: {
+        userId,
+        OR: [
+          { folderId: null },
+          { folderId: { not: excludeFolderId } }
+        ]
+      },
+      include: {
+        flashcards: true
+      }
+    });
+
+    // Update the cardCount on each deck to match the actual number of flashcards
+    for (const deck of decks) {
+      const flashcardsCount = deck.flashcards?.length || 0;
+      if (deck.cardCount !== flashcardsCount) {
+        await prisma.deck.update({
+          where: { id: deck.id },
+          data: { cardCount: flashcardsCount }
+        });
+        deck.cardCount = flashcardsCount;
+      }
+    }
+
+    return decks;
+  } catch (error) {
+    console.error('Error fetching decks not in folder:', error);
     throw error;
   }
 }
