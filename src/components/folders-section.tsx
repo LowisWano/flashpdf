@@ -95,11 +95,7 @@ export default function FoldersSection({
           <p className="text-gray-500 max-w-sm mx-auto mb-6">
             Create folders to organize your flashcard decks by subject, course, or any category you prefer.
           </p>
-          <Link href="/dashboard/folders/create">
-            <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-              Create your first folder
-            </Button>
-          </Link>
+          <CreateFolderButton />
         </div>
       )}
 
