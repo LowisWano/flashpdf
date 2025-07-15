@@ -85,7 +85,7 @@ export default function EditDeckForm({ deckId, deck }: EditDeckFormProps) {
         topics: tags,
         flashcards: flashcards.map(({ id, term, definition }) => ({ id, term, definition })),
       })
-      router.push(`/dashboard/decks/${deckId}/study`)
+      router.push(`/dashboard/decks/${deckId}`)
     } catch (e) {
       // Optionally handle error
       setIsSaving(false)

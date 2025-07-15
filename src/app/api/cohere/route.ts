@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         {
           role: "system",
           content: `
-            Generate a JSON data in this format:
+            Generate a JSON data strictly in this format:
 
             {
               title: string;
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
               }[];
             }
 
-            Instructions:
+            Strictly follow these nstructions:
 
             1. Set the "title" field to a concise summary or main topic of the given text.
             2. Create the "flashcards" array by extracting key terms and their definitions from the given text.
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
             5. Ensure the output is valid JSON, properly formatted with correct syntax and punctuation.
             6. If the text contains multiple key concepts, generate one flashcard per concept.
             7. Avoid adding explanations, commentary, or content outside the described JSON structure.
+            8. If there is undefined data, use an empty string
           `,
         },{
           role: "user",
