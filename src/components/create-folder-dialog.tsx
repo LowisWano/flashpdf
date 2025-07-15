@@ -54,15 +54,26 @@ export default function CreateFolderDialog({
     { value: "#7C3AED", label: "Violet" },
   ]
 
+  const [error, setError] = useState<string | null>(null)
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError(null)
+    
+    // Validate form
+    if (!name.trim()) {
+      setError("Folder name is required")
+      setIsSubmitting(false)
+      return
+    }
 
     try {
       const supabase = createClient()
       const { data: userData, error: userError } = await supabase.auth.getUser()
 
       if (userError) {
+        setError("Authentication error. Please try logging in again.")
         throw new Error("User authentication error")
       }
 
@@ -72,14 +83,16 @@ export default function CreateFolderDialog({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
-          description,
+          name: name.trim(),
+          description: description.trim(),
           color,
           userId: userData.user.id,
         }),
       })
 
       if (!response.ok) {
+        const errorData = await response.json()
+        setError(errorData.error || "Failed to create folder")
         throw new Error("Failed to create folder")
       }
 
@@ -93,6 +106,9 @@ export default function CreateFolderDialog({
       router.refresh()
     } catch (error) {
       console.error("Error creating folder:", error)
+      if (!error) {
+        setError("An unexpected error occurred")
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -135,9 +151,12 @@ export default function CreateFolderDialog({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter folder name"
-                className="bg-white border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100"
+                className={`bg-white border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 ${error && !name.trim() ? 'border-red-500' : ''}`}
                 required
               />
+              {error && (
+                <p className="text-sm text-red-500 mt-1">{error}</p>
+              )}
             </div>
 
             <div className="space-y-2">

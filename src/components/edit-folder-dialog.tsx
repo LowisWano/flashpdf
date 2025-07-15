@@ -56,9 +56,19 @@ export default function EditFolderDialog({ folder, open, isOpen, onOpenChange }:
     }
   }, [folder, dialogOpen])
 
+  const [error, setError] = useState<string | null>(null)
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError(null)
+    
+    // Validate form
+    if (!name.trim()) {
+      setError("Folder name is required")
+      setIsSubmitting(false)
+      return
+    }
 
     try {
       const response = await fetch(`/api/folders/${folder.id}`, {
@@ -67,13 +77,15 @@ export default function EditFolderDialog({ folder, open, isOpen, onOpenChange }:
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
-          description,
+          name: name.trim(),
+          description: description.trim(),
           color,
         }),
       })
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        setError(errorData.error || "Failed to update folder")
         throw new Error("Failed to update folder")
       }
 
@@ -82,6 +94,9 @@ export default function EditFolderDialog({ folder, open, isOpen, onOpenChange }:
       router.refresh()
     } catch (error) {
       console.error("Error updating folder:", error)
+      if (!error) {
+        setError("An unexpected error occurred")
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -106,9 +121,12 @@ export default function EditFolderDialog({ folder, open, isOpen, onOpenChange }:
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter folder name"
-                className="bg-white border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100"
+                className={`bg-white border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 ${error && !name.trim() ? 'border-red-500' : ''}`}
                 required
               />
+              {error && (
+                <p className="text-sm text-red-500 mt-1">{error}</p>
+              )}
             </div>
 
             <div className="space-y-2">

@@ -66,9 +66,24 @@ export default function FolderItem({ folder }: {
       </CardHeader>
       <CardContent className="pt-0">
         <div className="flex items-center justify-between mt-2">
-          <Badge variant="secondary" className="bg-gray-100 text-gray-700 hover:bg-gray-200">
-            {deckCount} {deckCount === 1 ? 'deck' : 'decks'}
-          </Badge>
+          <div className="flex items-center">
+            <Badge 
+              variant="secondary" 
+              className={`${
+                deckCount > 0 
+                  ? 'bg-purple-100 text-purple-800 hover:bg-purple-200' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {deckCount} {deckCount === 1 ? 'deck' : 'decks'}
+            </Badge>
+            
+            {deckCount > 0 && (
+              <span className="ml-2 text-xs text-gray-500">
+                {folder.decks?.reduce((total, deck) => total + (deck.cardCount || 0), 0)} cards
+              </span>
+            )}
+          </div>
           <Link href={`/dashboard/folders/${folder.id}`}>
             <Button size="sm" className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
               Open

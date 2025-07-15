@@ -22,6 +22,7 @@ import DeleteFolderDialog from "@/components/delete-folder-dialog"
 import FolderEditButton from "./folder-edit-button"
 import DeleteFolderButton from "./delete-folder-button"
 import BackButton from "./back-button"
+import AddDeckToFolderButton from "./add-deck-to-folder-button"
 
 export default async function FolderPage({
   params,
@@ -64,7 +65,6 @@ export default async function FolderPage({
           </div>
 
           <div className="items-center flex justify-center space-x-2">
-            <FolderEditButton folder={folder} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="p-1 hover:bg-gray-100 rounded-full">
@@ -76,18 +76,15 @@ export default async function FolderPage({
                   <Share2 className="mr-2 h-4 w-4" />
                   <span>Share</span>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DeleteFolderDialog 
-                  folderId={folder.id}
-                  folderName={folder.name}
-                />
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </CardContent>
       </Card>
       
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-wrap gap-4 mb-6">
+        <AddDeckToFolderButton folderId={folder.id} />
+        <FolderEditButton folder={folder} />
         <DeleteFolderButton folderId={folder.id} folderName={folder.name} />
         <BackButton />
       </div>
