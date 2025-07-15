@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { getFolders } from '@/services/folder.service';
+import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,6 +27,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(folder);
   } catch (error) {
     console.error('Error creating folder:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error || !data?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const folders = await getFolders(data.user.id);
+    return NextResponse.json(folders);
+  } catch (error) {
+    console.error('Error fetching folders:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

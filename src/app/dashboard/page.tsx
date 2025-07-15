@@ -15,8 +15,8 @@ export default async function Dashboard() {
   const decks: Deck[] = await getDecks(data.user.id)
   
   return (
-    <div >
-      <DecksSection decks={decks}/>
+    <div>
+      <DecksSection decks={decks} />
     </div>
   )
 }

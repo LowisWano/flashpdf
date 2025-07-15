@@ -17,7 +17,7 @@ export default function DeleteFolderButton({ folderId, folderName }: DeleteFolde
     <>
       <Button 
         variant="outline" 
-        className="text-red-600 hover:text-red-700 hover:bg-red-50 mb-4"
+        className="text-red-600 hover:text-red-700 hover:bg-red-50"
         onClick={() => setOpen(true)}
       >
         <Trash2 className="mr-2 h-4 w-4" />
@@ -27,7 +27,7 @@ export default function DeleteFolderButton({ folderId, folderName }: DeleteFolde
       <DeleteFolderDialog 
         folderId={folderId} 
         folderName={folderName}
-        open={open}
+        isOpen={open}
         onOpenChange={setOpen}
       />
     </>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Download, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
+import { Download, Edit, FolderPlus, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
 import { Deck as DeckType } from '@/generated/prisma'
 import {
   Card,
@@ -17,20 +17,73 @@ import { Progress } from './ui/progress'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Dialog } from './ui/dialog'
 import DeleteDeckDialog from './delete-deck-dialog'
+import MoveDeckToFolderDialog from './move-deck-to-folder-dialog'
 
-export default function Deck({ deck }: { 
-  deck: DeckType
+export default function Deck({ deck, isSelectable, isSelected, onSelect }: { 
+  deck: DeckType,
+  isSelectable?: boolean,
+  isSelected?: boolean,
+  onSelect?: (deckId: string) => void
 }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false)
+  const [isRemoving, setIsRemoving] = useState(false)
+  
+  const handleRemoveFromFolder = async () => {
+    if (!deck.folderId) return;
+    
+    setIsRemoving(true);
+    try {
+      const response = await fetch(`/api/decks/${deck.id}/remove-from-folder`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to remove deck from folder');
+      }
+      
+      // Refresh the page to show changes
+      window.location.reload();
+    } catch (error) {
+      console.error('Error removing deck from folder:', error);
+      alert('Failed to remove deck from folder. Please try again.');
+    } finally {
+      setIsRemoving(false);
+    }
+  }
   return (
-      <Card key={deck.id} className="hover:shadow-lg transition-shadow group justify-between">
-        <CardHeader className="">
+      <Card 
+        key={deck.id} 
+        className={`hover:shadow-lg transition-shadow group justify-between ${isSelected ? 'ring-2 ring-primary' : ''}`}
+        onClick={isSelectable && onSelect ? () => onSelect(deck.id) : undefined}
+      >
+        <CardHeader className={isSelectable ? 'cursor-pointer' : ''}>
           <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            {isSelectable && (
+              <div className="absolute top-2 right-2">
+                <div className={`w-5 h-5 rounded-full border ${isSelected ? 'bg-primary border-primary' : 'border-gray-300'} flex items-center justify-center`}>
+                  {isSelected && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-2">
                   <CardTitle className="text-lg line-clamp-1">{deck.title}</CardTitle>
                   {deck.isStarred && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
+                  {deck.folderId && (
+                    <span className="flex items-center text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
+                      <FolderPlus className="w-3 h-3 mr-1" />
+                      In folder
+                    </span>
+                  )}
                 </div>
                 <CardDescription className="line-clamp-2">{deck.description}</CardDescription>
               </div>
@@ -51,6 +104,12 @@ export default function Deck({ deck }: {
                       Edit
                     </DropdownMenuItem>
                   </Link>
+                  <DropdownMenuItem
+                    onClick={deck.folderId ? () => handleRemoveFromFolder() : () => setIsMoveDialogOpen(true)}
+                  >
+                    <FolderPlus className="w-4 h-4 mr-2" />
+                    {deck.folderId ? 'Remove from Folder' : 'Move to Folder'}
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-600"
@@ -66,6 +125,14 @@ export default function Deck({ deck }: {
             </div>
             <DeleteDeckDialog deckId={deck.id} deckTitle={deck.title} setIsDeleteDialogOpen={setIsDeleteDialogOpen}/>
           </Dialog>
+          
+          {/* Move to folder dialog */}
+          <MoveDeckToFolderDialog
+            deckId={deck.id}
+            deckTitle={deck.title}
+            open={isMoveDialogOpen}
+            onOpenChange={setIsMoveDialogOpen}
+          />
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-1">

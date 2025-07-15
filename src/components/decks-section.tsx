@@ -1,24 +1,32 @@
 "use client";
 
-import { BookOpen, Clock, FileText, Filter, Search, TrendingUp } from "lucide-react";
+import { BookOpen, Clock, FolderPlus, FileText, Filter, Search, TrendingUp, CheckSquare } from "lucide-react";
 import Deck from "./deck"
 import { Deck as DeckType } from "@/generated/prisma"
 import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { CreateFlashcardsDialog } from "./create-flashcards-dialog";
+import BulkMoveDeckToFolderDialog from "./bulk-move-deck-to-folder-dialog";
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 // Define sort types
 type SortOption = "recent" | "name" | null;
 
 export default function DecksSection({
   decks,
+  currentFolderId,
 }: {
   decks: DeckType[];
+  currentFolderId?: string;
 }) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>(null);
+  const [isBulkMoveDialogOpen, setIsBulkMoveDialogOpen] = useState(false);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedDeckIds, setSelectedDeckIds] = useState<string[]>([]);
 
   // Filter and sort decks based on search query and sort option
   const filteredDecks = useMemo(() => {
@@ -56,6 +64,30 @@ export default function DecksSection({
     setSortBy(option);
   };
   
+  const toggleSelectionMode = () => {
+    setIsSelectionMode(!isSelectionMode);
+    if (isSelectionMode) {
+      // Clear selections when exiting selection mode
+      setSelectedDeckIds([]);
+    }
+  };
+  
+  const handleDeckSelection = (deckId: string) => {
+    setSelectedDeckIds(prev => 
+      prev.includes(deckId) 
+        ? prev.filter(id => id !== deckId) 
+        : [...prev, deckId]
+    );
+  };
+  
+  const selectAllDecks = () => {
+    setSelectedDeckIds(filteredDecks.map(deck => deck.id));
+  };
+  
+  const clearSelection = () => {
+    setSelectedDeckIds([]);
+  };
+  
   return (
     <div>
       <div className="flex flex-row sm:items-center sm:justify-between gap-4 mb-3">
@@ -64,8 +96,25 @@ export default function DecksSection({
           <p className="text-gray-600">Manage and study your flashcard collections</p>
         </div>
         
+        <div className="flex gap-2">
+          {isSelectionMode && selectedDeckIds.length > 0 && (
+            <Button 
+              variant="outline"
+              onClick={() => setIsBulkMoveDialogOpen(true)}
+            >
+              <FolderPlus className="w-4 h-4 mr-2" />
+              Move to Folder
+            </Button>
+          )}
+          <Button 
+            variant={isSelectionMode ? "default" : "outline"}
+            onClick={toggleSelectionMode}
+          >
+            <CheckSquare className="w-4 h-4 mr-2" />
+            {isSelectionMode ? "Exit Selection" : "Select Decks"}
+          </Button>
           <CreateFlashcardsDialog />
-        
+        </div>
       </div>
 
       
@@ -115,6 +164,22 @@ export default function DecksSection({
         </div>
       )}
 
+      {isSelectionMode && filteredDecks.length > 0 && (
+        <div className="mb-4 flex items-center justify-between">
+          <div className="text-sm text-gray-600">
+            {selectedDeckIds.length} of {filteredDecks.length} decks selected
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={selectAllDecks}>
+              Select All
+            </Button>
+            <Button variant="outline" size="sm" onClick={clearSelection}>
+              Clear Selection
+            </Button>
+          </div>
+        </div>
+      )}
+
       {filteredDecks.length === 0 && searchQuery.trim() ? (
         <div className="text-center py-12">
           <div className="text-gray-400 mb-4">
@@ -127,13 +192,25 @@ export default function DecksSection({
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-3">
-          {
-            filteredDecks.map((deck) => (
-              <Deck key={deck.id} deck={deck} />
-            ))
-          }
+          {filteredDecks.map((deck) => (
+            <Deck 
+              key={deck.id} 
+              deck={deck}
+              isSelectable={isSelectionMode}
+              isSelected={selectedDeckIds.includes(deck.id)}
+              onSelect={handleDeckSelection}
+            />
+          ))}
         </div>
       )}
+      
+      {/* Bulk Move Dialog */}
+      <BulkMoveDeckToFolderDialog
+        open={isBulkMoveDialogOpen}
+        onOpenChange={setIsBulkMoveDialogOpen}
+        decks={filteredDecks.filter(deck => selectedDeckIds.includes(deck.id))}
+        excludeFolderId={currentFolderId}
+      />
     </div>
   )
 }
