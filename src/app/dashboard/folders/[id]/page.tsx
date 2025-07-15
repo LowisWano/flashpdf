@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MoreVertical, FolderOpen, Edit, Share2, Trash2 } from 'lucide-react'
+import { FolderOpen } from 'lucide-react'
 import { FolderWithDecks } from "@/lib/types"
 import { getFolderById } from "@/services/folder.service"
 import { createClient } from "@/utils/supabase/server"
@@ -11,16 +11,7 @@ import {
   CardContent
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import DeleteFolderDialog from "@/components/delete-folder-dialog"
-import FolderEditButton from "./folder-edit-button"
-import DeleteFolderButton from "./delete-folder-button"
+import FolderOptions from "./folder-options"
 import BackButton from "./back-button"
 import AddDeckToFolderButton from "./add-deck-to-folder-button"
 
@@ -44,7 +35,7 @@ export default async function FolderPage({
   }
 
   return (
-    <div className="flex justify-center flex-col sm:mx-45">
+    <div className="flex justify-center flex-col">
       <Card className="mb-6">
         <CardContent className="flex flex-row justify-between py-6">
           <div className="flex items-center">
@@ -65,32 +56,18 @@ export default async function FolderPage({
           </div>
 
           <div className="items-center flex justify-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="p-1 hover:bg-gray-100 rounded-full">
-                  <MoreVertical className="h-5 w-5" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <Share2 className="mr-2 h-4 w-4" />
-                  <span>Share</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FolderOptions folder={folder} />
           </div>
         </CardContent>
       </Card>
       
       <div className="flex flex-wrap gap-4 mb-6">
         <AddDeckToFolderButton folderId={folder.id} />
-        <FolderEditButton folder={folder} />
-        <DeleteFolderButton folderId={folder.id} folderName={folder.name} />
         <BackButton />
       </div>
       
       {folder.decks && folder.decks.length > 0 ? (
-        <DecksSection decks={folder.decks}/>
+        <DecksSection decks={folder.decks} currentFolderId={folder.id}/>
       ) : (
         <div className="text-center py-16 border-2 border-dashed rounded-lg bg-white">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 mb-4">

@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
-import { DropdownMenuItem } from "./ui/dropdown-menu"
 
 interface DeleteFolderDialogProps {
   folderId: string
@@ -37,6 +36,9 @@ export default function DeleteFolderDialog({
   // Use external state control if provided, otherwise use internal state
   const dialogOpen = open ?? externalIsOpen ?? internalIsOpen
   const setIsOpen = onOpenChange ?? setInternalIsOpen
+  
+  // If we're using controlled mode, don't render the trigger
+  const shouldRenderTrigger = open === undefined && externalIsOpen === undefined
 
   const handleDelete = async () => {
     setIsDeleting(true)
@@ -62,17 +64,14 @@ export default function DeleteFolderDialog({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <DropdownMenuItem 
-          onSelect={(e) => {
-            e.preventDefault()
-          }}
-          className="text-red-600 focus:text-red-600"
-        >
-          <Trash2 className="mr-2 h-4 w-4" />
-          <span>Delete</span>
-        </DropdownMenuItem>
-      </DialogTrigger>
+      {shouldRenderTrigger && (
+        <DialogTrigger asChild>
+          <Button variant="outline" className="text-red-600 hover:text-red-700 hover:bg-red-50">
+            <Trash2 className="mr-2 h-4 w-4" />
+            <span>Delete</span>
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Delete Folder</DialogTitle>

@@ -140,3 +140,53 @@ export async function deleteDeck({
     console.error('Error deleting deck:', error)
   }
 }
+
+export async function moveDeckToFolder({
+  deckId,
+  folderId
+}: {
+  deckId: string,
+  folderId: string | null // null to remove from folder
+}): Promise<Deck> {
+  try {
+    // Update the deck with the new folder ID
+    const updatedDeck = await prisma.deck.update({
+      where: { id: deckId },
+      data: { 
+        folderId: folderId 
+      },
+      include: {
+        flashcards: true
+      }
+    });
+
+    return updatedDeck;
+  } catch (error) {
+    console.error('Error moving deck to folder:', error);
+    throw error;
+  }
+}
+
+export async function removeDeckFromFolder({
+  deckId
+}: {
+  deckId: string
+}): Promise<Deck> {
+  try {
+    // Update the deck to remove the folder association
+    const updatedDeck = await prisma.deck.update({
+      where: { id: deckId },
+      data: { 
+        folderId: null 
+      },
+      include: {
+        flashcards: true
+      }
+    });
+
+    return updatedDeck;
+  } catch (error) {
+    console.error('Error removing deck from folder:', error);
+    throw error;
+  }
+}
