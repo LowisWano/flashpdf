@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Edit, FolderOpen, MoreVertical, Share2, Trash2 } from 'lucide-react'
+import { Edit, FolderOpen, MoreVertical, Share2 } from 'lucide-react'
 import { FolderWithDecks } from '@/lib/types'
 import {
   Card,
@@ -14,12 +14,13 @@ import {
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Badge } from './ui/badge'
+import DeleteFolderDialog from './delete-folder-dialog'
+import EditFolderDialog from './edit-folder-dialog'
 
 export default function FolderItem({ folder }: { 
   folder: FolderWithDecks
 }) {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const deckCount = folder.decks ? folder.decks.length : 0
   
   return (
@@ -39,24 +40,22 @@ export default function FolderItem({ folder }: {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <Link href={`/dashboard/folders/${folder.id}/edit`}>
-                <DropdownMenuItem>
-                  <Edit className="mr-2 h-4 w-4" />
-                  <span>Edit</span>
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem onSelect={(e) => {
+                e.preventDefault();
+                setIsEditDialogOpen(true);
+              }}>
+                <Edit className="mr-2 h-4 w-4" />
+                <span>Edit</span>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Share2 className="mr-2 h-4 w-4" />
                 <span>Share</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-red-600 focus:text-red-600"
-                onClick={() => setIsDeleteDialogOpen(true)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                <span>Delete</span>
-              </DropdownMenuItem>
+              <DeleteFolderDialog
+                folderId={folder.id}
+                folderName={folder.name}
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -78,7 +77,12 @@ export default function FolderItem({ folder }: {
         </div>
       </CardContent>
       
-      {/* TODO: Add delete confirmation dialog once it's created */}
+      {/* Edit Folder Dialog */}
+      <EditFolderDialog 
+        folder={folder}
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+      />
     </Card>
   )
 }

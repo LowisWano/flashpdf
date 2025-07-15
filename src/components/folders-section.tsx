@@ -1,6 +1,6 @@
 "use client";
 
-import { Folder, Clock, Filter, Search, Plus } from "lucide-react";
+import { Folder, Clock, Filter, Search } from "lucide-react";
 import { FolderWithDecks } from "@/lib/types";
 import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
@@ -8,6 +8,7 @@ import { Button } from "./ui/button";
 import { useState, useMemo } from "react";
 import Link from 'next/link';
 import FolderItem from "./folder-item";
+import CreateFolderButton from "@/app/dashboard/folders/create-folder-button";
 
 // Define sort types
 type SortOption = "recent" | "name" | null;
@@ -80,12 +81,7 @@ export default function FoldersSection({
           </DropdownMenu>
 
           {/* Create Folder Button */}
-          <Link href="/dashboard/folders/create">
-            <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-              <Plus className="mr-2 h-4 w-4" />
-              New Folder
-            </Button>
-          </Link>
+          <CreateFolderButton />
         </div>
       </div>
 

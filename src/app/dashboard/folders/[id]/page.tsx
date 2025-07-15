@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MoreVertical, FolderOpen } from 'lucide-react'
+import { MoreVertical, FolderOpen, Edit, Share2, Trash2 } from 'lucide-react'
 import { FolderWithDecks } from "@/lib/types"
 import { getFolderById } from "@/services/folder.service"
 import { createClient } from "@/utils/supabase/server"
@@ -11,6 +11,17 @@ import {
   CardContent
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import DeleteFolderDialog from "@/components/delete-folder-dialog"
+import FolderEditButton from "./folder-edit-button"
+import DeleteFolderButton from "./delete-folder-button"
+import BackButton from "./back-button"
 
 export default async function FolderPage({
   params,
@@ -52,16 +63,34 @@ export default async function FolderPage({
             </div>
           </div>
 
-          <div className="items-center flex justify-center">
-            <Link href={`/dashboard/folders/${id}/edit`}>
-              <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">Edit Folder</Button>
-            </Link>
-            <button className="p-1 hover:bg-gray-100 rounded-full">
-              <MoreVertical className="h-5 w-5" />
-            </button>
+          <div className="items-center flex justify-center space-x-2">
+            <FolderEditButton folder={folder} />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-1 hover:bg-gray-100 rounded-full">
+                  <MoreVertical className="h-5 w-5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <Share2 className="mr-2 h-4 w-4" />
+                  <span>Share</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DeleteFolderDialog 
+                  folderId={folder.id}
+                  folderName={folder.name}
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </CardContent>
       </Card>
+      
+      <div className="flex gap-4 mb-6">
+        <DeleteFolderButton folderId={folder.id} folderName={folder.name} />
+        <BackButton />
+      </div>
       
       {folder.decks && folder.decks.length > 0 ? (
         <DecksSection decks={folder.decks}/>
