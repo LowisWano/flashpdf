@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { text, userId } = await req.json();
+    const { text, userId, folderId } = await req.json();
     
     if (!text || !userId) {
       return NextResponse.json({ error: "Missing text or user ID" }, { status: 400 });
@@ -66,7 +66,8 @@ export async function POST(req: NextRequest) {
       deck: {
         title: responseData.title,
         flashcards: responseData.flashcards,
-        cardCount: responseData.flashcards.length
+        cardCount: responseData.flashcards.length,
+        folderId: folderId || undefined
       }
     });
 
