@@ -49,10 +49,17 @@ const navItems = {
   },
 }
 
-export function AppSidebar({ userFolders = [] }: {
-  userFolders?: FolderWithDecks[]
+export function AppSidebar({ userDetails }: {
+  userDetails: {
+    credentials: {
+      email: string
+      name: string
+      avatar: string
+    },
+    folders: FolderWithDecks[]
+  },
 }) {
-  const folderProjects = userFolders.map(folder => ({
+  const folderProjects = userDetails.folders.map(folder => ({
     name: folder.name,
     url: `/dashboard/folders/${folder.id}`,
     icon: Folder,
@@ -68,7 +75,7 @@ export function AppSidebar({ userFolders = [] }: {
         <NavProjects projects={folderProjects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={navItems.user} />
+        <NavUser user={userDetails.credentials} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

@@ -1,12 +1,11 @@
 "use client"
 
+import Link from "next/link"
+import { logout } from "@/app/login/actions"
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
+  Settings,
 } from "lucide-react"
 
 import {
@@ -17,7 +16,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -29,6 +27,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+
+async function handleLogout() {
+  try {
+    await logout()
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
+}
 
 export function NavUser({
   user,
@@ -80,32 +86,16 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            <Link href="/settings">
               <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+                <Settings/>
+                Settings
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+            </Link>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut />
+                Log out
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
