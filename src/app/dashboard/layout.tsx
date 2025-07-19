@@ -1,5 +1,4 @@
-import NavigationBar from "@/components/navigation-bar"
-import { AppSidebar } from "@/components/sidebar/app-sidebar"
+import { SidebarContainer } from "@/components/sidebar/sidebar-container"
 import {
   SidebarInset,
   SidebarProvider,
@@ -13,7 +12,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar/>
+      <SidebarContainer/>
       <SidebarInset>
         <SidebarTrigger className="p-2 h-12 w-12" />
         <main className="sm:p-10 p-5">{children}</main>

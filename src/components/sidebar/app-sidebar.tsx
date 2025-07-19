@@ -11,7 +11,7 @@ import {
 import { NavMain } from "@/components/sidebar/nav-main"
 import { NavProjects } from "@/components/sidebar/nav-projects"
 import { NavUser } from "@/components/sidebar/nav-user"
-import { TeamSwitcher } from "@/components/sidebar/team-switcher"
+import { SidebarHomeMenuItem } from "./sidebar-home-menu-item"
 import {
   Sidebar,
   SidebarContent,
@@ -19,21 +19,17 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import type { FolderWithDecks } from "@/lib/types"
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
+const navItems = {
+  home: [
     {
       name: "FlashPDF",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     }
   ],
-  navMain: [
+  main: [
     {
       title: "Home",
       url: "/dashboard",
@@ -46,27 +42,33 @@ const data = {
       icon: FolderOpen,
     }
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Folder,
-    }
-  ],
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "",
+  },
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ userFolders = [] }: {
+  userFolders?: FolderWithDecks[]
+}) {
+  const folderProjects = userFolders.map(folder => ({
+    name: folder.name,
+    url: `/dashboard/folders/${folder.id}`,
+    icon: Folder,
+  }));
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarHomeMenuItem teams={navItems.home} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={navItems.main} />
+        <NavProjects projects={folderProjects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={navItems.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
