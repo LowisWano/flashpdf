@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Edit } from "lucide-react"
-import { ColorPicker } from "@/components/color-picker"
+import { ColorPicker } from "@/components/folder/color-picker"
 import { FolderWithDecks } from "@/lib/types"
 
 interface EditFolderDialogProps {

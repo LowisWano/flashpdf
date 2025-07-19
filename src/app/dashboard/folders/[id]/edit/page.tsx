@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { ColorPicker } from "@/components/color-picker"
+import { ColorPicker } from "@/components/folder/color-picker"
 import { createClient } from "@/utils/supabase/client"
 import { FolderWithDecks } from "@/lib/types"
 

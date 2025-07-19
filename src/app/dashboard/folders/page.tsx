@@ -1,4 +1,4 @@
-import FoldersSection from "@/components/folders-section"
+import FoldersSection from "@/components/folder/folders-section"
 import { getFolders } from "@/services/folder.service"
 import { FolderWithDecks } from "@/lib/types"
 import { createClient } from '@/utils/supabase/server'

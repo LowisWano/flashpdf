@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
-import CreateFolderDialog from "@/components/create-folder-dialog"
+import CreateFolderDialog from "@/components/folder/create-folder-dialog"
 
 export default function CreateFolderButton() {
   const [open, setOpen] = useState(false)

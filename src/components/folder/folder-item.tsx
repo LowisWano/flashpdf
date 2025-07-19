@@ -12,9 +12,9 @@ import {
   CardDescription
 } from "@/components/ui/card"
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { Badge } from './ui/badge'
-import DeleteFolderDialog from './delete-folder-dialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Badge } from '@/components/ui/badge'
+import DeleteFolderDialog from '../delete-folder-dialog'
 import EditFolderDialog from './edit-folder-dialog'
 
 export default function FolderItem({ folder }: { 

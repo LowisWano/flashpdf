@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { FolderWithDecks } from "@/lib/types"
 import DeleteFolderDialog from "@/components/delete-folder-dialog"
-import EditFolderDialog from "@/components/edit-folder-dialog"
+import EditFolderDialog from "@/components/folder/edit-folder-dialog"
 import { useRouter } from "next/navigation"
 
 interface FolderOptionsProps {
