@@ -90,7 +90,7 @@ export default function StudySession({ deck, userId }: {
     }
   };
 
-  const handleNextCard = () => {
+  const handleNextCard = async () => {
     const cardId = flashcards[currentCardIndex].id;
     
     setAnsweredCards(prev => ({
@@ -100,6 +100,27 @@ export default function StudySession({ deck, userId }: {
     
     if (isAnswerCorrect) {
       setCorrectAnswers(prev => prev + 1);
+    }
+    
+    // Calculate current progress as percentage of cards answered
+    const cardsAnswered = Object.keys(answeredCards).length + 1; // +1 for current card
+    const currentProgress = Math.round((cardsAnswered / totalCards) * 100);
+    
+    try {
+      // Update progress without accuracy
+      const response = await fetch(`/api/decks/${deck.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ progress: currentProgress }),
+      });
+      
+      if (!response.ok) {
+        console.error('Failed to update deck progress');
+      }
+    } catch (error) {
+      console.error('Error updating deck progress:', error);
     }
     
     if (currentCardIndex < totalCards - 1) {

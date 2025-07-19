@@ -95,19 +95,31 @@ export async function createDeck({ userId, deck }: {
 export async function updateDeckProgress({
   deckId,
   accuracy,
+  progress
 }: {
   deckId: string;
-  accuracy: number;
+  accuracy?: number;
+  progress: number;
 }): Promise<Deck> {
+  const payload: {
+    lastStudied: Date,
+    studyProgress: number,
+    accuracy?: number,
+  } = {
+    lastStudied: new Date(),
+    studyProgress: progress
+  }
+
+  if (accuracy !== undefined) {
+    payload.accuracy = accuracy;
+    payload.studyProgress = 100;
+  }
+
   const updatedDeck = await prisma.deck.update({
     where: {
       id: deckId
     },
-    data: {
-      accuracy,
-      lastStudied: new Date(),
-      studyProgress: 100 // Mark as completed when study session is done
-    }
+    data: payload
   });
   
   return updatedDeck;

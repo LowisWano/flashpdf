@@ -17,10 +17,19 @@ export async function PUT(
       })
     }
     
-    const { accuracy } = await req.json()
+    const body = await req.json()
+    const { accuracy, progress } = body
     
-    if (typeof accuracy !== 'number' || accuracy < 0 || accuracy > 100) {
+    // Validate accuracy if provided
+    if (accuracy !== undefined && (typeof accuracy !== 'number' || accuracy < 0 || accuracy > 100)) {
       return new NextResponse(JSON.stringify({ error: 'Invalid accuracy value' }), {
+        status: 400,
+      })
+    }
+    
+    // Validate progress if provided
+    if (progress !== undefined && (typeof progress !== 'number' || progress < 0 || progress > 100)) {
+      return new NextResponse(JSON.stringify({ error: 'Invalid progress value' }), {
         status: 400,
       })
     }
@@ -28,6 +37,7 @@ export async function PUT(
     const updatedDeck = await updateDeckProgress({
       deckId: id,
       accuracy,
+      progress: progress || 0,
     })
     
     return NextResponse.json({ success: true, deck: updatedDeck })
