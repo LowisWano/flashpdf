@@ -17,7 +17,7 @@ import { Progress } from './ui/progress'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Dialog } from './ui/dialog'
 import DeleteDeckDialog from './delete-deck-dialog'
-import MoveDeckToFolderDialog from './move-deck-to-folder-dialog'
+import MoveDeckToFolderDialog from './folder/move-deck-to-folder-dialog'
 
 export default function Deck({ deck, isSelectable, isSelected, onSelect }: { 
   deck: DeckType,
@@ -78,12 +78,6 @@ export default function Deck({ deck, isSelectable, isSelected, onSelect }: {
                 <div className="flex items-center space-x-2 mb-2">
                   <CardTitle className="text-lg line-clamp-1">{deck.title}</CardTitle>
                   {deck.isStarred && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
-                  {deck.folderId && (
-                    <span className="flex items-center text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
-                      <FolderPlus className="w-3 h-3 mr-1" />
-                      In folder
-                    </span>
-                  )}
                 </div>
                 <CardDescription className="line-clamp-2">{deck.description}</CardDescription>
               </div>

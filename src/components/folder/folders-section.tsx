@@ -2,9 +2,9 @@
 
 import { Folder, Clock, Filter, Search } from "lucide-react";
 import { FolderWithDecks } from "@/lib/types";
-import { Input } from "./ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 import { useState, useMemo } from "react";
 import Link from 'next/link';
 import FolderItem from "./folder-item";

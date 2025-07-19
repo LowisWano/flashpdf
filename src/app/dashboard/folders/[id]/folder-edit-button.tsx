@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Edit } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import EditFolderDialog from "@/components/edit-folder-dialog"
+import EditFolderDialog from "@/components/folder/edit-folder-dialog"
 import { FolderWithDecks } from "@/lib/types"
 
 interface FolderEditButtonProps {

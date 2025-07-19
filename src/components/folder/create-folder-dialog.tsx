@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Plus } from "lucide-react"
-import { ColorPicker } from "@/components/color-picker"
+import { ColorPicker } from "@/components/folder/color-picker"
 
 interface CreateFolderDialogProps {
   open?: boolean

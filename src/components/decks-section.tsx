@@ -7,7 +7,7 @@ import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { CreateFlashcardsDialog } from "./create-flashcards-dialog";
-import BulkMoveDeckToFolderDialog from "./bulk-move-deck-to-folder-dialog";
+import BulkMoveDeckToFolderDialog from "./folder/bulk-move-deck-to-folder-dialog";
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 

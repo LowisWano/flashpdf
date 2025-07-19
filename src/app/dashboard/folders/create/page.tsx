@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
 // Import our custom color picker component
-import { ColorPicker } from "@/components/color-picker"
+import { ColorPicker } from "@/components/folder/color-picker"
 
 export default function CreateFolderPage() {
   const router = useRouter()

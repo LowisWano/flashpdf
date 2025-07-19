@@ -1,4 +1,10 @@
 import NavigationBar from "@/components/navigation-bar"
+import { AppSidebar } from "@/components/sidebar/app-sidebar"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 
 export default function DashboardLayout({
   children,
@@ -6,9 +12,12 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div>
-      <NavigationBar/>
-      <main className="sm:p-15 p-5 md:max-w-[1900px] md:mx-auto">{children}</main>
-    </div>
+    <SidebarProvider>
+      <AppSidebar/>
+      <SidebarInset>
+        <SidebarTrigger className="p-2 h-12 w-12" />
+        <main className="sm:p-10 p-5">{children}</main>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
