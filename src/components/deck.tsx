@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Download, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
+import { Ellipsis, Edit, MoreVertical, Play, Share2, Star, Trash2 } from 'lucide-react'
 import { Deck as DeckType } from '@/generated/prisma'
 import {
   Card,
@@ -40,7 +40,7 @@ export default function Deck({ deck }: {
                     variant="ghost"
                     size="sm"
                   >
-                    <MoreVertical className="w-4 h-4" />
+                    <MoreVertical />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

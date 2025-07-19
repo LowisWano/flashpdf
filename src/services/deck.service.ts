@@ -8,6 +8,7 @@ export interface FlashcardEntry {
 }
 
 export interface DeckEntry {
+  id: string;
   title: string;
   description?: string;
   topics?: string[];

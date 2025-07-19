@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation'
 import { DeckEntry } from '@/services/deck.service'
 import { Button } from './ui/button'
 import { Progress } from './ui/progress'
-import { Shuffle } from 'lucide-react'
+import { MoreVertical, Shuffle } from 'lucide-react'
+import Link from 'next/link'
 import { updateDeckProgress } from '@/services/deck.service'
 import { Input } from './ui/input'
 import { FlashcardEntry } from '@/services/deck.service'
+import { Card, CardContent, CardTitle } from './ui/card'
 
 export default function StudySession({ deck, userId }: { 
   deck: DeckEntry,
@@ -35,7 +37,7 @@ export default function StudySession({ deck, userId }: {
   // Shuffle unanswered flashcards function
   const shuffleUnansweredFlashcards = () => {
     // Get unanswered flashcards (cards that haven't been answered yet)
-    const unansweredCards = originalFlashcards.filter((_: any, index: number) => {
+    const unansweredCards = originalFlashcards.filter((_: FlashcardEntry, index: number) => {
       const cardId = originalFlashcards[index].id;
       return !answeredCards[cardId];
     });
@@ -151,7 +153,7 @@ export default function StudySession({ deck, userId }: {
       <div className="max-w-xl mx-auto text-center py-4 px-4">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10">
           <div className="mb-8">
-            <h2 className="text-4xl font-bold mb-4">You're doing great!</h2>
+            <h2 className="text-4xl font-bold mb-4">You&apos;re doing great!</h2>
             <p className="text-gray-600 dark:text-gray-300">
               Keep it up to build confidence.
             </p>
@@ -217,6 +219,33 @@ export default function StudySession({ deck, userId }: {
 
   return (
     <div>
+    <Card className="mb-6">
+        <CardContent className="flex flex-row justify-between">
+          <div className="flex items-center justify-center">
+          <CardTitle className="text-xl">
+            {deck.title}
+          </CardTitle>
+          </div>
+          <div className="items-center flex justify-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={shuffleUnansweredFlashcards}
+              className="rounded-full p-2"
+              title="Shuffle unanswered questions"
+            >
+              <Shuffle className="h-4 w-4" />
+            </Button>
+            <Link href={`/dashboard/decks/${deck.id}/edit`}>
+              <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">Edit Deck</Button>
+            </Link>
+            <button className="p-1 hover:bg-gray-100 rounded-full">
+              <MoreVertical className="h-5 w-5" />
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+    <div>
       <div className="mb-8">
         <div className="flex flex-col gap-2 mb-4">
           <div className="flex justify-between items-center">
@@ -255,19 +284,6 @@ export default function StudySession({ deck, userId }: {
         )}
       </div>
 
-      {/* Shuffle Button - Between flashcard and text input */}
-      <div className="flex justify-center mb-4 -mt-8">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={shuffleUnansweredFlashcards}
-          className="rounded-full p-2"
-          title="Shuffle unanswered questions"
-        >
-          <Shuffle className="h-4 w-4" />
-        </Button>
-      </div>
-
       {/* Answer Input */}
       {!isAnswerSubmitted && (
         <div className="mb-12">
@@ -297,34 +313,7 @@ export default function StudySession({ deck, userId }: {
           </Button>
         </div>
       )}
-
-      {/* Navigation Buttons - Only show when answer is not submitted */}
-      {/* {!isAnswerSubmitted && (
-        <div className="flex items-center justify-center gap-4 mt-8">
-          <Button 
-            variant="outline" 
-            onClick={goToPreviousCard}
-            disabled={currentCardIndex === 0}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Previous
-          </Button>
-          
-          <span className="text-sm text-muted-foreground">
-            Card {currentCardIndex + 1} of {totalCards}
-          </span>
-          
-          <Button 
-            variant="outline" 
-            onClick={goToNextCard}
-            className="flex items-center gap-2"
-          >
-            Next
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-      )} */}
+    </div>
     </div>
   )
 }
