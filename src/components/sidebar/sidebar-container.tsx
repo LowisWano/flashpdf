@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { getFolders } from '@/services/folder.service'
 import { AppSidebar } from './app-sidebar'
 import type { FolderWithDecks } from '@/lib/types'
+import { getUserById } from '@/services/user.service'
 
 export async function SidebarContainer() {
   const supabase = await createClient()
@@ -16,6 +17,17 @@ export async function SidebarContainer() {
   }
   
   const folders: FolderWithDecks[] = await getFolders(data.user.id)
-  console.log(data.user)
-  return <AppSidebar userFolders={folders} />
+
+  const { id, name } = await getUserById(data.user.id)
+
+  const userDetails = {
+    folders,
+    credentials: {
+      email: data.user.email || '', // Provide a default empty string
+      name: data.user.user_metadata?.full_name || name || 'User',
+      avatar: data.user.user_metadata?.avatar_url || '',
+    }
+  }
+  console.log('User Details:', userDetails)
+  return <AppSidebar userDetails={userDetails} />
 }
