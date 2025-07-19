@@ -85,7 +85,7 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
             <Label htmlFor="tags" className="text-base">Tags</Label>
             <div className="flex flex-wrap gap-2 mb-2">
               {tags.map((tag) => (
-                <Badge key={tag} className="bg-gradient-to-r from-orange-400 to-purple-500 text-white flex items-center gap-1 px-3 py-1">
+                <Badge key={tag} className="bg-orange-400 text-white flex items-center gap-1 px-3 py-1">
                   {tag}
                   <button 
                     type="button" 

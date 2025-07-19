@@ -35,26 +35,6 @@ export default async function StudyPage({ params }: { params: { id: string } }) 
 
   return (
     <div className="flex justify-center flex-col sm:mx-45">
-      <Card className="mb-6">
-        <CardContent className="flex flex-row justify-between">
-          <div className="flex items-center justify-center">
-          <CardTitle className="text-xl">
-            {deck.title}
-          </CardTitle>
-          </div>
-          
-
-          <div className="items-center flex justify-center">
-            <Link href={`/dashboard/decks/${id}/edit`}>
-              <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">Edit Deck</Button>
-            </Link>
-            <button className="p-1 hover:bg-gray-100 rounded-full">
-              <MoreVertical className="h-5 w-5" />
-            </button>
-          </div>
-        </CardContent>
-      </Card>
-      
       <StudySession deck={deck} userId={data.user.id} />
     </div>
   )
