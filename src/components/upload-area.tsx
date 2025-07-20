@@ -58,7 +58,7 @@ async function pollWhisperResult(whisperHash: string, { interval = 3000, maxAtte
   throw new Error("Timed out waiting for LLMWhisper result.");
 }
 
-export default function UploadArea() {
+export default function UploadArea({ folderId }: { folderId?: string }) {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
@@ -119,7 +119,8 @@ export default function UploadArea() {
         },
         body: JSON.stringify({
           text,
-          userId: userData?.data?.user?.id
+          userId: userData?.data?.user?.id,
+          folderId: folderId
         }),
       });
 
@@ -130,7 +131,12 @@ export default function UploadArea() {
       }
       const response = await cohereRes.json();
       console.log(response.deck)
-      router.push(`/dashboard/decks/${response.deck.id}/edit`)
+      // If we have a folderId, redirect back to the folder, otherwise go to the deck edit page
+      if (folderId) {
+        router.push(`/dashboard/folders/${folderId}`);
+      } else {
+        router.push(`/dashboard/decks/${response.deck.id}/edit`);
+      }
 
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "An error occurred.";
@@ -179,8 +185,54 @@ export default function UploadArea() {
     }
   };
 
-  const handleTextSubmit = () => {
-    // Implement text submission logic
+  const handleTextSubmit = async () => {
+    if (!pasteText.trim() || processing) return;
+    
+    setProcessing(true);
+    setError(null);
+    
+    try {
+      const supabase = await createClient();
+      const userData = await supabase.auth.getUser();
+      
+      if (!userData?.data?.user?.id) {
+        setError("User not authenticated.");
+        return;
+      }
+      
+      const cohereRes = await fetch("/api/cohere", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: pasteText,
+          userId: userData.data.user.id,
+          folderId: folderId
+        }),
+      });
+
+      if (!cohereRes.ok) {
+        const errorData = await cohereRes.json();
+        setError(`Failed to generate flashcards: ${errorData.error}`);
+        return;
+      }
+      
+      const response = await cohereRes.json();
+      
+      // If we have a folderId, redirect back to the folder, otherwise go to the deck edit page
+      if (folderId) {
+        router.push(`/dashboard/folders/${folderId}`);
+      } else {
+        router.push(`/dashboard/decks/${response.deck.id}/edit`);
+      }
+      
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "An error occurred.";
+      setError(errorMessage);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (

@@ -15,8 +15,9 @@ export default async function Dashboard() {
   const decks: Deck[] = await getDecks(data.user.id)
   
   return (
-    <div >
-      <DecksSection decks={decks}/>
+    <div>
+      <h1 className="scroll-m-20 font-bold text-2xl tracking-tighter md:text-4xl relative mb-4 flex items-center gap-4">My Flashcard Sets</h1>
+      <DecksSection decks={decks} />
     </div>
   )
 }
