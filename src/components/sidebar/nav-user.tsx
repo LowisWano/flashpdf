@@ -86,7 +86,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <Link href="/settings">
+            <Link href="/dashboard/settings">
               <DropdownMenuItem>
                 <Settings/>
                 Settings
