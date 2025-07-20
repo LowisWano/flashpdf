@@ -1,24 +1,16 @@
 "use client"
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Upload, FileText, Sparkles } from 'lucide-react'
+import { Plus, FileText, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 interface AddDeckToFolderButtonProps {
   folderId: string
@@ -95,7 +87,7 @@ export default function AddDeckToFolderButton({ folderId }: AddDeckToFolderButto
               <Sparkles className="h-8 w-8 text-gray-500 mb-2" />
               <span className="font-semibold text-lg">Generate with AI</span>
               <span className="text-sm text-gray-500 text-center">
-                Upload a PDF or document and we'll generate flashcards for you.
+                Upload a PDF or document and we&apos;ll generate flashcards for you.
               </span>
             </button>
           </div>

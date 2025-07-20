@@ -1,15 +1,13 @@
 "use client";
 
-import { BookOpen, Clock, FolderPlus, FileText, Filter, Search, TrendingUp, CheckSquare } from "lucide-react";
+import { Clock, FolderPlus, FileText, Filter, Search, CheckSquare, SquareX } from "lucide-react";
 import Deck from "./deck"
 import { Deck as DeckType } from "@/generated/prisma"
 import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { CreateFlashcardsDialog } from "./create-flashcards-dialog";
 import BulkMoveDeckToFolderDialog from "./folder/bulk-move-deck-to-folder-dialog";
 import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
 
 // Define sort types
 type SortOption = "recent" | "name" | null;
@@ -21,7 +19,6 @@ export default function DecksSection({
   decks: DeckType[];
   currentFolderId?: string;
 }) {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>(null);
   const [isBulkMoveDialogOpen, setIsBulkMoveDialogOpen] = useState(false);
@@ -90,12 +87,16 @@ export default function DecksSection({
   
   return (
     <div>
-      <div className="flex flex-row sm:items-center sm:justify-between gap-4 mb-3">
-        <div>
-          <h1 className="text-3xl font-bold">My Decks</h1>
-          <p className="text-gray-600">Manage and study your flashcard collections</p>
+      <div className="flex flex-col sm:flex-row gap-2 mb-8">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="Search for anything"
+            className="pl-10 bg-white border-gray-200 focus:bg-white"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
         </div>
-        
         <div className="flex gap-2">
           {isSelectionMode && selectedDeckIds.length > 0 && (
             <Button 
@@ -110,29 +111,15 @@ export default function DecksSection({
             variant={isSelectionMode ? "default" : "outline"}
             onClick={toggleSelectionMode}
           >
-            <CheckSquare className="w-4 h-4 mr-2" />
-            {isSelectionMode ? "Exit Selection" : "Select Decks"}
+            
+            {isSelectionMode ? <SquareX className="w-4 h-4" /> : <CheckSquare className="w-4 h-4" />}
           </Button>
-          {!currentFolderId && <CreateFlashcardsDialog />}
-        </div>
-      </div>
-
-      
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input
-            placeholder="Search for anything"
-            className="pl-10 bg-white border-gray-200 focus:bg-white"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Sort by {sortBy === 'name' ? ': Name' : sortBy === 'recent' ? ': Recently studied' : ''}
-              <Filter className="w-4 h-4 ml-2" />
+              {sortBy === 'name' ? 'Name' : sortBy === 'recent' ? 'Recently studied' : ''}
+              <Filter className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

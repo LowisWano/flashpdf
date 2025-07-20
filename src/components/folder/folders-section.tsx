@@ -6,7 +6,6 @@ import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useState, useMemo } from "react";
-import Link from 'next/link';
 import FolderItem from "./folder-item";
 import CreateFolderButton from "@/app/dashboard/folders/create-folder-button";
 
@@ -46,12 +45,11 @@ export default function FoldersSection({
   }, [folders, searchQuery, sortOption]);
 
   return (
-    <div className="container mx-auto py-6">
+    <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 className="text-2xl font-bold">Your Folders</h2>
-        <div className="flex gap-2 w-full sm:w-auto">
+        <div className="flex gap-2 w-full">
           {/* Search Input */}
-          <div className="relative flex-grow sm:flex-grow-0 sm:w-64">
+          <div className="relative flex-grow w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <Input
               placeholder="Search folders..."
@@ -107,7 +105,7 @@ export default function FoldersSection({
           </div>
           <h3 className="text-lg font-semibold mb-2">No folders found</h3>
           <p className="text-gray-500 max-w-sm mx-auto">
-            We couldn't find any folders matching your search. Try using different keywords.
+            We couldn&apos;t find any folders matching your search. Try using different keywords.
           </p>
         </div>
       )}

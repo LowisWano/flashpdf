@@ -37,8 +37,8 @@ export default async function FolderPage({
 
   return (
     <div className="flex justify-center flex-col">
-      <Card className="mb-6">
-        <CardContent className="flex flex-row justify-between py-6">
+      <Card className="mb-7">
+        <CardContent className="flex flex-row justify-between">
           <div className="flex items-center">
             <div 
               className="w-10 h-10 rounded-md flex items-center justify-center mr-4"
@@ -57,18 +57,11 @@ export default async function FolderPage({
           </div>
 
           <div className="items-center flex justify-center space-x-2">
+            <AddDeckToFolderButton folderId={folder.id} />
             <FolderOptions folder={folder} />
           </div>
         </CardContent>
       </Card>
-      
-      <div className="flex flex-wrap gap-4 mb-6 justify-between items-center">
-        <div className="flex items-center gap-2">
-          <BackButton />
-        </div>
-        <AddDeckToFolderButton folderId={folder.id} />
-      </div>
-      
       {folder.decks && folder.decks.length > 0 ? (
         <DecksSection decks={folder.decks} currentFolderId={folder.id}/>
       ) : (

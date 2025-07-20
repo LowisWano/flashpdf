@@ -16,6 +16,7 @@ export default async function Dashboard() {
   
   return (
     <div>
+      <h1 className="scroll-m-20 font-bold text-2xl tracking-tighter md:text-4xl relative mb-4 flex items-center gap-4">My Flashcard Sets</h1>
       <DecksSection decks={decks} />
     </div>
   )

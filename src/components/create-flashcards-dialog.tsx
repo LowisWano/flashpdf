@@ -16,7 +16,7 @@ export function CreateFlashcardsDialog() {
         <DialogTrigger asChild>
         <Button
           size="lg"
-          className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 px-8 sm:h-12 h-full w-20 rounded-3xl"
+          className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 h-10 w-10 rounded-full"
         >
             <Plus/>
           </Button>
