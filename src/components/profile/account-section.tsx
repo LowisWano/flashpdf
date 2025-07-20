@@ -48,7 +48,7 @@ export default function AccountSection({
 
   return (
     <Card>
-      <CardHeader className="pb-3">
+      <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle className="text-xl">Account</CardTitle>
           {!isEditing ? (

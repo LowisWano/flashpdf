@@ -1,6 +1,6 @@
 import { CreateFlashcardsDialog } from "@/components/create-flashcards-dialog"
+import { DynamicBreadcrumbs } from "@/components/sidebar/dynamic-breadcrumbs"
 import { SidebarContainer } from "@/components/sidebar/sidebar-container"
-import { Breadcrumb, BreadcrumbList, BreadcrumbLink, BreadcrumbItem, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -21,19 +21,7 @@ export default function DashboardLayout({
           <div className="flex items-center gap-2 px-3">
             <SidebarTrigger className="h-8 w-8" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <DynamicBreadcrumbs />
           </div>
           <div>
             <CreateFlashcardsDialog />
