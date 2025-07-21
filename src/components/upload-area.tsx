@@ -237,12 +237,12 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
 
   return (
     <div className="flex w-full flex-col gap-4 md:gap-6">
-      <Tabs defaultValue="upload-pdf">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="upload-pdf" className="text-sm">Upload PDF</TabsTrigger>
-          <TabsTrigger value="paste-text" className="text-sm">Paste text</TabsTrigger>
-        </TabsList>
-        <TabsContent value="upload-pdf">
+      {/* <Tabs defaultValue="upload-pdf">
+        <TabsList className="w-full">
+          <TabsTrigger value="upload-pdf" className="text-sm">Upload PDF</TabsTrigger> */}
+          {/* <TabsTrigger value="paste-text" className="text-sm">Paste text</TabsTrigger> */}
+        {/* </TabsList>
+        <TabsContent value="upload-pdf"> */}
           <div
             ref={dropZoneRef}
             onDragEnter={handleDragEnter}
@@ -307,8 +307,8 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
               <div className="absolute inset-0 bg-orange-500/10 rounded-lg border-2 border-dashed border-orange-500 pointer-events-none" />
             )}
           </div>
-        </TabsContent>
-        <TabsContent value="paste-text">
+        {/* </TabsContent> */}
+        {/* <TabsContent value="paste-text">
           <Card>
             <CardContent className="p-4 md:p-6">
               <div className="space-y-4">
@@ -333,8 +333,8 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-      </Tabs>
+        </TabsContent> */}
+      {/* </Tabs> */}
     </div>
   );
 }
