@@ -24,10 +24,11 @@ export async function createDeckAction({ title, description, topics, flashcards,
   await createDeck({
     userId: data.user.id,
     deck: {
+      id: crypto.randomUUID(), // Temporary ID, will be ignored by the database
       title,
       description,
       topics,
-      flashcards: flashcards.map(({ term, definition }) => ({ term, definition })),
+      flashcards: flashcards.map(({ id, term, definition }) => ({ id, term, definition })),
       cardCount: flashcards.length,
       folderId: folderId || undefined,
     }
