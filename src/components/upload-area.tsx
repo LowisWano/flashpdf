@@ -292,7 +292,7 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
                     onChange={handleFileChange}
                     disabled={processing}
                   />
-                  <p className="text-xs md:text-sm text-gray-500 mt-4">Supports PDF files up to 50MB</p>
+                  <p className="text-xs md:text-sm text-gray-500 mt-4">Upload only 1 file at a time</p>
                   {error && <div className="text-red-500 mt-4 text-sm">{error}</div>}
                   {extractedText && (
                     <div className="mt-6 text-left bg-gray-100 p-4 rounded max-h-96 overflow-auto">
