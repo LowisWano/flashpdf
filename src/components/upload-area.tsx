@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Upload } from "lucide-react"
+import { Upload, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { Label } from "@/components/ui/label"
+import { Progress } from "@/components/ui/progress"
 
 async function pollWhisperResult(whisperHash: string, { interval = 3000, maxAttempts = 20 } = {}) {
   let attempts = 0;
@@ -67,80 +68,88 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
   const [error, setError] = useState<string | null>(null);
   const [pasteText, setPasteText] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
+  const [loadingState, setLoadingState] = useState<'uploading' | 'processing' | 'generating' | null>(null);
+  const [fileName, setFileName] = useState<string>("");
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
   const processFile = async (file: File) => {
-    setError(null);
-    setExtractedText(null);
-    
-    if (file.size > 50 * 1024 * 1024) {
-      setError("File size exceeds 50MB.");
+  setError(null);
+  setExtractedText(null);
+  setFileName(file.name);
+  
+  if (file.size > 50 * 1024 * 1024) {
+    setError("File size exceeds 50MB.");
+    return;
+  }
+
+  setProcessing(true);
+  setLoadingState('uploading');
+
+  try {
+    const res = await fetch("/api/llmwhisper", {
+      method: "POST",
+      body: file,
+    });
+
+    if (!res.ok) {
+      setError("Failed to process PDF.");
+      setProcessing(false);
+      setLoadingState(null);
       return;
     }
 
-    setProcessing(true);
-
-    try {
-      const res = await fetch("/api/llmwhisper", {
-        method: "POST",
-        body: file,
-      });
-
-      if (!res.ok) {
-        setError("Failed to process PDF.");
-        setProcessing(false);
-        return;
-      }
-
-      const data = await res.json();
-      console.log("POST response:", data);
-      if (!data.whisper_hash) {
-        setError("No job hash returned from server.");
-        setProcessing(false);
-        return;
-      }
-
-      const text = await pollWhisperResult(data.whisper_hash);
-      setExtractedText(text);
-      const supabase = await createClient()
-      const userData = await supabase.auth.getUser()
-
-      const cohereRes = await fetch("/api/cohere", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text,
-          userId: userData?.data?.user?.id,
-          folderId: folderId
-        }),
-      });
-
-      if (!cohereRes.ok) {
-        const errorData = await cohereRes.json();
-        setError(`Failed to generate flashcards: ${errorData.error}`);
-        return;
-      }
-      const response = await cohereRes.json();
-      console.log(response.deck)
-      // If we have a folderId, redirect back to the folder, otherwise go to the deck edit page
-      if (folderId) {
-        router.push(`/dashboard/folders/${folderId}`);
-      } else {
-        router.push(`/dashboard/decks/${response.deck.id}/edit`);
-      }
-
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "An error occurred.";
-      setError(errorMessage);
-    } finally {
+    const data = await res.json();
+    console.log("POST response:", data);
+    if (!data.whisper_hash) {
+      setError("No job hash returned from server.");
       setProcessing(false);
+      setLoadingState(null);
+      return;
     }
-  };
+
+    setLoadingState('processing');
+    const text = await pollWhisperResult(data.whisper_hash);
+    setExtractedText(text);
+    const supabase = await createClient()
+    const userData = await supabase.auth.getUser()
+
+    setLoadingState('generating');
+    const cohereRes = await fetch("/api/cohere", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text,
+        userId: userData?.data?.user?.id,
+        folderId: folderId
+      }),
+    });
+
+    if (!cohereRes.ok) {
+      const errorData = await cohereRes.json();
+      setError(`Failed to generate flashcards: ${errorData.error}`);
+      return;
+    }
+    const response = await cohereRes.json();
+    console.log(response.deck)
+    // If we have a folderId, redirect back to the folder, otherwise go to the deck edit page
+    if (folderId) {
+      router.push(`/dashboard/folders/${folderId}`);
+    } else {
+      router.push(`/dashboard/decks/${response.deck.id}/edit`);
+    }
+
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred.";
+    setError(errorMessage);
+  } finally {
+    setProcessing(false);
+  }
+};
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -181,55 +190,38 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
     }
   };
 
-  const handleTextSubmit = async () => {
-    if (!pasteText.trim() || processing) return;
+  if(loadingState){
+    return(
+      <Card>
+        <CardContent className="p-8">
+          <div className="flex items-center space-x-4 mb-6">
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <FileText className="w-6 h-6 text-orange-600" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold">{fileName || 'Your Content'}</h3>
+              <p className="text-sm text-gray-600">PDF Document</p>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>
+                {loadingState === 'uploading' && 'Uploading...'}
+                {loadingState === 'processing' && 'Processing text...'}
+                {loadingState === 'generating' && 'Generating flashcards...'}
+              </span>
+              <span>{loadingState === 'generating' ? '75%' : loadingState === 'processing' ? '50%' : '25%'}</span>
+            </div>
+            <Progress 
+              value={loadingState === 'generating' ? 75 : loadingState === 'processing' ? 50 : 25} 
+              className="h-2" 
+            />
+          </div>
+        </CardContent>
+      </Card>
     
-    setProcessing(true);
-    setError(null);
-    
-    try {
-      const supabase = await createClient();
-      const userData = await supabase.auth.getUser();
-      
-      if (!userData?.data?.user?.id) {
-        setError("User not authenticated.");
-        return;
-      }
-      
-      const cohereRes = await fetch("/api/cohere", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: pasteText,
-          userId: userData.data.user.id,
-          folderId: folderId
-        }),
-      });
-
-      if (!cohereRes.ok) {
-        const errorData = await cohereRes.json();
-        setError(`Failed to generate flashcards: ${errorData.error}`);
-        return;
-      }
-      
-      const response = await cohereRes.json();
-      
-      // If we have a folderId, redirect back to the folder, otherwise go to the deck edit page
-      if (folderId) {
-        router.push(`/dashboard/folders/${folderId}`);
-      } else {
-        router.push(`/dashboard/decks/${response.deck.id}/edit`);
-      }
-      
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "An error occurred.";
-      setError(errorMessage);
-    } finally {
-      setProcessing(false);
-    }
-  };
+    )
+  }
 
   return (
     <div className="flex w-full flex-col gap-4 md:gap-6">
@@ -331,6 +323,7 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
           </Card>
         </TabsContent> */}
       {/* </Tabs> */}
+      
     </div>
   );
 }

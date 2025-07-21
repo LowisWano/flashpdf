@@ -20,7 +20,7 @@ export default function AddDeckToFolderButton({ folderId }: AddDeckToFolderButto
   const router = useRouter()
   
   const handleAddExistingDeck = () => {
-    router.push(`/dashboard/decks?selectFor=folder&folderId=${folderId}`)
+    router.push(`/dashboard/decks?selectFor=folder&folderId=${folderId}&excludeFolderId=${folderId}`)
   }
   
   const handleCreateNewDeck = () => {

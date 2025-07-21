@@ -9,6 +9,7 @@ export default function DecksPage() {
   const searchParams = useSearchParams()
   const folderId = searchParams.get('folderId')
   const selectFor = searchParams.get('selectFor')
+  const excludeFolderId = searchParams.get('excludeFolderId')
   
   const [decks, setDecks] = useState<Deck[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -19,7 +20,11 @@ export default function DecksPage() {
       try {
         setIsLoading(true)
         // Fetch decks from API endpoint
-        const response = await fetch('/api/decks')
+        const url = excludeFolderId 
+          ? `/api/decks?excludeFolderId=${excludeFolderId}` 
+          : '/api/decks'
+          
+        const response = await fetch(url)
         
         if (!response.ok) {
           throw new Error("Failed to fetch decks")
@@ -36,7 +41,7 @@ export default function DecksPage() {
     }
     
     loadDecks()
-  }, [])
+  }, [excludeFolderId])
   
   // Define the page title based on the context
   const pageTitle = selectFor === 'folder' 

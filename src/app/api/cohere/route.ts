@@ -22,7 +22,27 @@ export async function POST(req: NextRequest) {
 
     const chat = await cohere.chat({
       model: "command-a-03-2025",
-      responseFormat: {type: "json_object"},
+      responseFormat: {
+        type: "json_object",
+        jsonSchema: {
+          type: "object",
+          properties: {
+            title: { type: "string" },
+            flashcards: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  term: { type: "string" },
+                  definition: { type: "string" }
+                },
+                required: ["term", "definition"]
+              }
+            }
+          },
+          required: ["title", "flashcards"]
+        }
+      },
       messages: [
         {
           role: "system",
