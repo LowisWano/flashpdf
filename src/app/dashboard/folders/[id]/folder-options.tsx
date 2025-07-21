@@ -33,10 +33,6 @@ export default function FolderOptions({ folder }: FolderOptionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={() => console.log("Share clicked")}>
-            <Share2 className="mr-2 h-4 w-4" />
-            <span>Share</span>
-          </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => setIsEditDialogOpen(true)}>
             <Edit className="mr-2 h-4 w-4" />
             <span>Edit</span>
