@@ -27,7 +27,7 @@ export async function createDeckAction({ title, description, topics, flashcards,
       title,
       description,
       topics,
-      flashcards: flashcards.map(({ term, definition }) => ({ term, definition })),
+      flashcards: flashcards.map(({term, definition }) => ({term, definition })),
       cardCount: flashcards.length,
       folderId: folderId || undefined,
     }
