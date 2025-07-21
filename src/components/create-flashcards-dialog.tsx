@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Plus } from "lucide-react"
+import { Plus, Sparkles } from "lucide-react"
 
 export function CreateFlashcardsDialog() {
   const [open, setOpen] = useState(false)
@@ -48,9 +48,10 @@ export function CreateFlashcardsDialog() {
               onClick={handleNavigateToUpload}
               className="w-full flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"
             >
-              <span className="font-semibold text-lg">Generate from an upload</span>
+              <Sparkles className="h-8 w-8 text-gray-500 mb-2" />
+              <span className="font-semibold text-lg">Generate with AI</span>
               <span className="text-sm text-gray-500 text-center">
-                Upload a PDF or document and we&apos;ll generate flashcards for you.
+                Upload a PDF, image, or a scanned document and we&apos;ll generate flashcards for you.
               </span>
             </button>
             {/* Card 2: Create them yourself */}
@@ -59,7 +60,8 @@ export function CreateFlashcardsDialog() {
               onClick={handleNavigateToCreate}
               className="w-full flex-1 min-h-40 rounded-lg border border-gray-200 bg-white shadow hover:shadow-md transition p-6 flex flex-col items-center justify-center gap-2"
             >
-              <span className="font-semibold text-lg">Create them yourself</span>
+              <Plus className="h-8 w-8 text-gray-500 mb-2" />
+              <span className="font-semibold text-lg">Create New Deck</span>
               <span className="text-sm text-gray-500 text-center">
                 Manually add your own questions and answers.
               </span>

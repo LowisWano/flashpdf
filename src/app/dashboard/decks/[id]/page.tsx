@@ -11,11 +11,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string }
-}) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser()
