@@ -2,19 +2,16 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { DeckEntry } from '@/services/deck.service'
 import { Button } from './ui/button'
 import { Progress } from './ui/progress'
 import { MoreVertical, Shuffle } from 'lucide-react'
 import Link from 'next/link'
-import { updateDeckProgress } from '@/services/deck.service'
 import { Input } from './ui/input'
-import { FlashcardEntry } from '@/services/deck.service'
+import { DeckType, FlashcardType } from '@/services/deck.service'
 import { Card, CardContent, CardTitle } from './ui/card'
 
-export default function StudySession({ deck, userId }: { 
-  deck: DeckEntry,
-  userId: string 
+export default function StudySession({ deck }: { 
+  deck: DeckType
 }) {
   const router = useRouter();
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -26,7 +23,7 @@ export default function StudySession({ deck, userId }: {
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const [isShuffled, setIsShuffled] = useState(false);
-  const [shuffledFlashcards, setShuffledFlashcards] = useState<FlashcardEntry[]>([]);
+  const [shuffledFlashcards, setShuffledFlashcards] = useState<FlashcardType[]>([]);
 
   const originalFlashcards = deck.flashcards || [];
   const flashcards = isShuffled ? shuffledFlashcards : originalFlashcards;
@@ -37,23 +34,24 @@ export default function StudySession({ deck, userId }: {
   // Shuffle unanswered flashcards function
   const shuffleUnansweredFlashcards = () => {
     // Get unanswered flashcards (cards that haven't been answered yet)
-    const unansweredCards = originalFlashcards.filter((_: FlashcardEntry, index: number) => {
-      const cardId = originalFlashcards[index].id;
-      return !answeredCards[cardId];
+    const unansweredCards = originalFlashcards.filter((card) => {
+      const cardId = card.id;
+      // Make sure cardId is not undefined before using it as an object key
+      return cardId && !answeredCards[cardId];
     });
     
     // Shuffle only the unanswered cards
     const shuffledUnanswered = [...unansweredCards].sort(() => Math.random() - 0.5);
     
     // Create new array with answered cards in their original positions and shuffled unanswered cards
-    const newFlashcards = [...originalFlashcards];
+    const newFlashcards = [...originalFlashcards] as FlashcardType[];
     let shuffledIndex = 0;
     
     for (let i = 0; i < newFlashcards.length; i++) {
       const cardId = newFlashcards[i].id;
-      if (!answeredCards[cardId]) {
+      if (cardId && !answeredCards[cardId]) {
         // Replace with shuffled unanswered card
-        newFlashcards[i] = shuffledUnanswered[shuffledIndex];
+        newFlashcards[i] = shuffledUnanswered[shuffledIndex] as FlashcardType;
         shuffledIndex++;
       }
     }
@@ -93,10 +91,12 @@ export default function StudySession({ deck, userId }: {
   const handleNextCard = async () => {
     const cardId = flashcards[currentCardIndex].id;
     
-    setAnsweredCards(prev => ({
-      ...prev,
-      [cardId]: isAnswerCorrect
-    }));
+    if(cardId) {
+      setAnsweredCards(prev => ({
+        ...prev,
+        [cardId]: isAnswerCorrect
+      }));
+    }
     
     if (isAnswerCorrect) {
       setCorrectAnswers(prev => prev + 1);

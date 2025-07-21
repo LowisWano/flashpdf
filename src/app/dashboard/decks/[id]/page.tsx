@@ -1,11 +1,10 @@
 import Link from "next/link"
 import { MoreVertical } from 'lucide-react'
-import { getDecks } from "@/services/deck.service"
+import { DeckType, getDecks } from "@/services/deck.service"
 import { createClient } from "@/utils/supabase/server"
 import FlashcardsSection from "@/components/flashcards-section"
 import {
   Card,
-  CardHeader,
   CardTitle,
   CardContent
 } from "@/components/ui/card"
@@ -21,11 +20,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   }
 
   const decks = await getDecks(data.user.id)
-  const currentDeck = decks.find(d => d.id === id)
+  const currentDeck = decks.find(d => d.id === id) as DeckType
 
   if (!currentDeck) {
     return <div>Deck not found</div>
   }
+
+  console.log("Current Deck:", currentDeck)
 
   return (
     <div className="flex justify-center flex-col sm:mx-45">

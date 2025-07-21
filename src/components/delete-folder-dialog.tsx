@@ -66,10 +66,10 @@ export default function DeleteFolderDialog({
     <Dialog open={dialogOpen} onOpenChange={setIsOpen}>
       {shouldRenderTrigger && (
         <DialogTrigger asChild>
-          <Button variant="outline" className="text-red-600 hover:text-red-700 hover:bg-red-50">
-            <Trash2 className="mr-2 h-4 w-4" />
+          <div className="flex text-red-600 ml-2 cursor-pointer">
+            <Trash2 className="mr-4 mt-1 h-4 w-4" />
             <span>Delete</span>
-          </Button>
+          </div>
         </DialogTrigger>
       )}
       <DialogContent className="sm:max-w-[425px]">
