@@ -34,7 +34,7 @@ const FlashcardItem: React.FC<FlashcardItemProps> = ({ card, onRemove, onUpdate,
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor={`term-${card.id}`} className="text-base">Term</Label>
+          <Label htmlFor={`term-${card.id}`} className="text-base">Answer</Label>
           <Input
             id={`term-${card.id}`}
             placeholder="Enter term"
@@ -44,7 +44,7 @@ const FlashcardItem: React.FC<FlashcardItemProps> = ({ card, onRemove, onUpdate,
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor={`definition-${card.id}`} className="text-base">Definition</Label>
+          <Label htmlFor={`definition-${card.id}`} className="text-base">Question</Label>
           <Input
             id={`definition-${card.id}`}
             placeholder="Enter definition"

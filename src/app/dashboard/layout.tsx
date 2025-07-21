@@ -17,7 +17,7 @@ export default function DashboardLayout({
     <SidebarProvider>
       <SidebarContainer/>
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b bg-sidebar justify-between pr-4">
+        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-sidebar justify-between pr-4">
           <div className="flex items-center gap-2 px-3">
             <SidebarTrigger className="h-8 w-8" />
             <Separator orientation="vertical" className="mr-2 h-4" />
