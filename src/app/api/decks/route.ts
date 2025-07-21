@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDecksNotInFolder } from '@/services/deck.service';
+import { getDecks, getDecksNotInFolder } from '@/services/deck.service';
 import { createClient } from '@/utils/supabase/server';
 
 export async function GET(
@@ -19,8 +19,14 @@ export async function GET(
       );
     }
     
-    // Get decks not in the specified folder
-    const decks = await getDecksNotInFolder(user.id, excludeFolderId);
+    let decks;
+    if (excludeFolderId) {
+      // Get decks not in the specified folder
+      decks = await getDecksNotInFolder(user.id, excludeFolderId);
+    } else {
+      // Get all decks
+      decks = await getDecks(user.id);
+    }
 
     return NextResponse.json(decks);
   } catch (error) {

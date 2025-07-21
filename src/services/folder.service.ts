@@ -98,3 +98,41 @@ export async function deleteFolder({
     console.error('Error deleting folder:', error);
   }
 }
+
+export async function addDecksToFolder(
+  folderId: string,
+  deckIds: string[],
+  userId: string
+): Promise<boolean> {
+  try {
+    // Verify folder ownership
+    const folder = await prisma.folder.findUnique({
+      where: {
+        id: folderId,
+        userId: userId
+      }
+    });
+    
+    if (!folder) {
+      throw new Error('Folder not found or you do not have permission to access it');
+    }
+    
+    // Update all the decks with the new folder ID
+    await prisma.deck.updateMany({
+      where: {
+        id: {
+          in: deckIds
+        },
+        userId: userId // Ensure user owns the decks
+      },
+      data: {
+        folderId: folderId
+      }
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error adding decks to folder:', error);
+    throw error;
+  }
+}

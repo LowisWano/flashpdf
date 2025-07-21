@@ -7,7 +7,8 @@ import { Input } from "./ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import BulkMoveDeckToFolderDialog from "./folder/bulk-move-deck-to-folder-dialog";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 // Define sort types
 type SortOption = "recent" | "name" | null;
@@ -19,11 +20,52 @@ export default function DecksSection({
   decks: DeckType[];
   currentFolderId?: string;
 }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>(null);
   const [isBulkMoveDialogOpen, setIsBulkMoveDialogOpen] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedDeckIds, setSelectedDeckIds] = useState<string[]>([]);
+  
+  // Check if we're in folder selection mode from URL parameters
+  const selectFor = searchParams?.get('selectFor');
+  const targetFolderId = searchParams?.get('folderId') || currentFolderId;
+  
+  // Automatically enter selection mode when selectFor=folder
+  useEffect(() => {
+    if (selectFor === 'folder') {
+      setIsSelectionMode(true);
+    }
+  }, [selectFor]);
+  
+  // Handle confirming selection of decks for a folder
+  const handleConfirmSelection = async () => {
+    if (selectedDeckIds.length > 0 && targetFolderId) {
+      try {
+        // Make API call to add decks to folder
+        const response = await fetch('/api/folders/add-decks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            folderId: targetFolderId,
+            deckIds: selectedDeckIds,
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to add decks to folder');
+        }
+        
+        // Redirect back to the folder page after adding decks
+        router.push(`/dashboard/folders/${targetFolderId}`);
+      } catch (error) {
+        console.error("Error adding decks to folder:", error);
+      }
+    }
+  };
 
   // Filter and sort decks based on search query and sort option
   const filteredDecks = useMemo(() => {
@@ -98,22 +140,35 @@ export default function DecksSection({
           />
         </div>
         <div className="flex gap-2">
-          {isSelectionMode && selectedDeckIds.length > 0 && (
+          {selectFor === 'folder' && selectedDeckIds.length > 0 ? (
             <Button 
-              variant="outline"
-              onClick={() => setIsBulkMoveDialogOpen(true)}
+              variant="default"
+              onClick={handleConfirmSelection}
+              className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
             >
-              <FolderPlus className="w-4 h-4 mr-2" />
-              Move to Folder
+              Add Selected Decks
+            </Button>
+          ) : (
+            isSelectionMode && selectedDeckIds.length > 0 && (
+              <Button 
+                variant="outline"
+                onClick={() => setIsBulkMoveDialogOpen(true)}
+              >
+                <FolderPlus className="w-4 h-4 mr-2" />
+                Move to Folder
+              </Button>
+            )
+          )}
+          
+          {/* Don't show selection toggle in folder selection mode */}
+          {selectFor !== 'folder' && (
+            <Button 
+              variant={isSelectionMode ? "default" : "outline"}
+              onClick={toggleSelectionMode}
+            >
+              {isSelectionMode ? <SquareX className="w-4 h-4" /> : <CheckSquare className="w-4 h-4" />}
             </Button>
           )}
-          <Button 
-            variant={isSelectionMode ? "default" : "outline"}
-            onClick={toggleSelectionMode}
-          >
-            
-            {isSelectionMode ? <SquareX className="w-4 h-4" /> : <CheckSquare className="w-4 h-4" />}
-          </Button>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
