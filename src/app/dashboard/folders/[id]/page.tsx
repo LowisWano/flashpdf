@@ -1,25 +1,20 @@
-import Link from "next/link"
 import { FolderOpen } from 'lucide-react'
-import { FolderWithDecks } from "@/lib/types"
 import { getFolderById } from "@/services/folder.service"
 import { createClient } from "@/utils/supabase/server"
 import DecksSection from "@/components/decks-section"
 import {
   Card,
-  CardHeader,
   CardTitle,
   CardContent
 } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import FolderOptions from "./folder-options"
-import BackButton from "./back-button"
 import AddDeckToFolderButton from "./add-deck-to-folder-button"
 import EmptyFolderActions from "./empty-folder-actions"
 
 export default async function FolderPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const { id } = await params
   const supabase = await createClient()
