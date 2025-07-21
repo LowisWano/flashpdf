@@ -17,6 +17,7 @@ const BREADCRUMB_MAP: Record<string, string> = {
   settings: "Settings",
   folders: "Folders",
   decks: "Decks",
+  study: "Study",
 };
 
 export function DynamicBreadcrumbs() {

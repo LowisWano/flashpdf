@@ -15,7 +15,6 @@ export default async function Page({
       <Suspense fallback={<div>Loading...</div>}>
         <UploadArea folderId={folderId} />
       </Suspense>
-      <UploadPageFooter folderId={folderId} />
     </div>
   )
 }

@@ -50,7 +50,7 @@ export default function CreateFlashcardSetPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      createDeckAction({
+      await createDeckAction({
         title,
         description,
         topics: tags,
