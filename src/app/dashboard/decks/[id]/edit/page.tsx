@@ -2,11 +2,7 @@ import { getDecks } from "@/services/deck.service"
 import EditDeckForm from "./edit-deck-form"
 import { createClient } from '@/utils/supabase/server'
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string }
-}) {
+export default async function Page( { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()

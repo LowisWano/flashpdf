@@ -160,9 +160,9 @@ export default function DecksSection({
             )
           )}
           
-          {/* Don't show selection toggle in folder selection mode */}
           {selectFor !== 'folder' && (
-            <Button 
+            <Button
+              className="w-full sm:w-auto"
               variant={isSelectionMode ? "default" : "outline"}
               onClick={toggleSelectionMode}
             >

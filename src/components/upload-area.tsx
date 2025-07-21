@@ -76,10 +76,6 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
     setError(null);
     setExtractedText(null);
     
-    if (file.type !== "application/pdf") {
-      setError("Please upload a PDF file.");
-      return;
-    }
     if (file.size > 50 * 1024 * 1024) {
       setError("File size exceeds 50MB.");
       return;

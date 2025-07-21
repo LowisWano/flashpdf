@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
               }[];
             }
 
-            Strictly follow these nstructions:
+            Strictly follow these instructions:
 
             1. Set the "title" field to a concise summary or main topic of the given text.
             2. Create the "flashcards" array by extracting key terms and their definitions from the given text.

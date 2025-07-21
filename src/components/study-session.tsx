@@ -137,7 +137,6 @@ export default function StudySession({ deck, userId }: {
   };
 
   const completeStudySession = async (score: number) => {
-    console.log(`correct answers: ${correctAnswers}/ total cards: ${totalCards} = ${score}`)
     setFinalScore(score);
     setIsStudyCompleted(true);
     

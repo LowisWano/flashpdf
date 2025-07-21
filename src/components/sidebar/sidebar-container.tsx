@@ -28,6 +28,6 @@ export async function SidebarContainer() {
       avatar: data.user.user_metadata?.avatar_url || '',
     }
   }
-  console.log('User Details:', userDetails)
+
   return <AppSidebar userDetails={userDetails} />
 }

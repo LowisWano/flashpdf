@@ -12,13 +12,7 @@ import { ColorPicker } from "@/components/folder/color-picker"
 import { createClient } from "@/utils/supabase/client"
 import { FolderWithDecks } from "@/lib/types"
 
-interface EditFolderPageProps {
-  params: {
-    id: string
-  }
-}
-
-export default function EditFolderPage({ params }: EditFolderPageProps) {
+export default function EditFolderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = params
   const router = useRouter()
   const [folder, setFolder] = useState<FolderWithDecks | null>(null)
