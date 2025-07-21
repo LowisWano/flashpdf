@@ -5,7 +5,7 @@ import { Suspense } from "react"
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const params = await searchParams
   const folderId = typeof params.folderId === 'string' ? params.folderId : undefined
