@@ -4,8 +4,22 @@ import { Deck } from "@/generated/prisma"
 import { createClient } from '@/utils/supabase/server'
 import { FolderOpen, Plus, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { Suspense } from "react"
 
-export default async function Dashboard() {
+// Loading component for the Suspense fallback
+function LoadingSpinner() {
+  return (
+    <div className="flex items-center justify-center h-64">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mx-auto"></div>
+        <p className="mt-4 text-gray-500">Loading decks...</p>
+      </div>
+    </div>
+  )
+}
+
+// Component that fetches and displays decks
+async function DeckContent() {
   const supabase = await createClient()
   
   const { data, error } = await supabase.auth.getUser()
@@ -16,9 +30,7 @@ export default async function Dashboard() {
   const decks: Deck[] = await getDecks(data.user.id)
   
   return (
-    <div>
-      <h1 className="scroll-m-20 font-bold text-2xl tracking-tighter md:text-4xl relative mb-4 flex items-center gap-4">My Flashcard Sets</h1>
-      
+    <>
       {decks.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed rounded-lg bg-white shadow-sm">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 mb-4">
@@ -48,6 +60,18 @@ export default async function Dashboard() {
       ) : (
         <DecksSection decks={decks} />
       )}
+    </>
+  )
+}
+
+export default function Dashboard() {
+  return (
+    <div>
+      <h1 className="scroll-m-20 font-bold text-2xl tracking-tighter md:text-4xl relative mb-4 flex items-center gap-4">My Flashcard Sets</h1>
+      
+      <Suspense fallback={<LoadingSpinner />}>
+        <DeckContent />
+      </Suspense>
     </div>
   )
 }
