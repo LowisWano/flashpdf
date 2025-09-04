@@ -1,15 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useParams, useSearchParams } from "next/navigation"
 import FlashcardSetForm from "@/components/flashcard-set-form"
 import { v4 as uuidv4 } from "uuid";
 import { Flashcard } from "@/components/flashcard-item";
 import { createDeckAction } from "./createAction";
 
 export default function CreateFlashcardSetPage() {
-  const searchParams = useSearchParams()
-  const folderId = searchParams.get('folderId')
+  const params = useParams<{ folderId?: string }>()
+  const folderId = params.folderId
   
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")

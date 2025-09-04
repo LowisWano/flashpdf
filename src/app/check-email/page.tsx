@@ -1,12 +1,12 @@
 // In your /check-email page
 'use client'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function CheckEmailPage() {
-  const searchParams = useSearchParams()
+  const params = useParams<{ justSignedUp?: string }>()
   const router = useRouter()
-  const justSignedUp = searchParams.get('justSignedUp')
+  const justSignedUp = params.justSignedUp
 
   useEffect(() => {
     if (!justSignedUp) {

@@ -52,7 +52,10 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
+      {isSaving && (
+        <div className="absolute inset-0 bg-white/50 z-10 rounded-lg cursor-not-allowed" />
+      )}
       {/* Main Form */}
       <Card className="shadow-lg border border-gray-100">
         <CardHeader>

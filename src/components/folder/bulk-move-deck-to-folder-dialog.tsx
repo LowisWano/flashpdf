@@ -121,6 +121,7 @@ export default function BulkMoveDeckToFolderDialog({
       
       // Close dialog and refresh page to show changes
       onOpenChange(false)
+      router.push(`/dashboard/folders/${selectedFolderId}`) 
       router.refresh()
       
     } catch (error) {
@@ -272,25 +273,27 @@ export default function BulkMoveDeckToFolderDialog({
           <div className="flex-1 text-xs text-gray-500">
             {selectedDeckIds.length} deck{selectedDeckIds.length !== 1 ? 's' : ''} selected
           </div>
-          <Button 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-            disabled={isMoving}
-          >
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleMoveDecks}
-            disabled={isMoving || isLoading || folders.length === 0 || selectedDeckIds.length === 0}
-            className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
-          >
-            {isMoving ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Moving...
-              </>
-            ) : "Move Selected"}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+              disabled={isMoving}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleMoveDecks}
+              disabled={isMoving || isLoading || folders.length === 0 || selectedDeckIds.length === 0}
+              className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+            >
+              {isMoving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Moving...
+                </>
+              ) : "Move Selected"}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

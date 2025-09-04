@@ -2,19 +2,26 @@ import { Deck } from "@/generated/prisma";
 import prisma from "@/lib/prisma"
 
 export interface FlashcardEntry {
-  id: string;
+  id?: string;
   term: string;
   definition: string;
 }
 
-export interface DeckEntry {
+export interface FlashcardType extends FlashcardEntry {
   id: string;
+}
+
+export interface DeckEntry {
   title: string;
   description?: string;
   topics?: string[];
   flashcards: FlashcardEntry[];
   cardCount: number;
   folderId?: string;
+}
+
+export interface DeckType extends Deck {
+  flashcards: FlashcardEntry[];
 }
 
 export async function getDecks(userId: string): Promise<Deck[]> {

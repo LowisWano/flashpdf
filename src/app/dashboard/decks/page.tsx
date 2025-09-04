@@ -1,15 +1,15 @@
 "use client"
 
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams, useRouter, useParams } from "next/navigation"
 import DecksSection from "@/components/decks-section"
 import { Deck } from "@/generated/prisma"
 import { useEffect, useState } from "react"
 
 export default function DecksPage() {
-  const searchParams = useSearchParams()
-  const folderId = searchParams.get('folderId')
-  const selectFor = searchParams.get('selectFor')
-  const excludeFolderId = searchParams.get('excludeFolderId')
+  const params = useParams<{ folderId?: string, selectFor?: string, excludeFolderId?: string }>()
+  const folderId = params.folderId
+  const selectFor = params.selectFor
+  const excludeFolderId = params.excludeFolderId
   
   const [decks, setDecks] = useState<Deck[]>([])
   const [isLoading, setIsLoading] = useState(true)
