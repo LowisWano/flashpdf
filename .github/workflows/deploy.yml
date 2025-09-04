@@ -1,0 +1,28 @@
+name: Deployment
+
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Deploy FlashPDF
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build & Deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{secrets.DCISM_HOST}}
+          username: ${{secrets.DCISM_USERNAME}}
+          password: ${{secrets.DCISM_PASSWORD}}
+          port: ${{secrets.DCISM_PORT}}
+          script: |
+            cd ~/flashpdf.dcism.org
+            git reset --hard && git clean -fd && git pull origin main
+            npm install --build-from-source
+            npm rebuild
+            pm2 stop flashpdf || true
+            npm run build
+            pm2 reload flashpdf
