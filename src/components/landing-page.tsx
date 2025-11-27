@@ -72,7 +72,7 @@ export default function LandingPage() {
                 Upload Your First PDF
               </Button>
             </Link>
-            <Link href="https://youtu.be/xvFZjo5PgG0">
+            <Link href="">
               <Button size="lg" variant="outline" className="text-lg px-8 py-3">
                 Watch Demo
               </Button>
