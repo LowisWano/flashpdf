@@ -137,6 +137,46 @@
   }
 }
 
+/* Force readable text colors and adjust common Tailwind utility classes when `.dark` is enabled.
+   Uses attribute selectors to catch utility variants like `bg-white/80`, `text-gray-500`, `border-gray-200`, etc. */
+@layer base {
+  .dark * {
+    color: var(--foreground) !important;
+  }
+
+  /* Background utilities: catch `bg-white`, `bg-white/80`, `bg-white/50`, `bg-gray-50`, `bg-gray-100`, etc. */
+  .dark [class*="bg-white"],
+  .dark [class*="bg-gray-50"],
+  .dark [class*="bg-gray-"] ,
+  .dark [class*="bg-muted"] {
+    background-color: var(--card) !important;
+  }
+
+  /* Buttons and other muted panels */
+  .dark [class*="bg-gradient-to-"] {
+    /* leave gradients mostly as-is but ensure readable text above them */
+  }
+
+  /* Text utilities (e.g., text-gray-500, text-gray-600) -> ensure readable foreground */
+  .dark [class*="text-gray"],
+  .dark [class*="text-muted"],
+  .dark [class*="text-secondary"],
+  .dark [class*="text-muted-foreground"] {
+    color: var(--foreground) !important;
+  }
+
+  /* Border utilities */
+  .dark [class*="border-gray"],
+  .dark [class*="border-white"] {
+    border-color: var(--border) !important;
+  }
+
+  /* Ensure elements that explicitly set `text-white` remain white */
+  .dark [class*="text-white"] {
+    color: var(--foreground) !important;
+  }
+}
+
 /* div{
   @apply border-2 border-red-500;
 } */

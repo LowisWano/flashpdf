@@ -4,7 +4,7 @@ import { Roboto } from "next/font/google";
 import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "FlashPDF",
+  title: "AutoDeck",
   description: "AI Flashcards Generator",
 };
 
@@ -26,9 +26,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={`${inter.className} dark`}>
       <body
-        className="min-h-screen bg-gray-50"
+        className="min-h-screen"
       >
         {children}
       </body>

@@ -24,7 +24,7 @@ import type { FolderWithDecks } from "@/lib/types"
 const navItems = {
   home: [
     {
-      name: "FlashPDF",
+      name: "AutoDeck",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     }
