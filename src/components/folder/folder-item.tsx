@@ -71,7 +71,7 @@ export default function FolderItem({ folder }: {
               variant="secondary" 
               className={`${
                 deckCount > 0 
-                  ? 'bg-purple-100 text-purple-800 hover:bg-purple-200' 
+                  ? 'bg-purple-800 text-white hover:bg-purple-900' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -85,7 +85,7 @@ export default function FolderItem({ folder }: {
             )}
           </div>
           <Link href={`/dashboard/folders/${folder.id}`}>
-            <Button size="sm" className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
+            <Button size="sm" className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA]">
               Open
             </Button>
           </Link>

@@ -51,7 +51,7 @@ export default function LoginPage() {
           </div>
           <Input id="password" name="password" type="password" required />
         </div>
-        <Button type="submit" className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 px-8 py-3 w-full">
+        <Button type="submit" className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] px-8 py-3 w-full">
           Login
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -60,7 +60,7 @@ export default function LoginPage() {
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="/signup" className="underline underline-offset-4 text-orange-500">
+        <a href="/signup" className="underline underline-offset-4 text-cyan-500">
           Sign up
         </a>
       </div>

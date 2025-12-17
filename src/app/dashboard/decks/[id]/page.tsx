@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <div className="items-center flex justify-center">
             <Link href={`./${id}/edit`}>
-              <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">Edit Flashcards</Button>
+              <Button className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA]">Edit Flashcards</Button>
             </Link>
             <button className="p-1 hover:bg-gray-100 rounded-full">
               <MoreVertical className="h-5 w-5" />

@@ -70,7 +70,7 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
               placeholder="Enter flashcard set title"
               value={title}
               onChange={(e) => onTitleChange(e.target.value)}
-              className="bg-white border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+              className="bg-white border-gray-200 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100"
             />
           </div>
           <div className="space-y-2">
@@ -88,7 +88,7 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
             <Label htmlFor="tags" className="text-base">Tags</Label>
             <div className="flex flex-wrap gap-2 mb-2">
               {tags.map((tag) => (
-                <Badge key={tag} className="bg-orange-400 text-white flex items-center gap-1 px-3 py-1">
+                <Badge key={tag} className="bg-cyan-400 text-white flex items-center gap-1 px-3 py-1">
                   {tag}
                   <button 
                     type="button" 
@@ -106,7 +106,7 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleTagKeyDown}
-              className="bg-white border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+              className="bg-white border-gray-200 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100"
             />
             <p className="text-xs text-gray-500 mt-1">Press Enter to add a tag</p>
           </div>
@@ -149,7 +149,7 @@ const FlashcardSetForm: React.FC<FlashcardSetFormProps> = ({
         )}
         <Button
           onClick={onSave}
-          className="bg-gradient-to-r from-orange-500 to-purple-600 text-white hover:from-orange-600 hover:to-purple-700 shadow-md px-8"
+          className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] text-white hover:from-[#2980B9] hover:to-[#6DD5FA] shadow-md px-8"
           disabled={isSaving}
         >
           {isSaving ? "Saving..." : "Save Flashcard Set"}

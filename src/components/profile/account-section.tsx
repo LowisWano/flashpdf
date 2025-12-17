@@ -86,7 +86,7 @@ export default function AccountSection({
             {isEditing && (
               <button
                 onClick={triggerFileInput}
-                className="absolute -bottom-1 -right-1 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors shadow-md"
+                className="absolute -bottom-1 -right-1 w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center hover:bg-cyan-600 transition-colors shadow-md"
               >
                 <Camera className="w-3 h-3 text-white" />
               </button>

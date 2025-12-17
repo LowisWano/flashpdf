@@ -38,7 +38,7 @@ export default function SignUpPage({
           </div>
           <Input id="confirm password" type="password" required />
         </div>
-        <Button type="submit" className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 px-8 py-3 w-full">
+        <Button type="submit" className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] px-8 py-3 w-full">
           Sign in
         </Button>
       </div>
@@ -46,7 +46,7 @@ export default function SignUpPage({
         </div>
       <div className="text-center text-sm">
        Already have an account?{" "}
-        <Link href="/login" className="underline underline-offset-4 text-orange-500">
+        <Link href="/login" className="underline underline-offset-4 text-cyan-500">
           Login
         </Link>
       </div>

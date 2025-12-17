@@ -195,8 +195,8 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
       <Card>
         <CardContent className="p-8">
           <div className="flex items-center space-x-4 mb-6">
-            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6 text-orange-600" />
+            <div className="w-12 h-12 bg-cyan-50 rounded-lg flex items-center justify-center">
+              <FileText className="w-6 h-6 text-cyan-600" />
             </div>
             <div className="flex-1">
               <h3 className="font-semibold">{fileName || 'Your Content'}</h3>
@@ -243,15 +243,15 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
           >
             <Card className={`border-2 border-dashed transition-all duration-200 ${
               isDragOver 
-                ? 'border-orange-500 bg-orange-50 shadow-lg' 
-                : 'border-gray-300 hover:border-orange-400'
+                ? 'border-cyan-500 bg-cyan-50 shadow-lg' 
+                : 'border-gray-300 hover:border-cyan-400'
             }`}>
               <CardContent className="p-6 md:p-12">
                 <div className="text-center transition-transform">
                   <div className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 transition-all duration-200 ${
                     isDragOver 
-                      ? 'bg-gradient-to-br from-orange-600 to-purple-700 scale-110' 
-                      : 'bg-gradient-to-br from-orange-500 to-purple-600'
+                      ? 'bg-gradient-to-br from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] scale-110' 
+                        : 'bg-gradient-to-br from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF]'
                   }`}>
                     <Upload className={`w-6 h-6 md:w-8 md:h-8 text-white transition-all duration-200 ${
                       isDragOver ? 'scale-110' : 'scale-100'
@@ -265,7 +265,7 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
                   </p>
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-sm md:text-base"
+                    className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] text-sm md:text-base"
                     onClick={handleButtonClick}
                     disabled={processing}
                   >
@@ -292,7 +292,7 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
               </CardContent>
             </Card>
             {isDragOver && (
-              <div className="absolute inset-0 bg-orange-500/10 rounded-lg border-2 border-dashed border-orange-500 pointer-events-none" />
+              <div className="absolute inset-0 bg-cyan-500/10 rounded-lg border-2 border-dashed border-cyan-500 pointer-events-none" />
             )}
           </div>
         {/* </TabsContent> */}
@@ -307,13 +307,13 @@ export default function UploadArea({ folderId }: { folderId?: string }) {
                     value={pasteText}
                     onChange={(e) => setPasteText(e.target.value)}
                     placeholder="Paste your text content here..."
-                    className="w-full min-h-[200px] md:min-h-[300px] p-3 md:p-4 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm md:text-base"
+                    className="w-full min-h-[200px] md:min-h-[300px] p-3 md:p-4 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-sm md:text-base"
                   />
                 </div>
                 <Button
                   onClick={handleTextSubmit}
                   disabled={!pasteText.trim() || processing}
-                  className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-sm md:text-base"
+                  className="w-full bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] text-sm md:text-base"
                 >
                   {processing ? "Processing..." : "Generate Flashcards"}
                 </Button>

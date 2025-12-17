@@ -47,7 +47,7 @@ export default function EmptyFolderActions({ folderId }: EmptyFolderActionsProps
         Create Manually
       </Button>
       <Button 
-        className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+        className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA]"
         onClick={handleGenerateWithAI}
       >
         <Sparkles className="mr-2 h-4 w-4" />

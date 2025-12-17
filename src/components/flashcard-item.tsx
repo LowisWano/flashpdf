@@ -40,7 +40,7 @@ const FlashcardItem: React.FC<FlashcardItemProps> = ({ card, onRemove, onUpdate,
             placeholder="Enter term"
             value={card.term}
             onChange={(e) => onUpdate(card.id, "term", e.target.value)}
-            className="bg-white border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+            className="bg-white border-gray-200 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100"
           />
         </div>
         <div className="space-y-2">

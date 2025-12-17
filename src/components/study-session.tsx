@@ -217,7 +217,7 @@ export default function StudySession({ deck }: {
           
           <div className="space-y-4">
             <Button 
-              className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 py-6 text-lg"
+              className="w-full bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] py-6 text-lg"
               onClick={initiateStudySession}
             >
               Study Again
@@ -257,7 +257,7 @@ export default function StudySession({ deck }: {
               <Shuffle className="h-4 w-4" />
             </Button>
             <Link href={`/dashboard/decks/${deck.id}/edit`}>
-              <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">Edit Deck</Button>
+              <Button className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA]">Edit Deck</Button>
             </Link>
             <button className="p-1 hover:bg-gray-100 rounded-full">
               <MoreVertical className="h-5 w-5" />
@@ -326,7 +326,7 @@ export default function StudySession({ deck }: {
         <div className="flex justify-center mb-12">
           <Button 
             size="lg" 
-            className="px-8 py-6 text-lg bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+            className="px-8 py-6 text-lg bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA]"
             onClick={handleNextCard}
           >
             {currentCardIndex < totalCards - 1 ? 'Continue' : 'Finish'}

@@ -20,8 +20,8 @@ export default function StatsGrid({
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       <Card>
         <CardContent className="p-4 text-center">
-          <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Clock className="w-5 h-5 text-orange-600" />
+          <div className="w-10 h-10 bg-cyan-50 rounded-full flex items-center justify-center mx-auto mb-2">
+            <Clock className="w-5 h-5 text-cyan-600" />
           </div>
           <p className="text-2xl font-bold text-gray-900">{streak}</p>
           <p className="text-xs text-gray-600">Day Streak</p>

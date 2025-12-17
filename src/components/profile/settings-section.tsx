@@ -114,7 +114,7 @@ export default function SettingsSection({
               </Avatar>
               <button
                 onClick={triggerFileInput}
-                className="absolute -bottom-1 -right-1 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
+                className="absolute -bottom-1 -right-1 w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center hover:bg-cyan-600 transition-colors"
               >
                 <Camera className="w-3 h-3 text-white" />
               </button>
@@ -294,7 +294,7 @@ export default function SettingsSection({
               type="checkbox"
               checked={settings.emailNotifications}
               onChange={(e) => onSettingChange('emailNotifications', e.target.checked)}
-              className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
+              className="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500"
             />
           </div>
           <div className="flex items-center justify-between">
@@ -306,7 +306,7 @@ export default function SettingsSection({
               type="checkbox"
               checked={settings.studyReminders}
               onChange={(e) => onSettingChange('studyReminders', e.target.checked)}
-              className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
+              className="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500"
             />
           </div>
         </CardContent>
@@ -330,7 +330,7 @@ export default function SettingsSection({
               type="checkbox"
               checked={settings.publicProfile}
               onChange={(e) => onSettingChange('publicProfile', e.target.checked)}
-              className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
+              className="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500"
             />
           </div>
         </CardContent>

@@ -161,7 +161,7 @@ export default function Deck({ deck, isSelectable, isSelected, onSelect }: {
           </div>
           <div className='flex flex-col gap-2'>
             <Link href={`/dashboard/decks/${deck.id}/study`}>
-              <Button className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
+              <Button className="w-full bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA]">
                 <Play className="w-4 h-4 mr-2" />
                 Study Now
               </Button>

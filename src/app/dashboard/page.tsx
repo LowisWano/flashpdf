@@ -43,14 +43,14 @@ async function DeckContent() {
           <div className="flex justify-center gap-4">
             <Link 
               href="/dashboard/create" 
-              className="inline-flex items-center px-4 py-2 rounded-md bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white font-semibold shadow-sm transition-colors duration-200"
+              className="inline-flex items-center px-4 py-2 rounded-md bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] text-white font-semibold shadow-sm transition-colors duration-200"
             >
               <Plus className="h-4 w-4 mr-2" />
               Create New Deck
             </Link>
             <Link 
               href="/dashboard/upload" 
-              className="inline-flex items-center px-4 py-2 rounded-md bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white font-semibold shadow-sm transition-colors duration-200"
+              className="inline-flex items-center px-4 py-2 rounded-md bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] text-white font-semibold shadow-sm transition-colors duration-200"
             >
               <Sparkles className="h-4 w-4 mr-2" />
               Generate with AI

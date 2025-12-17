@@ -64,7 +64,7 @@ export default function ProfileCard({
             {isEditing && (
               <button
                 onClick={triggerEditFileInput}
-                className="absolute -bottom-1 -right-1 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors shadow-lg"
+                className="absolute -bottom-1 -right-1 w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center hover:bg-cyan-600 transition-colors shadow-lg"
               >
                 <Camera className="w-4 h-4 text-white" />
               </button>

@@ -13,10 +13,10 @@ export default function LandingPage() {
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50 dark:bg-[var(--card)] dark:border-[var(--border)]">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] rounded-lg flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] bg-clip-text text-transparent">
               AutoDeck
             </span>
           </div>
@@ -38,7 +38,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
+              <Button className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA]">
                 Get Started
               </Button>
             </Link>
@@ -49,11 +49,11 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto text-center max-w-4xl">
-          <Badge className="mb-4 bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-[color:var(--accent)] dark:text-[var(--accent-foreground)]">
+          <Badge className="mb-4 bg-cyan-50 text-cyan-700 hover:bg-cyan-200 dark:bg-[color:var(--accent)] dark:text-[var(--accent-foreground)]">
             <Sparkles className="w-3 h-3 mr-1" />
             AI-Powered Learning
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-orange-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] bg-clip-text text-transparent">
             Turn Any PDF Into
             <br />
             Smart Flashcards
@@ -66,7 +66,7 @@ export default function LandingPage() {
             <Link href="/dashboard">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-lg px-8 py-3"
+                className="bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] hover:from-[#2980B9] hover:to-[#6DD5FA] text-lg px-8 py-3"
               >
                 <Upload className="w-5 h-5 mr-2" />
                 Upload Your First PDF
@@ -85,8 +85,8 @@ export default function LandingPage() {
             <div className="bg-white rounded-2xl shadow-2xl border p-8 dark:bg-[var(--card)] dark:border-[var(--border)]">
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="space-y-4">
-                  <div className="flex items-center space-x-3 p-4 bg-orange-50 rounded-lg dark:bg-[var(--muted)]">
-                    <FileText className="w-8 h-8 text-orange-600" />
+                  <div className="flex items-center space-x-3 p-4 bg-cyan-50 rounded-lg dark:bg-[var(--muted)]">
+                    <FileText className="w-8 h-8 text-cyan-600" />
                     <div className="text-left">
                       <div className="font-semibold text-gray-900 dark:text-[var(--foreground)]">Biology_Chapter_5.pdf</div>
                       <div className="text-sm text-gray-500 dark:text-[var(--foreground)]">Uploaded • 2.3 MB</div>
@@ -121,9 +121,9 @@ export default function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-2 hover:border-orange-200 transition-colors dark:border-[var(--border)]">
+            <Card className="border-2 hover:border-cyan-200 transition-colors dark:border-[var(--border)]">
               <CardHeader>
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] rounded-lg flex items-center justify-center mb-4">
                   <Upload className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>Smart PDF Upload</CardTitle>
@@ -208,7 +208,7 @@ export default function LandingPage() {
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="flex-1">
                 <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] rounded-full flex items-center justify-center text-white font-bold mr-4">
                     1
                   </div>
                   <h3 className="text-2xl font-bold dark:text-[var(--foreground)]">Upload Your PDF</h3>
@@ -219,8 +219,8 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="flex-1">
-                <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-dashed border-orange-200 dark:bg-[var(--card)] dark:border-[var(--border)]">
-                  <Upload className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+                <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-dashed border-cyan-200 dark:bg-[var(--card)] dark:border-[var(--border)]">
+                  <Upload className="w-12 h-12 text-cyan-500 mx-auto mb-4" />
                   <div className="text-center text-gray-600 dark:text-[var(--foreground)]">Drop your PDF here</div>
                 </div>
               </div>
@@ -290,7 +290,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-orange-500 via-purple-600 to-pink-600">
+      <section className="py-20 px-4 bg-gradient-to-r from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF]">
           <div className="container mx-auto text-center max-w-3xl">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Transform Your Study Experience?</h2>
           <p className="text-xl text-white/90 mb-8">
@@ -317,7 +317,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-br from-[#2980B9] via-[#6DD5FA] to-[#FFFFFF] rounded-lg flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-xl font-bold">AutoDeck</span>
